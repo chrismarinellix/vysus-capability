@@ -216,10 +216,16 @@
         }
 
         .logo-v {
-            font-size: 5rem;
-            font-weight: 300;
-            color: var(--stockholm-neon);
+            display: inline-block;
+            width: 80px;
+            height: 80px;
             margin-right: 1rem;
+            vertical-align: middle;
+        }
+
+        .logo-v svg {
+            width: 100%;
+            height: 100%;
         }
 
         .logo-text {
@@ -485,7 +491,7 @@
             .two-col { grid-template-columns: 1fr; }
             .team-grid, .focus-grid { grid-template-columns: 1fr; }
             .hero-title { font-size: 2.5rem; }
-            .logo-v { font-size: 3.5rem; }
+            .logo-v { width: 60px; height: 60px; }
             .logo-text { font-size: 2.5rem; }
         }
 
@@ -859,10 +865,10 @@
 
         @keyframes finger-tap {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            40% { transform: translate(-10px, 10px) rotate(-10deg); }
-            50% { transform: translate(-10px, 15px) rotate(-10deg); }
-            60% { transform: translate(-10px, 10px) rotate(-10deg); }
-            70% { transform: translate(0, 0) rotate(0deg); }
+            15% { transform: translate(-8px, 8px) rotate(-8deg); }
+            20% { transform: translate(-10px, 15px) rotate(-10deg); }
+            25% { transform: translate(-8px, 8px) rotate(-8deg); }
+            35% { transform: translate(0, 0) rotate(0deg); }
         }
 
         .demo-text {
@@ -1152,13 +1158,20 @@
             updateEmailPanel();
         }
 
-        // Animate demo checkbox
-        setInterval(function() {
+        // Animate demo checkbox - synced with finger tap animation
+        // Finger taps at 20% of 3s animation = 600ms
+        function animateDemoCheckbox() {
             const demoBox = document.getElementById('demoCheckbox');
             if (demoBox) {
-                demoBox.classList.toggle('checked');
+                // Wait 600ms (20% of 3s) for finger to reach checkbox, then toggle
+                setTimeout(function() {
+                    demoBox.classList.toggle('checked');
+                }, 600);
             }
-        }, 3000);
+        }
+        // Run immediately and then every 3s (matching animation duration)
+        animateDemoCheckbox();
+        setInterval(animateDemoCheckbox, 3000);
     </script>
 
     <!-- ============================================ -->
@@ -1170,8 +1183,14 @@
         <div class="hero-content">
             <!-- Glassmorphic Hero Container -->
             <div style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-radius: 24px; padding: 3rem; border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
-                <div>
-                    <span class="logo-v">V</span>
+                <div style="display: flex; align-items: center; justify-content: center;">
+                    <span class="logo-v">
+                        <svg viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Vysus Marque - Stockholm Neon -->
+                            <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="#00E3A9"/>
+                            <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="#00E3A9"/>
+                        </svg>
+                    </span>
                     <span class="logo-text">Vysus Group</span>
                 </div>
 
@@ -1295,7 +1314,7 @@
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Expert Power Systems Team</h2>
-                <p class="slide-subtitle">PhDs, former utility engineers, and internationally recognized specialists <span class="draft-note">(To be updated against Tony's capability matrix)</span></p>
+                <p class="slide-subtitle">PhDs, former utility engineers, and internationally recognized specialists</p>
             </div>
 
             <div class="team-grid">
@@ -1325,9 +1344,9 @@
 
                 <div class="team-card">
                     <div class="team-name">Ir. Amani Razif</div>
-                    <div class="team-title">Team Lead - Power and Energy Systems | BSc Electrical Power Engineering</div>
+                    <div class="team-title">Team Lead - Malaysia | Power and Energy Systems</div>
                     <div class="team-bio">
-                        7 years consulting experience specializing in renewable energy and grid interconnection. Extensive work on large-scale solar (LSS), BESS, and hydro projects. Experienced in steady-state, short circuit, harmonics, and dynamic stability studies. Proficient in PSS®E, PSCAD, ETAP, and PowerFactory. Well-versed in grid code and compliance requirements.
+                        Over 7 years of consultancy experience in renewable energy and grid interconnection across Malaysia and Australia. Project scope includes solar farms, battery energy storage systems (BESS), and small hydro development covering feasibility, modelling and regulatory compliance. Experienced in steady-state, short circuit, harmonics, EMT and dynamic stability analysis using PSS®E, PSCAD, PowerFactory and ETAP. Skilled in navigating submission requirements under the National Electricity Rules (Australia), AEMO RUGs, and Malaysian Grid Code (MGC) with strong familiarity in the grid-connection approval process and stakeholder engagement.
                     </div>
                 </div>
 
@@ -1335,7 +1354,7 @@
                     <div class="team-name">Dr. Ajith Tennakoon</div>
                     <div class="team-title">Lead Power Systems Engineer | PhD, CPEng</div>
                     <div class="team-bio">
-                        30+ years spanning power generation, transmission, and protection systems. Former Head of Transmission Control & Protection at major utility. Former Utility Protection & Control Planning Engineer. Extensive experience in retrofitting, commissioning, and protection design. Expert in PSS/E, PSCAD, PowerFactory.
+                        Professional electrical engineer with more than 3 decades of experience in power generation and transmission. Started career as a Power Plant engineer at Ceylon Electricity Board (CEB) in Sri Lanka, then continued as senior control & instrumentation engineer and protection engineer. Joined SA Power Networks as protection & control planning engineer, then served as Head of Transmission Control and Protection at CEB before joining Vysus Group in 2019. Extensive experience in power generation and transmission specialising in control and protection. Completed master's and PhD in Electrical Engineering specializing in power system modeling and dynamic studies. Proficient in PSS/E, PowerFactory, PSCAD. Engaged in managing connection studies per NER for renewable energy integration including PV, Wind, BESS and Hybrid plants with grid-following and grid-forming inverters.
                     </div>
                 </div>
 
@@ -1364,19 +1383,19 @@
                     </div>
                 </div>
 
-                <div class="team-card placeholder">
-                    <div class="team-name">Mohammed Nathur (Arif) <span class="placeholder-badge">PLACEHOLDER</span></div>
-                    <div class="team-title">[Title to be confirmed]</div>
+                <div class="team-card">
+                    <div class="team-name">Mohammed Arif</div>
+                    <div class="team-title">Lead Energy - Power and Energy Systems</div>
                     <div class="team-bio">
-                        [Biography and expertise to be added - please provide details for Mohammed Nathur including years of experience, specializations, software proficiencies, and notable project experience.]
+                        Over 17 years of experience in power system consulting, managing projects for utilities and industrial clients. Currently with Vysus Group for 2 years, engaged in connection studies, renewable model control tuning and power system modelling of large-scale renewable plants in the Australian National Electricity Market (NEM). Previously worked with WSP on various renewable generation projects including AEMO's Generator Technical Performance Standard and NER compliance studies (connection and R1 studies) particularly in NSW region. Earlier career with GE working on synchronous power generation equipment and controls, conducting power plant testing and model validation in US, Middle East and Southeast Asia. Expert in deriving dynamic model parameters of synchronous machines, excitation systems and turbine governors. Hands-on experience with grid code compliance testing and model validation for US grids (WECC, NERC, ERCOT). Proficient in PSS/E, PSCAD, DIgSILENT PowerFactory, PSLF and ETAP.
                     </div>
                 </div>
 
-                <div class="team-card placeholder">
-                    <div class="team-name">Momtaz Rahman <span class="placeholder-badge">PLACEHOLDER</span></div>
-                    <div class="team-title">[Title to be confirmed]</div>
+                <div class="team-card">
+                    <div class="team-name">Momtaz Rahman, PhD</div>
+                    <div class="team-title">Lead Engineer - Power & Energy Systems</div>
                     <div class="team-bio">
-                        [Biography and expertise to be added - please provide details for Momtaz Rahman including years of experience, specializations, software proficiencies, and notable project experience.]
+                        Passionate about reducing carbon footprint through renewable energy deployment. Over 15 years experience in power systems consultancy, power station operation, and renewable energy solutions across Australia, Bangladesh, Germany, and Qatar. Expertise in power system dynamic modelling and micro-grid connection studies using PSS/E, PSCAD, and DIgSILENT PowerFactory. Senior-level experience in development and delivery of on-grid and off-grid renewable energy projects. Skilled in power system operations and utility substation studies including optimal power flow management in interconnected systems and short-term outage planning for network reliability. Holds Bachelor's, Master's (Energy Technology) and PhD (Renewable Energy) degrees in Electrical Engineering. Currently undertaking connection studies for Australian projects following AEMO guidelines, providing hold point testing support, and preparing R2 model validation reports.
                     </div>
                 </div>
             </div>
@@ -1992,8 +2011,13 @@
     <!-- FOOTER                                       -->
     <!-- ============================================ -->
     <div style="background: var(--malmo-green); color: white; padding: 3rem 2rem; text-align: center;">
-        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 1rem;">
-            <span style="color: var(--stockholm-neon);">V</span> Vysus Group
+        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.75rem;">
+            <svg viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg" style="width: 50px; height: auto;">
+                <!-- Vysus Marque - Stockholm Neon -->
+                <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="#00E3A9"/>
+                <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="#00E3A9"/>
+            </svg>
+            <span>Vysus Group</span>
         </div>
         <div style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 0.5rem;">
             Power and Energy Systems Division
