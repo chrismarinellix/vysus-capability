@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vysus Group - Grid Connection Studies Consultancy [CONFIDENTIAL]</title>
+
+    <style>
+        /* ========================================== */
+        /* BASE VARIABLES & COLORS                    */
+        /* ========================================== */
+        :root {
+            --stockholm-neon: #00E3A9;
+            --malmo-green: #005454;
+            --oslo-gunmetal: #2C3E50;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* ========================================== */
+        /* SECURITY & ACCESS CONTROL                  */
+        /* ========================================== */
+        #accessControl {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        #accessControl.hidden {
+            display: none;
+        }
+
+        .access-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .access-box h2 {
+            color: #005454;
+            margin-bottom: 1rem;
+        }
+
+        .access-box input {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .access-box button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--stockholm-neon);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .access-box button:hover {
+            background: #00c995;
+        }
+
+        #accessError {
+            color: #d32f2f;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        #expirationWarning {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #fff3cd;
+            color: #856404;
+            padding: 1rem;
+            text-align: center;
+            z-index: 9998;
+            border-bottom: 2px solid #ffc107;
+            display: none;
+        }
+
+        #expirationWarning.show {
+            display: block;
+        }
+
+        /* ========================================== */
+        /* SLIDE CONTAINER                            */
+        /* ========================================== */
+        .slide {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content-slide {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .slide-title {
+            font-size: 2.5rem;
+            color: var(--malmo-green);
+            margin-bottom: 1rem;
+        }
+
+        .slide-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+        }
+
+        /* ========================================== */
+        /* HERO SLIDE                                 */
+        /* ========================================== */
+        .hero-slide {
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .logo-v {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--stockholm-neon);
+        }
+
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 300;
+            color: white;
+            margin-left: 1rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            margin: 2rem 0;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        /* ========================================== */
+        /* CAPABILITY MATCHER STYLES                  */
+        /* ========================================== */
+        .capability-checkbox {
+            display: block;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            background: white;
+            border: 1px solid #e0e0e0;
+        }
+
+        .capability-checkbox:hover {
+            background: rgba(0, 227, 169, 0.05);
+            border-color: var(--stockholm-neon);
+        }
+
+        .capability-checkbox input[type="checkbox"] {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--stockholm-neon);
+        }
+
+        .capability-checkbox span {
+            color: #333;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        .capability-checkbox input[type="checkbox"]:checked + span {
+            font-weight: 600;
+            color: var(--malmo-green);
+        }
+
+        .faq-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--malmo-green);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .faq-question:hover {
+            background: #006666;
+        }
+
+        .faq-icon {
+            transition: transform 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 2000px;
+        }
+
+        .faq-content {
+            padding: 2rem;
+        }
+
+        /* ========================================== */
+        /* FLOATING SUMMARY PANEL                     */
+        /* ========================================== */
+        #capabilitySummary {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 84, 84, 0.3);
+            padding: 1.5rem;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            z-index: 9997;
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+        }
+
+        #capabilitySummary.show {
+            transform: translateX(0);
+        }
+
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid var(--stockholm-neon);
+            padding-bottom: 0.5rem;
+        }
+
+        .summary-header h3 {
+            color: var(--malmo-green);
+            font-size: 1.2rem;
+        }
+
+        .close-summary {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+
+        .close-summary:hover {
+            color: #333;
+        }
+
+        #supportReport {
+            margin: 1rem 0;
+        }
+
+        .copy-button, .reset-button {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .copy-button {
+            background: var(--stockholm-neon);
+            color: white;
+        }
+
+        .copy-button:hover {
+            background: #00c995;
+        }
+
+        .reset-button {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        .reset-button:hover {
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ACCESS CONTROL -->
+    <div id="accessControl">
+        <div class="access-box">
+            <h2>Confidential Document Access</h2>
+            <p>This capability statement is confidential. Please enter your email address to access.</p>
+            <input type="email" id="userEmail" placeholder="your.name@company.com" required>
+            <div id="accessError"></div>
+            <button onclick="verifyAccess()">Access Document</button>
+        </div>
+    </div>
+
+    <div id="expirationWarning">
+        ⚠️ This document expires on <strong id="expiryDate"></strong> - Please contact Chris Marinelli for an updated version
+    </div>
+
+    <!-- HERO SLIDE -->
+    <div class="slide hero-slide">
+        <div class="hero-content">
+            <div>
+                <span class="logo-v">V</span>
+                <span class="logo-text">Vysus Group</span>
+            </div>
+            <h1 class="hero-title">Grid Connection Studies Consultancy</h1>
+            <p class="hero-subtitle">Expert Support for Renewable Energy Grid Integration</p>
+            <p class="hero-subtitle" style="margin-top: 2rem; font-size: 1rem; opacity: 0.8;">100% AEMO Approval Rate | 280+ Successful Connections | ISO 9001:2015 Certified</p>
+        </div>
+    </div>
+
+    <!-- CAPABILITY MATCHER SLIDE -->
+    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Select Your Project Requirements</h2>
+                <p class="slide-subtitle">Check the studies and services you need - we'll generate a custom support statement with expert contacts</p>
+            </div>
+
+            <div class="faq-container">
+
+                <!-- R0 PRELIMINARY ASSESSMENT -->
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>R0 - Preliminary Assessment Studies</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r0-feasibility" onchange="toggleCapability(this)">
+                                <span>Feasibility Study & Connection Point Analysis</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r0-desktop" onchange="toggleCapability(this)">
+                                <span>Desktop Network Capacity Assessment</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r0-cost" onchange="toggleCapability(this)">
+                                <span>Preliminary Cost Estimation</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- R1 DETAILED GPS PACKAGE -->
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>R1 - Detailed Generator Performance Standards Package</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r1-power-systems" onchange="toggleCapability(this)">
+                                <span>Power Systems Modeling (PSS®E/PowerFactory/PSCAD)</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r1-dynamic-models" onchange="toggleCapability(this)">
+                                <span>Dynamic Model Development & Validation</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r1-gps-package" onchange="toggleCapability(this)">
+                                <span>GPS Documentation Package & AEMO Submission</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r1-protection" onchange="toggleCapability(this)">
+                                <span>Protection System Design & Coordination</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r1-connection-agreement" onchange="toggleCapability(this)">
+                                <span>Connection Agreement Technical Schedules</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- R2 COMMISSIONING SUPPORT -->
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>R2 - Commissioning & Post-Connection Support</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r2-testing" onchange="toggleCapability(this)">
+                                <span>Commissioning Test Procedure Development</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r2-onsite" onchange="toggleCapability(this)">
+                                <span>On-Site GPS Validation Testing Support</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r2-reporting" onchange="toggleCapability(this)">
+                                <span>R2 Compliance Report Preparation</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SPECIALIZED STUDIES -->
+                <div class="faq-item" onclick="this.classList.toggle('active')">
+                    <div class="faq-question">
+                        <span>Specialized Technical Studies</span>
+                        <span class="faq-icon">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="harmonic-analysis" onchange="toggleCapability(this)">
+                                <span>Harmonic & Power Quality Analysis (IEC 61000)</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="electromagnetic" onchange="toggleCapability(this)">
+                                <span>Electromagnetic Transient Studies (PSCAD/EMTP)</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="frequency-control" onchange="toggleCapability(this)">
+                                <span>Frequency Control & Synthetic Inertia Studies</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="voltage-stability" onchange="toggleCapability(this)">
+                                <span>Voltage Stability & Reactive Power Analysis</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="scada-telecom" onchange="toggleCapability(this)">
+                                <span>SCADA & Telecommunications Design</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="compliance-audit" onchange="toggleCapability(this)">
+                                <span>Ongoing Compliance & Performance Audits</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING SUMMARY PANEL -->
+    <div id="capabilitySummary">
+        <div class="summary-header">
+            <h3>Your Project Support</h3>
+            <button class="close-summary" onclick="document.getElementById('capabilitySummary').classList.remove('show')">&times;</button>
+        </div>
+        <div id="supportReport"></div>
+        <button class="copy-button" onclick="copyReportToClipboard()">📋 Copy to Email</button>
+        <button class="reset-button" onclick="resetCapabilities()">Reset Selection</button>
+    </div>
+
+    <script>
+        // ============================================
+        // SECURITY & ACCESS CONTROL
+        // ============================================
+        const DOCUMENT_CREATED = new Date('2025-11-26').getTime();
+        const DAYS_VALID = 10;
+        const DOCUMENT_EXPIRY = DOCUMENT_CREATED + (DAYS_VALID * 24 * 60 * 60 * 1000);
+
+        function verifyAccess() {
+            const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
+            const errorElement = document.getElementById('accessError');
+
+            if (!emailInput || !emailInput.includes('@')) {
+                errorElement.textContent = 'Please enter a valid email address';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            if (Date.now() > DOCUMENT_EXPIRY) {
+                errorElement.textContent = 'This document has expired. Please contact Chris Marinelli for an updated version.';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            const domain = emailInput.split('@')[1];
+            const storedData = localStorage.getItem('vysus_doc_access');
+
+            if (storedData) {
+                const accessData = JSON.parse(storedData);
+                if (domain !== accessData.lockedDomain) {
+                    errorElement.textContent = `Access denied. This document is locked to @${accessData.lockedDomain} domain only.`;
+                    errorElement.style.display = 'block';
+                    return;
+                }
+                accessData.lastAccess = new Date().toISOString();
+                accessData.accessCount = (accessData.accessCount || 1) + 1;
+                localStorage.setItem('vysus_doc_access', JSON.stringify(accessData));
+            } else {
+                const accessData = {
+                    lockedDomain: domain,
+                    firstEmail: emailInput,
+                    firstAccess: new Date().toISOString(),
+                    accessCount: 1
+                };
+                localStorage.setItem('vysus_doc_access', JSON.stringify(accessData));
+            }
+
+            document.getElementById('accessControl').classList.add('hidden');
+            const expiryDateDisplay = new Date(DOCUMENT_EXPIRY).toLocaleDateString('en-AU', {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            document.getElementById('expiryDate').textContent = expiryDateDisplay;
+            document.getElementById('expirationWarning').classList.add('show');
+        }
+
+        window.addEventListener('load', function() {
+            if (Date.now() > DOCUMENT_EXPIRY) return;
+            const storedData = localStorage.getItem('vysus_doc_access');
+            if (storedData) {
+                document.getElementById('accessControl').classList.add('hidden');
+            }
+        });
+
+        // ============================================
+        // CAPABILITY MATCHER WITH EXPERT MAPPING
+        // ============================================
+        const CAPABILITY_DATABASE = {
+            'r0-feasibility': {
+                title: 'R0 Feasibility Study & Connection Point Analysis',
+                support: 'Preliminary grid connection feasibility assessment including connection point identification, basic technical analysis, and early-stage cost estimation to support project development decisions.',
+                expert: 'Chris Marinelli',
+                phone: '+61 XXX XXX XXX',
+                email: 'chris.marinelli@vysusgroup.com'
+            },
+            'r0-desktop': {
+                title: 'Desktop Network Capacity Assessment',
+                support: 'Desktop review of network capacity, thermal ratings, and fault level analysis to identify potential technical constraints and connection opportunities.',
+                expert: 'Network Planning Team',
+                phone: '+61 XXX XXX XXX',
+                email: 'planning@vysusgroup.com'
+            },
+            'r0-cost': {
+                title: 'Preliminary Cost Estimation',
+                support: 'High-level cost estimation for grid connection works including NSP charges, augmentation requirements, and developer-funded infrastructure.',
+                expert: 'Commercial/Technical Lead',
+                phone: '+61 XXX XXX XXX',
+                email: 'commercial@vysusgroup.com'
+            },
+            'r1-power-systems': {
+                title: 'Power Systems Modeling (PSS®E/PowerFactory/PSCAD)',
+                support: 'Comprehensive power systems analysis including load flow, short circuit, dynamic stability, and voltage control studies using industry-standard software platforms.',
+                expert: 'Lead Power Systems Engineer',
+                phone: '+61 XXX XXX XXX',
+                email: 'powersystems@vysusgroup.com'
+            },
+            'r1-dynamic-models': {
+                title: 'Dynamic Model Development & Validation',
+                support: 'Development and validation of detailed dynamic models for generators, inverters, and control systems to AEMO standards including EMT and RMS positive sequence models.',
+                expert: 'Dr. Modeling Specialist',
+                phone: '+61 XXX XXX XXX',
+                email: 'modeling@vysusgroup.com'
+            },
+            'r1-gps-package': {
+                title: 'GPS Documentation Package & AEMO Submission',
+                support: 'Complete Generator Performance Standards documentation package including technical schedules, compliance statements, and AEMO submission support with 100% approval track record.',
+                expert: 'GPS Compliance Lead',
+                phone: '+61 XXX XXX XXX',
+                email: 'gps@vysusgroup.com'
+            },
+            'r1-protection': {
+                title: 'Protection System Design & Coordination',
+                support: 'Protection coordination, relay settings, and fault level analysis ensuring safe and reliable grid integration with compliance to NER requirements.',
+                expert: 'Protection Engineer',
+                phone: '+61 XXX XXX XXX',
+                email: 'protection@vysusgroup.com'
+            },
+            'r1-connection-agreement': {
+                title: 'Connection Agreement Technical Schedules',
+                support: 'Preparation of technical schedules for connection agreements, negotiation support, and commercial interface with Network Service Providers.',
+                expert: 'Connection Agreement Specialist',
+                phone: '+61 XXX XXX XXX',
+                email: 'agreements@vysusgroup.com'
+            },
+            'r2-testing': {
+                title: 'Commissioning Test Procedure Development',
+                support: 'Development of comprehensive GPS validation test procedures aligned with AEMO requirements for field testing and commissioning activities.',
+                expert: 'Commissioning Lead',
+                phone: '+61 XXX XXX XXX',
+                email: 'commissioning@vysusgroup.com'
+            },
+            'r2-onsite': {
+                title: 'On-Site GPS Validation Testing Support',
+                support: 'On-site testing support and supervision to verify plant performance matches approved models and Generator Performance Standards.',
+                expert: 'Field Services Team',
+                phone: '+61 XXX XXX XXX',
+                email: 'fieldservices@vysusgroup.com'
+            },
+            'r2-reporting': {
+                title: 'R2 Compliance Report Preparation',
+                support: 'Comprehensive R2 validation report preparation demonstrating GPS compliance for AEMO and NSP submission, including non-compliance resolution support.',
+                expert: 'Technical Documentation',
+                phone: '+61 XXX XXX XXX',
+                email: 'reports@vysusgroup.com'
+            },
+            'harmonic-analysis': {
+                title: 'Harmonic & Power Quality Analysis (IEC 61000)',
+                support: 'Detailed harmonic analysis, power quality assessment, and filter design to IEC 61000 series standards including THD, flicker, and voltage distortion studies.',
+                expert: 'Power Quality Engineer',
+                phone: '+61 XXX XXX XXX',
+                email: 'powerquality@vysusgroup.com'
+            },
+            'electromagnetic': {
+                title: 'Electromagnetic Transient Studies (PSCAD/EMTP)',
+                support: 'EMT studies for inverter-based resources, HVDC systems, and complex transient phenomena analysis including switching studies and resonance assessment.',
+                expert: 'EMT Specialist',
+                phone: '+61 XXX XXX XXX',
+                email: 'emt@vysusgroup.com'
+            },
+            'frequency-control': {
+                title: 'Frequency Control & Synthetic Inertia Studies',
+                support: 'Analysis of frequency response, synthetic inertia provision, fast frequency response (FFR) capabilities, and primary frequency response (PFR) compliance.',
+                expert: 'Frequency Control Expert',
+                phone: '+61 XXX XXX XXX',
+                email: 'frequency@vysusgroup.com'
+            },
+            'voltage-stability': {
+                title: 'Voltage Stability & Reactive Power Analysis',
+                support: 'Steady-state and dynamic voltage stability studies, reactive power adequacy assessment, voltage control design, and system strength analysis.',
+                expert: 'Stability Engineer',
+                phone: '+61 XXX XXX XXX',
+                email: 'stability@vysusgroup.com'
+            },
+            'scada-telecom': {
+                title: 'SCADA & Telecommunications Design',
+                support: 'Design of SCADA systems, telecommunications infrastructure, and data monitoring solutions for grid-connected assets including cyber security considerations.',
+                expert: 'SCADA Specialist',
+                phone: '+61 XXX XXX XXX',
+                email: 'scada@vysusgroup.com'
+            },
+            'compliance-audit': {
+                title: 'Ongoing Compliance & Performance Audits',
+                support: 'Post-commissioning performance monitoring, compliance audits, and technical support for operational assets to maintain GPS compliance and optimize performance.',
+                expert: 'Compliance Team',
+                phone: '+61 XXX XXX XXX',
+                email: 'compliance@vysusgroup.com'
+            }
+        };
+
+        let selectedCapabilities = new Set();
+
+        function toggleCapability(checkbox) {
+            const capabilityId = checkbox.getAttribute('data-capability');
+
+            if (checkbox.checked) {
+                selectedCapabilities.add(capabilityId);
+            } else {
+                selectedCapabilities.delete(capabilityId);
+            }
+
+            updateSupportReport();
+        }
+
+        function updateSupportReport() {
+            const summaryPanel = document.getElementById('capabilitySummary');
+            const selectedCount = selectedCapabilities.size;
+
+            if (selectedCount > 0) {
+                summaryPanel.classList.add('show');
+                generateSupportReport();
+            } else {
+                summaryPanel.classList.remove('show');
+            }
+        }
+
+        function generateSupportReport() {
+            const reportContainer = document.getElementById('supportReport');
+            let reportHTML = '';
+
+            selectedCapabilities.forEach(capId => {
+                const capability = CAPABILITY_DATABASE[capId];
+                if (capability) {
+                    reportHTML += `
+                        <div style="margin-bottom: 1.5rem; padding: 1rem; background: rgba(0, 227, 169, 0.05); border-left: 3px solid #00E3A9; border-radius: 6px;">
+                            <h4 style="color: #005454; margin: 0 0 0.5rem 0; font-size: 0.95rem;">${capability.title}</h4>
+                            <p style="margin: 0 0 0.8rem 0; color: #555; font-size: 0.9rem; line-height: 1.5;">${capability.support}</p>
+                            <div style="background: white; padding: 0.7rem; border-radius: 4px; font-size: 0.85rem;">
+                                <strong style="color: #00E3A9;">Contact:</strong> ${capability.expert}<br>
+                                <strong style="color: #00E3A9;">Phone:</strong> ${capability.phone}<br>
+                                <strong style="color: #00E3A9;">Email:</strong> <a href="mailto:${capability.email}" style="color: #005454;">${capability.email}</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            reportContainer.innerHTML = reportHTML;
+        }
+
+        function copyReportToClipboard() {
+            let emailText = 'VYSUS GROUP - PROJECT SUPPORT CAPABILITIES\n\n';
+            emailText += 'Based on your selected requirements, here is how Vysus Group can support your project:\n\n';
+            emailText += '='.repeat(80) + '\n\n';
+
+            selectedCapabilities.forEach(capId => {
+                const capability = CAPABILITY_DATABASE[capId];
+                if (capability) {
+                    emailText += `${capability.title.toUpperCase()}\n`;
+                    emailText += `-`.repeat(capability.title.length) + '\n\n';
+                    emailText += `Support: ${capability.support}\n\n`;
+                    emailText += `Key Contact: ${capability.expert}\n`;
+                    emailText += `Phone: ${capability.phone}\n`;
+                    emailText += `Email: ${capability.email}\n\n`;
+                    emailText += '='.repeat(80) + '\n\n';
+                }
+            });
+
+            emailText += 'This capability statement is confidential. Please contact the relevant expert for detailed discussions.\n\n';
+            emailText += 'Vysus Group - 100% AEMO Approval Rate | 280+ Successful Grid Connections | ISO 9001:2015 Certified\n';
+
+            navigator.clipboard.writeText(emailText).then(() => {
+                alert('✅ Support statement copied to clipboard!\n\nYou can now paste this into an email.');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('❌ Failed to copy. Please select and copy manually.');
+            });
+        }
+
+        function resetCapabilities() {
+            selectedCapabilities.clear();
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            updateSupportReport();
+        }
+    </script>
+</body>
+</html>

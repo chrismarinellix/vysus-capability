@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owais Capability Analysis - Vysus Group</title>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        :root {
+            --vysus-stockholm-neon: #00E3A9;
+            --vysus-malmo-green: #005454;
+            --vysus-white: #FFFFFF;
+            --vysus-oslo-snow: #F8F8F8;
+            --vysus-stavanger-ice: #EDEDED;
+            --vysus-bergen-rain: #DADADA;
+            --vysus-scandinavia-rock: #485559;
+            --vysus-trondheim-night: #1D1D1B;
+            --vysus-bath-sky: #4B81EF;
+            --vysus-orlando-red: #F92D63;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Suisse International', Arial, sans-serif;
+            background: var(--vysus-oslo-snow);
+            color: var(--vysus-trondheim-night);
+            line-height: 1.4;
+        }
+
+        .header {
+            background: var(--vysus-malmo-green);
+            padding: 25px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -80px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: var(--vysus-stockholm-neon);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            opacity: 0.2;
+            transform: rotate(15deg);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo svg path { fill: var(--vysus-stockholm-neon); }
+
+        .logo-text {
+            color: var(--vysus-white);
+            font-size: 20px;
+            font-weight: 300;
+        }
+
+        .header-title {
+            color: var(--vysus-white);
+            text-align: right;
+        }
+
+        .header-title h1 {
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+        .header-title p {
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            padding: 30px 40px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .profile-bar {
+            background: var(--vysus-white);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid var(--vysus-stockholm-neon);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .profile-name {
+            font-size: 28px;
+            font-weight: 400;
+            color: var(--vysus-malmo-green);
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-value {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--vysus-malmo-green);
+        }
+
+        .meta-label {
+            font-size: 11px;
+            color: var(--vysus-scandinavia-rock);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .chart-card {
+            background: var(--vysus-white);
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .chart-card.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .chart-title {
+            font-size: 16px;
+            font-weight: 400;
+            color: var(--vysus-malmo-green);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--vysus-stockholm-neon);
+        }
+
+        .scatter-plot {
+            position: relative;
+            height: 400px;
+            border-left: 2px solid var(--vysus-bergen-rain);
+            border-bottom: 2px solid var(--vysus-bergen-rain);
+            margin: 20px 30px 40px 60px;
+        }
+
+        .scatter-plot-large {
+            height: 500px;
+        }
+
+        .axis-label {
+            position: absolute;
+            font-size: 11px;
+            color: var(--vysus-scandinavia-rock);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .axis-label.y-axis {
+            left: -55px;
+            top: 50%;
+            transform: rotate(-90deg) translateX(50%);
+            transform-origin: left center;
+            white-space: nowrap;
+        }
+
+        .axis-label.x-axis {
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .grid-line {
+            position: absolute;
+            background: var(--vysus-stavanger-ice);
+        }
+
+        .grid-line.horizontal {
+            width: 100%;
+            height: 1px;
+        }
+
+        .grid-line.vertical {
+            width: 1px;
+            height: 100%;
+        }
+
+        .tick-label {
+            position: absolute;
+            font-size: 10px;
+            color: var(--vysus-scandinavia-rock);
+        }
+
+        .tick-label.y {
+            left: -25px;
+            transform: translateY(-50%);
+        }
+
+        .tick-label.x {
+            bottom: -20px;
+            transform: translateX(-50%);
+        }
+
+        .data-point {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .data-point:hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            z-index: 20;
+        }
+
+        .data-point.current {
+            background: var(--vysus-stockholm-neon);
+            border: 2px solid var(--vysus-malmo-green);
+        }
+
+        .data-point.previous {
+            background: var(--vysus-bergen-rain);
+            border: 2px solid var(--vysus-scandinavia-rock);
+            opacity: 0.6;
+        }
+
+        .data-point.goal {
+            background: transparent;
+            border: 2px dashed var(--vysus-orlando-red);
+        }
+
+        .data-point.level3 {
+            background: var(--vysus-malmo-green);
+            border: 2px solid var(--vysus-stockholm-neon);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: var(--vysus-trondheim-night);
+            color: var(--vysus-white);
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 100;
+            transform: translate(-50%, -100%);
+            margin-top: -10px;
+        }
+
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: var(--vysus-trondheim-night);
+            border-bottom: none;
+        }
+
+        .reference-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--vysus-scandinavia-rock) 0px,
+                var(--vysus-scandinavia-rock) 5px,
+                transparent 5px,
+                transparent 10px
+            );
+            opacity: 0.5;
+        }
+
+        .reference-label {
+            position: absolute;
+            right: 5px;
+            font-size: 9px;
+            color: var(--vysus-scandinavia-rock);
+            background: var(--vysus-white);
+            padding: 2px 5px;
+            transform: translateY(-50%);
+        }
+
+        .legend {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--vysus-stavanger-ice);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--vysus-scandinavia-rock);
+        }
+
+        .legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .legend-dot.current {
+            background: var(--vysus-stockholm-neon);
+            border: 2px solid var(--vysus-malmo-green);
+        }
+
+        .legend-dot.previous {
+            background: var(--vysus-bergen-rain);
+            border: 2px solid var(--vysus-scandinavia-rock);
+        }
+
+        .legend-dot.goal {
+            background: transparent;
+            border: 2px dashed var(--vysus-orlando-red);
+        }
+
+        .legend-dot.level3 {
+            background: var(--vysus-malmo-green);
+            border: 2px solid var(--vysus-stockholm-neon);
+        }
+
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bar-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 40px;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: var(--vysus-trondheim-night);
+            text-align: right;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .bar-container {
+            height: 20px;
+            background: var(--vysus-stavanger-ice);
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .bar-fill.level1 { background: var(--vysus-bergen-rain); }
+        .bar-fill.level2 { background: var(--vysus-stockholm-neon); }
+        .bar-fill.level3 { background: var(--vysus-malmo-green); }
+
+        .bar-previous {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            border-right: 3px solid var(--vysus-scandinavia-rock);
+            opacity: 0.5;
+        }
+
+        .bar-value {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--vysus-malmo-green);
+        }
+
+        .role-alignment {
+            margin-top: 25px;
+        }
+
+        .role-card {
+            background: var(--vysus-oslo-snow);
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 150px 1fr auto;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .role-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--vysus-malmo-green);
+        }
+
+        .role-bar {
+            height: 8px;
+            background: var(--vysus-stavanger-ice);
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .role-fill {
+            height: 100%;
+            background: var(--vysus-stockholm-neon);
+            border-radius: 4px;
+        }
+
+        .role-threshold {
+            position: absolute;
+            top: -3px;
+            width: 2px;
+            height: 14px;
+            background: var(--vysus-malmo-green);
+        }
+
+        .role-percent {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--vysus-stockholm-neon);
+        }
+
+        .role-percent.exceeds {
+            color: var(--vysus-malmo-green);
+        }
+
+        .footer {
+            background: var(--vysus-trondheim-night);
+            color: var(--vysus-white);
+            padding: 20px 40px;
+            text-align: center;
+        }
+
+        .tagline {
+            color: var(--vysus-stockholm-neon);
+            font-size: 14px;
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .footer p {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        .competency-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .matrix-cell {
+            background: var(--vysus-oslo-snow);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .matrix-cell:hover {
+            border-color: var(--vysus-stockholm-neon);
+        }
+
+        .matrix-cell.highlight {
+            background: linear-gradient(135deg, rgba(0, 227, 169, 0.1), rgba(0, 84, 84, 0.05));
+            border-color: var(--vysus-stockholm-neon);
+        }
+
+        .matrix-name {
+            font-size: 10px;
+            color: var(--vysus-scandinavia-rock);
+            margin-bottom: 8px;
+            height: 28px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .matrix-levels {
+            display: flex;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .matrix-level {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .matrix-level.empty { background: var(--vysus-stavanger-ice); color: var(--vysus-bergen-rain); }
+        .matrix-level.l1 { background: var(--vysus-bergen-rain); color: var(--vysus-scandinavia-rock); }
+        .matrix-level.l2 { background: var(--vysus-stockholm-neon); color: var(--vysus-malmo-green); }
+        .matrix-level.l3 { background: var(--vysus-malmo-green); color: var(--vysus-white); }
+
+        .arrow-indicator {
+            font-size: 10px;
+            color: var(--vysus-stockholm-neon);
+            margin: 0 2px;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const VysusLogo = () => (
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M91.9 37.2 L100.0 60.6 L100.0 37.2 Z" />
+                <path d="M27.6 37.4 L25.7 38.1 L23.8 39.2 L22.2 40.7 L21.3 42.0 L20.4 43.8 L19.8 45.9 L19.7 47.9 L20.0 49.7 L20.7 51.8 L21.6 53.4 L22.9 54.9 L24.5 56.2 L26.0 57.0 L28.2 57.6 L30.0 57.7 L30.0 37.2 Z" />
+                <path d="M0.0 37.2 L11.6 70.8 L25.5 70.8 L13.9 37.2 Z" />
+            </svg>
+        );
+
+        // Competency data with categories for X-axis positioning
+        const technicalCodes = [
+            { id: 1, name: "Power System Dynamic Studies (PSCAD)", category: "Studies", old: 1, new: 2 },
+            { id: 2, name: "Power System Wide Area Operations", category: "Operations", old: 1, new: 2 },
+            { id: 3, name: "Power System Short Circuit", category: "Studies", old: 1, new: 2 },
+            { id: 4, name: "Test Plan Development", category: "Testing", old: 1, new: 2 },
+            { id: 5, name: "NEM Connection Process", category: "Regulatory", old: 1, new: 2 },
+            { id: 6, name: "NEM Generator Technical Req.", category: "Regulatory", old: 1, new: 2 },
+            { id: 7, name: "NEM Power System Model Guidelines", category: "Regulatory", old: 1, new: 2 },
+            { id: 8, name: "Control System Dynamics", category: "Controls", old: 1, new: 2 },
+            { id: 9, name: "Scripting & Automation", category: "Automation", old: 1, new: 2 },
+            { id: 10, name: "Client & Project Management", category: "Management", old: 1, new: 2 }
+        ];
+
+        const activityCodesL2 = [
+            { id: 11, name: "Generator Connection Study (NEM)", category: "Studies", old: 1, new: 2 },
+            { id: 12, name: "Generator Performance Standards", category: "Regulatory", old: 1, new: 2 },
+            { id: 13, name: "Generator Commissioning (Wind)", category: "Commissioning", old: 1, new: 2 },
+            { id: 14, name: "Generator Commissioning (Solar)", category: "Commissioning", old: 1, new: 2 },
+            { id: 15, name: "Generator R2 Model Validation", category: "Validation", old: 1, new: 2 },
+            { id: 16, name: "Energy Storage Connection (NEM)", category: "Studies", old: 1, new: 2 },
+            { id: 17, name: "Energy Storage Standards", category: "Regulatory", old: 1, new: 2 },
+            { id: 18, name: "Energy Storage Commissioning", category: "Commissioning", old: 1, new: 2 },
+            { id: 19, name: "Energy Storage R2 Validation", category: "Validation", old: 1, new: 2 },
+            { id: 20, name: "Control Tuning & Optimisation", category: "Controls", old: 1, new: 2 },
+            { id: 21, name: "Study Automation Scripts", category: "Automation", old: 1, new: 2 },
+            { id: 22, name: "Connection Agreement DD", category: "Commercial", old: 1, new: 2 },
+            { id: 23, name: "Project Issue Resolution", category: "Management", old: 1, new: 2 }
+        ];
+
+        const activityCodesL3 = [
+            { id: 24, name: "Dynamic Model Benchmarking", category: "Modelling", old: 2, new: 3 },
+            { id: 25, name: "Dynamic Model Validation", category: "Validation", old: 2, new: 3 },
+            { id: 26, name: "Base Case Assembly & Tuning", category: "Modelling", old: 2, new: 3 }
+        ];
+
+        const goals2026 = [
+            { id: 27, name: "PowerFactory Studies", category: "Studies", current: 1, target: 2 },
+            { id: 28, name: "Power Quality Analysis", category: "Studies", current: 1, target: 2 },
+            { id: 29, name: "Project Cost Estimate", category: "Commercial", current: 1, target: 2 },
+            { id: 30, name: "Control System Dynamics", category: "Controls", current: 2, target: 3 },
+            { id: 31, name: "Client & Project Management", category: "Management", current: 2, target: 3 },
+            { id: 32, name: "Generator Connection Study", category: "Studies", current: 2, target: 3 },
+            { id: 33, name: "Generator Performance Standards", category: "Regulatory", current: 2, target: 3 },
+            { id: 34, name: "Control Tuning & Optimisation", category: "Controls", current: 2, target: 3 },
+            { id: 35, name: "Study Automation Scripts", category: "Automation", current: 2, target: 3 },
+            { id: 36, name: "Project Issue Resolution", category: "Management", current: 2, target: 3 }
+        ];
+
+        // Role requirements from framework
+        const roleRequirements = {
+            "Engineer": { l2Min: 1, l3Min: 0, description: "Level 2 in at least one discipline" },
+            "Senior Engineer": { l2Min: 1, l3Min: 0, description: "Level 2 in at least one discipline, project lead experience" },
+            "Lead Engineer": { l2Min: 2, l3Min: 0, description: "Level 2 in at least two disciplines, Level 1 in two more" },
+            "Principal Engineer": { l2Min: 2, l3Min: 0, description: "Level 2 in at least two disciplines, Level 1 in two more, pod leadership" },
+            "Senior Principal": { l3Min: 1, l2Min: 2, description: "Level 3 in at least one discipline, Level 2 in two more" }
+        };
+
+        const categories = ["Studies", "Modelling", "Validation", "Controls", "Automation", "Regulatory", "Commercial", "Management", "Commissioning", "Testing", "Operations"];
+
+        const ScatterPlot = ({ data, title, showGoals = false, large = false }) => {
+            const [hoveredPoint, setHoveredPoint] = useState(null);
+
+            const getCategoryX = (category) => {
+                const idx = categories.indexOf(category);
+                return ((idx + 0.5) / categories.length) * 100;
+            };
+
+            const getLevelY = (level) => ((level) / 3) * 100;
+
+            return (
+                <div className={`scatter-plot ${large ? 'scatter-plot-large' : ''}`}>
+                    <span className="axis-label y-axis">Competency Level</span>
+                    <span className="axis-label x-axis">Discipline Category</span>
+
+                    {/* Grid lines */}
+                    {[1, 2, 3].map(level => (
+                        <div key={`h-${level}`} className="grid-line horizontal" style={{ bottom: `${getLevelY(level)}%` }}>
+                            <span className="tick-label y" style={{ bottom: 0 }}>{level}</span>
+                        </div>
+                    ))}
+
+                    {/* Reference lines for role requirements */}
+                    <div className="reference-line" style={{ bottom: `${getLevelY(2)}%` }}>
+                        <span className="reference-label">Lead Engineer Req.</span>
+                    </div>
+                    <div className="reference-line" style={{ bottom: `${getLevelY(3)}%` }}>
+                        <span className="reference-label">Senior Principal Req.</span>
+                    </div>
+
+                    {/* Category labels */}
+                    {categories.map((cat, idx) => (
+                        <span key={cat} className="tick-label x" style={{ left: `${getCategoryX(cat)}%` }}>
+                            {cat.substring(0, 6)}
+                        </span>
+                    ))}
+
+                    {/* Data points - previous level */}
+                    {data.map((item, idx) => (
+                        <div
+                            key={`prev-${item.id}`}
+                            className="data-point previous"
+                            style={{
+                                left: `${getCategoryX(item.category) + (idx % 3 - 1) * 2}%`,
+                                bottom: `${getLevelY(item.old || item.current)}%`
+                            }}
+                        />
+                    ))}
+
+                    {/* Data points - current/new level */}
+                    {data.map((item, idx) => (
+                        <div
+                            key={`new-${item.id}`}
+                            className={`data-point ${item.new === 3 ? 'level3' : 'current'}`}
+                            style={{
+                                left: `${getCategoryX(item.category) + (idx % 3 - 1) * 2}%`,
+                                bottom: `${getLevelY(item.new || item.target)}%`
+                            }}
+                            onMouseEnter={() => setHoveredPoint(item)}
+                            onMouseLeave={() => setHoveredPoint(null)}
+                        >
+                            {hoveredPoint?.id === item.id && (
+                                <div className="tooltip">
+                                    {item.name}: L{item.old || item.current} → L{item.new || item.target}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+
+                    {/* Goal points */}
+                    {showGoals && goals2026.map((item, idx) => (
+                        <div
+                            key={`goal-${item.id}`}
+                            className="data-point goal"
+                            style={{
+                                left: `${getCategoryX(item.category) + (idx % 3 - 1) * 2}%`,
+                                bottom: `${getLevelY(item.target)}%`
+                            }}
+                            onMouseEnter={() => setHoveredPoint(item)}
+                            onMouseLeave={() => setHoveredPoint(null)}
+                        >
+                            {hoveredPoint?.id === item.id && (
+                                <div className="tooltip">
+                                    2026 Goal: {item.name} → L{item.target}
+                                </div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const BarChart = ({ data }) => (
+            <div className="bar-chart">
+                {data.map(item => (
+                    <div key={item.id} className="bar-row">
+                        <div className="bar-label" title={item.name}>{item.name}</div>
+                        <div className="bar-container">
+                            <div className="bar-previous" style={{ width: `${((item.old || 0) / 3) * 100}%` }} />
+                            <div
+                                className={`bar-fill level${item.new}`}
+                                style={{ width: `${(item.new / 3) * 100}%` }}
+                            />
+                        </div>
+                        <div className="bar-value">L{item.new}</div>
+                    </div>
+                ))}
+            </div>
+        );
+
+        const RoleAlignment = () => {
+            const l2Count = 10 + 13; // Technical + Activity codes at L2
+            const l3Count = 3; // Activity codes at L3
+
+            const roles = [
+                { name: "Engineer", met: l2Count >= 1, percent: Math.min(100, (l2Count / 1) * 100) },
+                { name: "Senior Engineer", met: l2Count >= 1, percent: Math.min(100, (l2Count / 1) * 100) },
+                { name: "Lead Engineer", met: l2Count >= 2, percent: Math.min(100, (l2Count / 4) * 100) },
+                { name: "Principal Engineer", met: l2Count >= 2, percent: Math.min(100, (l2Count / 4) * 100) },
+                { name: "Senior Principal", met: l3Count >= 1, percent: Math.min(100, (l3Count / 1) * 100 * 0.5 + (l2Count / 4) * 100 * 0.5) }
+            ];
+
+            return (
+                <div className="role-alignment">
+                    {roles.map(role => (
+                        <div key={role.name} className="role-card">
+                            <div className="role-name">{role.name}</div>
+                            <div className="role-bar">
+                                <div className="role-fill" style={{ width: `${Math.min(100, role.percent)}%` }} />
+                                <div className="role-threshold" style={{ left: '100%' }} />
+                            </div>
+                            <div className={`role-percent ${role.percent >= 100 ? 'exceeds' : ''}`}>
+                                {Math.round(role.percent)}%
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            );
+        };
+
+        const CompetencyMatrix = ({ data }) => (
+            <div className="competency-matrix">
+                {data.map(item => (
+                    <div key={item.id} className={`matrix-cell ${item.new >= 2 ? 'highlight' : ''}`}>
+                        <div className="matrix-name">{item.name}</div>
+                        <div className="matrix-levels">
+                            <div className={`matrix-level ${item.old >= 1 ? 'l1' : 'empty'}`}>{item.old || '-'}</div>
+                            <span className="arrow-indicator">→</span>
+                            <div className={`matrix-level l${item.new}`}>{item.new}</div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+
+        const App = () => {
+            const allData = [...technicalCodes, ...activityCodesL2, ...activityCodesL3];
+
+            return (
+                <div>
+                    <header className="header">
+                        <div className="header-content">
+                            <div className="logo">
+                                <VysusLogo />
+                                <span className="logo-text">Vysus Group</span>
+                            </div>
+                            <div className="header-title">
+                                <h1>Engineering Competency Analysis</h1>
+                                <p>Power Grid and Renewables | December 2024</p>
+                            </div>
+                        </div>
+                    </header>
+
+                    <main className="main-content">
+                        <div className="profile-bar">
+                            <div>
+                                <h2 className="profile-name">Owais</h2>
+                                <p style={{color: 'var(--vysus-scandinavia-rock)', fontSize: '13px'}}>
+                                    Assessed by Tony Morton | Projects: Blacktop, Whyalla, Armidale, Haughton, Wellington North
+                                </p>
+                            </div>
+                            <div className="profile-meta">
+                                <div className="meta-item">
+                                    <div className="meta-value">10</div>
+                                    <div className="meta-label">Tech Codes L2</div>
+                                </div>
+                                <div className="meta-item">
+                                    <div className="meta-value">13</div>
+                                    <div className="meta-label">Activity Codes L2</div>
+                                </div>
+                                <div className="meta-item">
+                                    <div className="meta-value">3</div>
+                                    <div className="meta-label">Activity Codes L3</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="dashboard-grid">
+                            <div className="chart-card full-width">
+                                <h3 className="chart-title">Competency Distribution by Category (X) vs Level (Y)</h3>
+                                <ScatterPlot data={allData} showGoals={true} large={true} />
+                                <div className="legend">
+                                    <div className="legend-item">
+                                        <div className="legend-dot previous"></div>
+                                        <span>Previous Level</span>
+                                    </div>
+                                    <div className="legend-item">
+                                        <div className="legend-dot current"></div>
+                                        <span>Current Level (L2)</span>
+                                    </div>
+                                    <div className="legend-item">
+                                        <div className="legend-dot level3"></div>
+                                        <span>Current Level (L3)</span>
+                                    </div>
+                                    <div className="legend-item">
+                                        <div className="legend-dot goal"></div>
+                                        <span>2026 Development Goal</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="chart-card">
+                                <h3 className="chart-title">Technical Codes - Level Progression</h3>
+                                <BarChart data={technicalCodes} />
+                            </div>
+
+                            <div className="chart-card">
+                                <h3 className="chart-title">Role Alignment vs Framework Requirements</h3>
+                                <RoleAlignment />
+                                <p style={{fontSize: '11px', color: 'var(--vysus-scandinavia-rock)', marginTop: '15px'}}>
+                                    Based on Vysus Power Grid Competency Levels Rev 002. Lead Engineer requires L2 in 2+ disciplines.
+                                    Senior Principal requires L3 in at least one discipline.
+                                </p>
+                            </div>
+
+                            <div className="chart-card full-width">
+                                <h3 className="chart-title">Level 3 Activity Codes (Task Leader)</h3>
+                                <BarChart data={activityCodesL3} />
+                            </div>
+
+                            <div className="chart-card full-width">
+                                <h3 className="chart-title">Activity Codes - Level 2 Progression Matrix</h3>
+                                <CompetencyMatrix data={activityCodesL2} />
+                            </div>
+
+                            <div className="chart-card full-width">
+                                <h3 className="chart-title">2026 Development Goals - Target Levels</h3>
+                                <CompetencyMatrix data={goals2026.map(g => ({ ...g, old: g.current, new: g.target }))} />
+                            </div>
+                        </div>
+                    </main>
+
+                    <footer className="footer">
+                        <p className="tagline">Ingenuity. Imagination. Insight.</p>
+                        <p>Vysus Group - Power Grid and Renewables</p>
+                    </footer>
+                </div>
+            );
+        };
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>

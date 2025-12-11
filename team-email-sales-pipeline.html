@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Email - Sales Pipeline Discussion</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #f5f5f5;
+        }
+        .email-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .header {
+            border-bottom: 2px solid #00E3A9;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .field {
+            margin-bottom: 0.5rem;
+        }
+        .field strong {
+            color: #005454;
+        }
+        .body-text {
+            line-height: 1.8;
+            color: #333;
+        }
+        .body-text p {
+            margin-bottom: 1rem;
+        }
+        .attachment {
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .attachment-icon {
+            font-size: 2rem;
+        }
+        .signature {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            color: #666;
+        }
+        .copy-btn {
+            background: linear-gradient(135deg, #00E3A9 0%, #005454 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 2rem;
+        }
+        .copy-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <div class="field"><strong>To:</strong> Power & Energy Systems Team</div>
+            <div class="field"><strong>Subject:</strong> Grid Connection Sales Pipeline Discussion - Action Required</div>
+        </div>
+
+        <div class="body-text">
+            <p>Hi everyone,</p>
+
+            <p>I'd like to get together to discuss our sales pipeline and business opportunities for grid connection services.</p>
+
+            <p>I've put together a capability flyer (attached) that I want to use as a framework for building discussions with clients. This document outlines our key services, track record, and technical capabilities in a format designed for client engagement.</p>
+
+            <p><strong>Meeting Objective:</strong></p>
+            <ul>
+                <li>Review current pipeline opportunities</li>
+                <li>Discuss how to use this flyer in client conversations</li>
+                <li>Training on pre-sales communication techniques</li>
+                <li>Identify follow-up actions for active opportunities</li>
+            </ul>
+
+            <p><strong>Important:</strong> As engineers, we're generally comfortable talking technical - but closing sales requires a different approach. I want to train you on the communication techniques that help convert technical discussions into commercial opportunities.</p>
+
+            <p>Please review the attached flyer before our meeting. I've also attached a pre-sales question guide with four key questions you can use when talking to clients at any stage - whether on existing projects or in new conversations.</p>
+
+            <div class="attachment">
+                <span class="attachment-icon">📎</span>
+                <div>
+                    <strong>vysus-grid-connection-capability-statement-v2.html</strong><br>
+                    <span style="color: #666; font-size: 0.9rem;">Grid Connection Capability Flyer (Confidential Draft)</span>
+                </div>
+            </div>
+
+            <div class="attachment">
+                <span class="attachment-icon">📎</span>
+                <div>
+                    <strong>grid-connection-presales-questions.html</strong><br>
+                    <span style="color: #666; font-size: 0.9rem;">Pre-Sales Question Training Guide</span>
+                </div>
+            </div>
+
+            <p>Please confirm your availability for a 1-hour session this week.</p>
+        </div>
+
+        <div class="signature">
+            <p>Thanks,<br>
+            <strong>Chris Marinelli</strong><br>
+            Vice President - Power and Energy Systems<br>
+            chris.marinelli@vysusgroup.com<br>
+            0417 035 368</p>
+        </div>
+    </div>
+
+    <button class="copy-btn" onclick="copyEmail()">Copy Email Text to Clipboard</button>
+
+    <script>
+        function copyEmail() {
+            const emailText = `Subject: Grid Connection Sales Pipeline Discussion - Action Required
+
+Hi everyone,
+
+I'd like to get together to discuss our sales pipeline and business opportunities for grid connection services.
+
+I've put together a capability flyer (attached) that I want to use as a framework for building discussions with clients. This document outlines our key services, track record, and technical capabilities in a format designed for client engagement.
+
+MEETING OBJECTIVE:
+- Review current pipeline opportunities
+- Discuss how to use this flyer in client conversations
+- Training on pre-sales communication techniques
+- Identify follow-up actions for active opportunities
+
+IMPORTANT: As engineers, we're generally comfortable talking technical - but closing sales requires a different approach. I want to train you on the communication techniques that help convert technical discussions into commercial opportunities.
+
+Please review the attached flyer before our meeting. I've also attached a pre-sales question guide with four key questions you can use when talking to clients at any stage - whether on existing projects or in new conversations.
+
+ATTACHMENTS:
+1. vysus-grid-connection-capability-statement-v2.html - Grid Connection Capability Flyer (Confidential Draft)
+2. grid-connection-presales-questions.html - Pre-Sales Question Training Guide
+
+Please confirm your availability for a 1-hour session this week.
+
+Thanks,
+Chris Marinelli
+Vice President - Power and Energy Systems
+chris.marinelli@vysusgroup.com
+0417 035 368`;
+
+            navigator.clipboard.writeText(emailText).then(() => {
+                alert('Email text copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+            });
+        }
+    </script>
+</body>
+</html>

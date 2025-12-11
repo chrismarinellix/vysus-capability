@@ -1,0 +1,2860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vysus Grid - Client Conversations Training [INTERNAL]</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Vysus Brand Colors */
+            --stockholm-neon: #00E3A9;
+            --malmo-green: #005454;
+            --barcelona-dusk: #3c1363;
+            --houston-pink: #f188f4;
+            --mumbai-magenta: #8e329c;
+            --hellerup-royal: #05275e;
+            --bath-sky: #4b81ef;
+            --orlando-red: #f92d63;
+            --trondheim-night: #1d1d1b;
+            --scandinavia-rock: #485559;
+            --bergen-rain: #dadada;
+            --oslo-snow: #f8f8f8;
+            --white: #ffffff;
+        }
+
+        /* ========================================== */
+        /* SECURITY & ACCESS CONTROL STYLES           */
+        /* ========================================== */
+
+        /* Access Control Overlay */
+        #accessControl {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        #accessControl.hidden {
+            display: none;
+        }
+
+        .access-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .access-box h2 {
+            color: #005454;
+            margin-bottom: 1rem;
+        }
+
+        .access-box .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        .access-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #00E3A9;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .access-box button {
+            background: linear-gradient(135deg, #00E3A9 0%, #005454 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .access-box button:hover {
+            opacity: 0.9;
+        }
+
+        .access-error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Internal Use Banner */
+        #internalBanner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #005454 0%, #00E3A9 100%);
+            color: white;
+            text-align: center;
+            padding: 0.4rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            z-index: 9997;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* User Info Banner */
+        #userInfoBanner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 84, 84, 0.95);
+            color: white;
+            text-align: center;
+            padding: 0.4rem;
+            font-size: 0.75rem;
+            z-index: 9997;
+            display: none;
+        }
+
+        #userInfoBanner.show {
+            display: block;
+        }
+
+        body {
+            font-family: Arial, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--trondheim-night);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, var(--malmo-green) 0%, var(--hellerup-royal) 50%, var(--trondheim-night) 100%);
+            background-attachment: fixed;
+        }
+
+        /* Animated Background Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--stockholm-neon);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-particle 15s infinite;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .nav-brand {
+            color: var(--stockholm-neon);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .nav-stats {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        .stat-icon {
+            font-size: 1.2rem;
+        }
+
+        .xp-bar {
+            width: 150px;
+            height: 8px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .xp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--stockholm-neon), var(--bath-sky));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 7rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Screen Management */
+        .screen {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 227, 169, 0.2);
+            border-color: rgba(0, 227, 169, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: white;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--stockholm-neon), var(--bath-sky));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .subtitle {
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--stockholm-neon), var(--malmo-green));
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 227, 169, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 227, 169, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--stockholm-neon);
+        }
+
+        .btn-communication {
+            background: linear-gradient(135deg, var(--mumbai-magenta), var(--barcelona-dusk));
+            color: white;
+            box-shadow: 0 10px 30px rgba(142, 50, 156, 0.4);
+        }
+
+        .btn-communication:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(142, 50, 156, 0.6);
+        }
+
+        /* Module Cards */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--stockholm-neon), var(--bath-sky));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .module-card:hover::before,
+        .module-card.completed::before {
+            transform: scaleX(1);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 227, 169, 0.3);
+            box-shadow: 0 15px 40px rgba(0, 227, 169, 0.2);
+        }
+
+        .module-card.completed {
+            border-color: rgba(0, 227, 169, 0.5);
+        }
+
+        .module-card.communication-link {
+            background: linear-gradient(135deg, rgba(142, 50, 156, 0.2), rgba(60, 19, 99, 0.2));
+            border-color: rgba(142, 50, 156, 0.3);
+        }
+
+        .module-card.communication-link::before {
+            background: linear-gradient(90deg, var(--houston-pink), var(--mumbai-magenta));
+        }
+
+        .module-card.communication-link:hover {
+            border-color: var(--mumbai-magenta);
+            box-shadow: 0 15px 40px rgba(142, 50, 156, 0.3);
+        }
+
+        .module-card .icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .module-card h3 {
+            color: white;
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .module-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+
+        .module-card .xp-reward {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 227, 169, 0.2);
+            color: var(--stockholm-neon);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .module-card .status-badge {
+            position: absolute;
+            bottom: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+        }
+
+        /* Question Card Styles */
+        .question-container {
+            color: white;
+        }
+
+        .question-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-header .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-header .back-btn:hover {
+            background: rgba(0, 227, 169, 0.3);
+        }
+
+        .question-header h2 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--stockholm-neon), white);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .question-progress {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .progress-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .progress-dot.active {
+            background: var(--stockholm-neon);
+            box-shadow: 0 0 10px var(--stockholm-neon);
+        }
+
+        .progress-dot.completed {
+            background: var(--bath-sky);
+        }
+
+        .question-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .question-content h3 {
+            color: var(--stockholm-neon);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .question-content p {
+            line-height: 1.8;
+            margin-bottom: 1rem;
+        }
+
+        .question-content ul, .question-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .question-content li {
+            margin: 0.5rem 0;
+        }
+
+        .highlight-box {
+            background: rgba(0, 227, 169, 0.1);
+            border-left: 4px solid var(--stockholm-neon);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box {
+            background: rgba(249, 45, 99, 0.1);
+            border-left: 4px solid var(--orlando-red);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-box {
+            background: rgba(75, 129, 239, 0.1);
+            border-left: 4px solid var(--bath-sky);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Choices */
+        .choices-container {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 1.2rem 1.5rem;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .choice-btn:hover {
+            border-color: var(--stockholm-neon);
+            background: rgba(0, 227, 169, 0.1);
+            transform: translateX(10px);
+        }
+
+        .choice-btn.correct {
+            border-color: var(--stockholm-neon);
+            background: rgba(0, 227, 169, 0.2);
+        }
+
+        .choice-btn.incorrect {
+            border-color: var(--orlando-red);
+            background: rgba(249, 45, 99, 0.2);
+        }
+
+        .choice-btn.disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Feedback Modal */
+        .feedback-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feedback-overlay.active {
+            display: flex;
+        }
+
+        .feedback-modal {
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 500px;
+            text-align: center;
+            color: white;
+            border: 2px solid;
+            animation: popIn 0.3s ease;
+        }
+
+        .feedback-modal.success {
+            border-color: var(--stockholm-neon);
+        }
+
+        .feedback-modal.error {
+            border-color: var(--orlando-red);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .feedback-modal .icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-modal h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feedback-modal p {
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .xp-gained {
+            display: inline-block;
+            background: rgba(0, 227, 169, 0.2);
+            color: var(--stockholm-neon);
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Badges Section */
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .badge-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .badge-card.earned {
+            border-color: var(--stockholm-neon);
+            box-shadow: 0 0 30px rgba(0, 227, 169, 0.3);
+        }
+
+        .badge-card.locked {
+            opacity: 0.5;
+        }
+
+        .badge-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+
+        .badge-card.earned .badge-icon {
+            filter: grayscale(0%);
+            animation: bounce 1s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .badge-card h4 {
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .badge-card p {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        /* Quick Reference Section */
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .reference-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .reference-card:hover {
+            border-color: rgba(0, 227, 169, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .reference-card.hidden {
+            display: none;
+        }
+
+        .reference-card .ref-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .reference-card h3 {
+            color: var(--stockholm-neon);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .reference-card .ref-content {
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .reference-card ul, .reference-card ol {
+            margin-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        .reference-card li {
+            margin: 0.4rem 0;
+        }
+
+        .ref-tip {
+            background: rgba(0, 227, 169, 0.1);
+            border-left: 3px solid var(--stockholm-neon);
+            padding: 0.8rem 1rem;
+            margin-top: 1rem;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.9rem;
+        }
+
+        /* Completion Screen */
+        .completion-screen {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .completion-icon {
+            font-size: 6rem;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .completion-screen h2 {
+            font-size: 2.5rem;
+            color: var(--stockholm-neon);
+            margin-bottom: 1rem;
+        }
+
+        .completion-screen p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .final-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+        }
+
+        .final-stat {
+            text-align: center;
+        }
+
+        .final-stat .value {
+            font-size: 3rem;
+            color: var(--stockholm-neon);
+            font-weight: 700;
+        }
+
+        .final-stat .label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .nav-stats {
+                display: none;
+            }
+
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .reference-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Communication Training iframe */
+        .training-iframe-container {
+            width: 100%;
+            height: calc(100vh - 80px);
+            border-radius: 16px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+        }
+
+        .training-iframe-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- ACCESS CONTROL OVERLAY -->
+    <div id="accessControl">
+        <div class="access-box">
+            <h2>⚡ Internal Training Access</h2>
+            <p style="color: #666; margin-bottom: 1rem;">This training module is restricted to Vysus Group employees only.</p>
+
+            <div class="warning">
+                <strong>Internal Use Only</strong><br>
+                This document contains proprietary sales techniques and company information. Access is restricted to @vysusgroup.com email addresses.
+            </div>
+
+            <label style="display: block; margin-top: 1.5rem; color: #333; font-weight: 500;">Enter your Vysus Group email:</label>
+            <input type="email" id="userEmail" placeholder="your.name@vysusgroup.com" onkeypress="if(event.key==='Enter')verifyAccess()">
+            <p class="access-error" id="accessError"></p>
+
+            <button onclick="verifyAccess()">Access Training</button>
+
+            <p style="font-size: 0.85rem; color: #999; margin-top: 1.5rem; text-align: center;">
+                Questions? Contact:<br>
+                <strong>Chris Marinelli</strong><br>
+                chris.marinelli@vysusgroup.com
+            </p>
+        </div>
+    </div>
+
+    <!-- Internal Use Banner -->
+    <div id="internalBanner">
+        INTERNAL USE ONLY - Vysus Group Training - Not for External Distribution
+    </div>
+
+    <!-- User Info Banner -->
+    <div id="userInfoBanner">
+        Logged in as: <span id="userEmailDisplay"></span> | Vysus Group Internal Training
+    </div>
+
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="nav-bar" style="top: 28px;">
+        <div class="nav-brand">VYSUS GRID - CLIENT CONVERSATIONS</div>
+        <div class="nav-stats">
+            <div class="stat-item">
+                <span class="stat-icon">⚡</span>
+                <span id="xp-display">0 XP</span>
+            </div>
+            <div class="xp-bar">
+                <div class="xp-fill" id="xp-fill" style="width: 0%"></div>
+            </div>
+            <div class="stat-item">
+                <span class="stat-icon">🎖️</span>
+                <span id="level-display">Level 1</span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Welcome Screen -->
+        <div class="screen active" id="screen-welcome">
+            <div class="hero glass-card">
+                <h1>⚡ Grid Connection Client Conversations</h1>
+                <p class="tagline">Training Guide for Engineers</p>
+                <p class="subtitle">A practical guide to understanding client needs, asking the right questions, and identifying where Vysus Group can add value to their grid connection projects.</p>
+                <div style="margin-top: 2rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showScreen('screen-scenarios')">
+                        Start With Scenarios 🎬
+                    </button>
+                    <button class="btn btn-secondary" onclick="showScreen('screen-modules')">
+                        Jump to Questions 🎯
+                    </button>
+                </div>
+            </div>
+
+            <!-- Think Broader Section -->
+            <div class="glass-card" style="border-left: 4px solid var(--bath-sky);">
+                <h2 style="color: var(--bath-sky); margin-bottom: 1rem; text-align: center;">🧠 Think Broader - It's Not Just Existing Clients</h2>
+                <div style="color: rgba(255,255,255,0.9); line-height: 1.8;">
+                    <p style="margin-bottom: 1rem;">Opportunities are everywhere - not just on your current projects. Think about <strong style="color: var(--stockholm-neon);">your entire network</strong>:</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                        <div style="background: rgba(75,129,239,0.1); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">👥</div>
+                            <strong style="color: var(--bath-sky);">Former Colleagues</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">Who do you know at developers, EPCs, or utilities?</p>
+                        </div>
+                        <div style="background: rgba(75,129,239,0.1); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎓</div>
+                            <strong style="color: var(--bath-sky);">University Contacts</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">Old classmates now working in the industry?</p>
+                        </div>
+                        <div style="background: rgba(75,129,239,0.1); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔗</div>
+                            <strong style="color: var(--bath-sky);">LinkedIn Network</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">Who's posting about new projects?</p>
+                        </div>
+                        <div style="background: rgba(75,129,239,0.1); padding: 1rem; border-radius: 12px; text-align: center;">
+                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏭</div>
+                            <strong style="color: var(--bath-sky);">Industry Contacts</strong>
+                            <p style="font-size: 0.85rem; margin-top: 0.5rem;">OEMs, contractors, consultants you've worked with?</p>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,227,169,0.15); padding: 1.2rem; border-radius: 12px; margin-top: 1rem;">
+                        <strong style="color: var(--stockholm-neon); font-size: 1.1rem;">💡 The Mindset Shift</strong>
+                        <p style="margin-top: 0.5rem;">Go home tonight and think: <em>"Who do I know that might have a project needing grid connection support?"</em> Write down 3 names. That's your starting point.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- The End Goal -->
+            <div class="glass-card" style="border-left: 4px solid var(--stockholm-neon);">
+                <h2 style="color: var(--stockholm-neon); margin-bottom: 1rem; text-align: center;">🎯 The End Goal: Get the Flyer to the Client</h2>
+                <div style="color: rgba(255,255,255,0.9); line-height: 1.8;">
+                    <div style="display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center;">
+                        <div style="text-align: center; flex: 1; min-width: 150px;">
+                            <div style="font-size: 3rem;">💬</div>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>1. Start Conversation</strong><br>Use the questions in this guide</p>
+                        </div>
+                        <div style="font-size: 2rem; color: var(--stockholm-neon);">→</div>
+                        <div style="text-align: center; flex: 1; min-width: 150px;">
+                            <div style="font-size: 3rem;">📄</div>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>2. Send the Flyer</strong><br>Interactive capability statement</p>
+                        </div>
+                        <div style="font-size: 2rem; color: var(--stockholm-neon);">→</div>
+                        <div style="text-align: center; flex: 1; min-width: 150px;">
+                            <div style="font-size: 3rem;">✅</div>
+                            <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>3. Client Engages</strong><br>They fill it out and email us their needs</p>
+                        </div>
+                    </div>
+                    <p style="text-align: center; margin-top: 1.5rem; opacity: 0.9;">The flyer does the heavy lifting - it shows our capability and lets the client tell us exactly what they need, <strong>in writing</strong>.</p>
+                </div>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card" onclick="showScreen('screen-toolkit')" style="border-color: rgba(0,227,169,0.7);">
+                    <span class="xp-reward" style="background: rgba(0,227,169,0.2); color: var(--stockholm-neon);">USE TODAY</span>
+                    <div class="icon">🚀</div>
+                    <h3>Quick Start Toolkit</h3>
+                    <p>Ready-to-use templates, scripts & a guided process to start conversations today</p>
+                </div>
+                <div class="module-card" onclick="showScreen('screen-scenarios')" style="border-color: rgba(241,136,244,0.5);">
+                    <span class="xp-reward" style="background: rgba(241,136,244,0.2); color: var(--houston-pink);">PRACTICE</span>
+                    <div class="icon">🎬</div>
+                    <h3>Real-World Scenarios</h3>
+                    <p>Practice conversations for different situations - calls, events, cold outreach</p>
+                </div>
+                <div class="module-card" onclick="showScreen('screen-modules')">
+                    <span class="xp-reward">+400 XP</span>
+                    <div class="icon">🎯</div>
+                    <h3>4 Key Questions</h3>
+                    <p>Master the questions that uncover grid connection opportunities</p>
+                </div>
+                <div class="module-card" onclick="showScreen('screen-network')">
+                    <span class="xp-reward">+150 XP</span>
+                    <div class="icon">🌐</div>
+                    <h3>Map Your Network</h3>
+                    <p>Identify people you know who could lead to opportunities</p>
+                </div>
+            </div>
+
+            <!-- Communication Mastery - Full Width -->
+            <div class="module-card communication-link" onclick="showScreen('screen-communication')" style="text-align: center; margin-top: 1.5rem;">
+                <span class="xp-reward" style="background: rgba(142, 50, 156, 0.3); color: var(--houston-pink);">BONUS</span>
+                <div class="icon">🎤</div>
+                <h3>Communication Mastery</h3>
+                <p style="font-size: 0.85rem; margin-bottom: 0.5rem;">Professional communication techniques from <strong>Dr Louise Mahler</strong> - internationally recognised expert in voice, body language, and executive presence.</p>
+                <p style="font-size: 0.8rem; opacity: 0.7;"><a href="https://www.louisemahler.com.au" target="_blank" style="color: var(--houston-pink);">louisemahler.com.au</a></p>
+            </div>
+        </div>
+
+        <!-- Quick Start Toolkit Screen -->
+        <div class="screen" id="screen-toolkit">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>🚀 Quick Start Toolkit</h2>
+            </div>
+
+            <!-- Mode Toggle -->
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; justify-content: center;">
+                <button id="btn-guided" onclick="showToolkitMode('guided')" class="btn btn-primary" style="padding: 0.6rem 1.2rem;">📖 Guided Walkthrough</button>
+                <button id="btn-quick" onclick="showToolkitMode('quick')" class="btn btn-secondary" style="padding: 0.6rem 1.2rem;">⚡ Quick Reference</button>
+                <button id="btn-network" onclick="showToolkitMode('network')" class="btn btn-secondary" style="padding: 0.6rem 1.2rem;">🧠 My Network</button>
+            </div>
+
+            <!-- ==================== GUIDED MODE ==================== -->
+            <div id="toolkit-guided">
+                <!-- Why Bother? -->
+                <div class="glass-card" style="margin-bottom: 1.5rem; text-align: center; padding: 2rem;">
+                    <h3 style="color: var(--stockholm-neon); font-size: 1.5rem; margin-bottom: 1rem;">Why bother?</h3>
+                    <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; color: rgba(255,255,255,0.9);">
+                        <div><span style="font-size: 2rem;">📈</span><br><strong>More interesting projects</strong></div>
+                        <div><span style="font-size: 2rem;">🏢</span><br><strong>Steady paycheck</strong></div>
+                        <div><span style="font-size: 2rem;">⭐</span><br><strong>Get noticed</strong></div>
+                    </div>
+                    <p style="margin-top: 1.5rem; color: rgba(255,255,255,0.8); font-size: 0.95rem;">A full pipeline = job security + career growth. Let's make it easy.</p>
+                </div>
+
+                <!-- Step 1: The Approach -->
+                <div class="glass-card" style="border-left: 4px solid var(--stockholm-neon); margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="background: var(--stockholm-neon); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">1</span>
+                        <h3 style="color: var(--stockholm-neon); margin: 0;">Start the Conversation</h3>
+                    </div>
+
+                    <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem; font-size: 1.05rem; line-height: 1.6;">
+                        You're not selling. You're just catching up. Here's the flow:
+                    </p>
+
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                        <div style="color: var(--stockholm-neon); font-weight: 600; margin-bottom: 0.75rem;">👋 OPEN (pick one)</div>
+                        <div style="color: rgba(255,255,255,0.95); font-size: 1rem; line-height: 2;">
+                            <p>"Hey [Name], it's been ages! How's things?"</p>
+                            <p>"Saw you're at [Company] now - how's that going?"</p>
+                            <p>"Long time! What are you working on these days?"</p>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem;">
+                        <div style="color: var(--bath-sky); font-weight: 600; margin-bottom: 0.75rem;">🔄 TRANSITION (natural, curious)</div>
+                        <div style="color: rgba(255,255,255,0.95); font-size: 1rem; line-height: 2;">
+                            <p>"Anything interesting in the pipeline?"</p>
+                            <p>"Are you guys still doing mostly solar, or branching out?"</p>
+                            <p>"The market's been busy - are you seeing the same?"</p>
+                        </div>
+                    </div>
+
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem;">
+                        <div style="color: var(--houston-pink); font-weight: 600; margin-bottom: 0.75rem;">🎯 THE SOFT OFFER</div>
+                        <div style="color: rgba(255,255,255,0.95); font-size: 1rem; line-height: 2;">
+                            <p>"If you ever need a hand with grid connection stuff - AEMO applications, GPS studies - we've got a good team at Vysus."</p>
+                            <p>"I can send you a quick overview of what we do - just in case it's useful down the track."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: The Templates -->
+                <div class="glass-card" style="border-left: 4px solid var(--bath-sky); margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="background: var(--bath-sky); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">2</span>
+                        <h3 style="color: var(--bath-sky); margin: 0;">Copy & Send</h3>
+                    </div>
+
+                    <p style="color: rgba(255,255,255,0.9); margin-bottom: 1rem;">Pick a template. Change the [brackets]. Hit send. Done.</p>
+
+                    <!-- Email Template -->
+                    <div style="background: rgba(75,129,239,0.15); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <strong style="color: var(--bath-sky);">📧 Reconnecting Email</strong>
+                            <button onclick="copyTemplate('email-reconnect')" style="background: var(--bath-sky); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Copy</button>
+                        </div>
+                        <div id="email-reconnect" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.95); line-height: 1.7; white-space: pre-wrap;">Subject: Quick catch up?
+
+Hey [Name],
+
+Hope you're well! It's been a while since [we worked together / caught up].
+
+I'm with Vysus Group now, doing grid connection studies. If you ever need support with AEMO applications or GPS compliance, happy to chat.
+
+No pressure - just wanted to say hi!
+
+Cheers,
+[Your name]</div>
+                    </div>
+
+                    <!-- LinkedIn Template -->
+                    <div style="background: rgba(75,129,239,0.15); border-radius: 12px; padding: 1.2rem; margin-bottom: 1rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <strong style="color: var(--bath-sky);">🔗 LinkedIn Message</strong>
+                            <button onclick="copyTemplate('linkedin-msg')" style="background: var(--bath-sky); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Copy</button>
+                        </div>
+                        <div id="linkedin-msg" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.95); line-height: 1.7; white-space: pre-wrap;">Hey [Name], saw you're at [Company] - looks like interesting work! I'm with Vysus doing grid connections. If you ever need a hand with AEMO stuff, give me a shout. Cheers!</div>
+                    </div>
+
+                    <!-- Project Congrats Template -->
+                    <div style="background: rgba(75,129,239,0.15); border-radius: 12px; padding: 1.2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <strong style="color: var(--bath-sky);">🎉 Saw Your Project Email</strong>
+                            <button onclick="copyTemplate('email-project')" style="background: var(--bath-sky); color: white; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.85rem;">Copy</button>
+                        </div>
+                        <div id="email-project" style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.95); line-height: 1.7; white-space: pre-wrap;">Subject: [Project] - congrats!
+
+Hi [Name],
+
+Saw the news about [Project] - nice work!
+
+I'm at Vysus doing grid connection studies. If you need any support with AEMO applications or GPS work, happy to help.
+
+Either way, best of luck with it!
+
+[Your name]</div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Send Flyer -->
+                <div class="glass-card" style="border-left: 4px solid var(--houston-pink); margin-bottom: 1.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                        <span style="background: var(--houston-pink); color: white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 1.2rem;">3</span>
+                        <h3 style="color: var(--houston-pink); margin: 0;">Send the Flyer</h3>
+                    </div>
+
+                    <p style="color: rgba(255,255,255,0.9); font-size: 1.05rem; line-height: 1.6; margin-bottom: 1rem;">
+                        If they're interested, send our interactive capability statement. It shows what we do and lets them tell us exactly what they need.
+                    </p>
+
+                    <div style="background: rgba(241,136,244,0.1); padding: 1.2rem; border-radius: 12px; text-align: center;">
+                        <p style="color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">The flyer does the selling for you.</p>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">They tick what they need → Email comes to us → We follow up</p>
+                    </div>
+                </div>
+
+                <!-- That's It -->
+                <div class="glass-card" style="background: linear-gradient(135deg, rgba(0,227,169,0.2) 0%, rgba(75,129,239,0.2) 100%); text-align: center; padding: 2rem;">
+                    <h3 style="color: white; font-size: 1.4rem; margin-bottom: 0.5rem;">That's it. Seriously.</h3>
+                    <p style="color: rgba(255,255,255,0.9); font-size: 1rem;">Say hi → Ask what they're working on → Offer to help → Send the flyer</p>
+                </div>
+            </div>
+
+            <!-- ==================== QUICK REFERENCE MODE ==================== -->
+            <div id="toolkit-quick" style="display: none;">
+                <div class="glass-card" style="padding: 2rem;">
+                    <h3 style="color: var(--stockholm-neon); text-align: center; margin-bottom: 1.5rem; font-size: 1.4rem;">⚡ Quick Reference Card</h3>
+                    <p style="text-align: center; color: rgba(255,255,255,0.7); margin-bottom: 1.5rem; font-size: 0.9rem;">Print this or keep it open during calls</p>
+
+                    <!-- The Flow -->
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--stockholm-neon); margin-bottom: 1rem; font-size: 1.1rem;">THE FLOW</h4>
+                        <table style="width: 100%; color: rgba(255,255,255,0.95); font-size: 0.95rem;">
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 0.75rem 0; width: 30%; color: var(--stockholm-neon); font-weight: 600;">1. OPEN</td>
+                                <td style="padding: 0.75rem 0;">"Hey! How's things? What are you up to these days?"</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 0.75rem 0; color: var(--bath-sky); font-weight: 600;">2. ASK</td>
+                                <td style="padding: 0.75rem 0;">"Anything interesting in the pipeline?"</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                                <td style="padding: 0.75rem 0; color: var(--houston-pink); font-weight: 600;">3. OFFER</td>
+                                <td style="padding: 0.75rem 0;">"If you need a hand with grid connection stuff, let me know."</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0.75rem 0; color: var(--white); font-weight: 600;">4. SEND</td>
+                                <td style="padding: 0.75rem 0;">"I'll send you a quick overview of what we do."</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Good Questions -->
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--bath-sky); margin-bottom: 1rem; font-size: 1.1rem;">QUESTIONS THAT WORK</h4>
+                        <ul style="color: rgba(255,255,255,0.95); font-size: 0.95rem; line-height: 2; padding-left: 1.2rem;">
+                            <li>"What stage is that project at?"</li>
+                            <li>"Are you handling the AEMO stuff in-house?"</li>
+                            <li>"What's your timeline for grid connection?"</li>
+                            <li>"Who's doing your GPS studies?"</li>
+                            <li>"Any challenges with the connection process?"</li>
+                        </ul>
+                    </div>
+
+                    <!-- Copy-Paste Intros -->
+                    <div style="background: rgba(0,0,0,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                        <h4 style="color: var(--houston-pink); margin-bottom: 1rem; font-size: 1.1rem;">COPY-PASTE INTROS</h4>
+
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">EMAIL</span>
+                                <button onclick="copyTemplate('quick-email')" style="background: var(--houston-pink); color: white; border: none; padding: 0.3rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Copy</button>
+                            </div>
+                            <div id="quick-email" style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.5;">Hey [Name], hope you're well! I'm at Vysus doing grid connections - if you ever need support with AEMO applications, happy to chat. [Your name]</div>
+                        </div>
+
+                        <div style="margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">LINKEDIN</span>
+                                <button onclick="copyTemplate('quick-linkedin')" style="background: var(--houston-pink); color: white; border: none; padding: 0.3rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Copy</button>
+                            </div>
+                            <div id="quick-linkedin" style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.5;">Hey! Saw you're at [Company]. I'm doing grid connection work at Vysus - shout if you ever need a hand with AEMO stuff!</div>
+                        </div>
+
+                        <div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                                <span style="color: rgba(255,255,255,0.7); font-size: 0.85rem;">TEXT/WHATSAPP</span>
+                                <button onclick="copyTemplate('quick-text')" style="background: var(--houston-pink); color: white; border: none; padding: 0.3rem 0.75rem; border-radius: 4px; cursor: pointer; font-size: 0.8rem;">Copy</button>
+                            </div>
+                            <div id="quick-text" style="background: rgba(0,0,0,0.3); padding: 0.75rem; border-radius: 6px; font-size: 0.85rem; color: rgba(255,255,255,0.9); line-height: 1.5;">Hey [Name]! Long time. Quick one - if you ever need grid connection support (AEMO, GPS studies etc) give me a shout. Hope you're well!</div>
+                        </div>
+                    </div>
+
+                    <!-- Remember -->
+                    <div style="background: linear-gradient(135deg, rgba(0,227,169,0.2) 0%, rgba(75,129,239,0.2) 100%); border-radius: 12px; padding: 1.5rem; text-align: center;">
+                        <p style="color: white; font-size: 1.1rem; margin-bottom: 0.5rem;"><strong>Remember:</strong> You're just catching up.</p>
+                        <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem;">The flyer does the selling. You just open the door.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ==================== NETWORK MODE ==================== -->
+            <div id="toolkit-network" style="display: none;">
+                <div class="glass-card" style="margin-bottom: 1.5rem;">
+                    <h3 style="color: var(--houston-pink); margin-bottom: 0.5rem;">🧠 Who Do You Know?</h3>
+                    <p style="color: rgba(255,255,255,0.8); font-size: 0.95rem;">Go through each category. Write anyone who comes to mind - don't overthink it!</p>
+                </div>
+
+                <div id="networkDiscovery" style="display: grid; gap: 1rem;">
+                    <div class="glass-card" style="padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.8rem;">🎓</span>
+                            <div>
+                                <strong style="color: var(--houston-pink); font-size: 1.1rem;">University / Study</strong>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0;">Who's now in energy, renewables, or utilities?</p>
+                            </div>
+                        </div>
+                        <textarea id="network-uni" placeholder="e.g., Sarah from elec eng - now at AGL..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; min-height: 70px; font-family: inherit; resize: vertical; font-size: 0.95rem;"></textarea>
+                    </div>
+
+                    <div class="glass-card" style="padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.8rem;">👔</span>
+                            <div>
+                                <strong style="color: var(--houston-pink); font-size: 1.1rem;">Previous Jobs</strong>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0;">Former colleagues at developers, EPCs, utilities?</p>
+                            </div>
+                        </div>
+                        <textarea id="network-employers" placeholder="e.g., Mike from Origin - now PM at Neoen..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; min-height: 70px; font-family: inherit; resize: vertical; font-size: 0.95rem;"></textarea>
+                    </div>
+
+                    <div class="glass-card" style="padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.8rem;">🏗️</span>
+                            <div>
+                                <strong style="color: var(--houston-pink); font-size: 1.1rem;">Project Contacts</strong>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0;">Clients, contractors, vendors you got along with?</p>
+                            </div>
+                        </div>
+                        <textarea id="network-projects" placeholder="e.g., Site manager from the Bungala project..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; min-height: 70px; font-family: inherit; resize: vertical; font-size: 0.95rem;"></textarea>
+                    </div>
+
+                    <div class="glass-card" style="padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.8rem;">🔗</span>
+                            <div>
+                                <strong style="color: var(--houston-pink); font-size: 1.1rem;">LinkedIn / Events</strong>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0;">Who's posting about projects? Met at conferences?</p>
+                            </div>
+                        </div>
+                        <textarea id="network-linkedin" placeholder="e.g., Dave just started at Goldwind..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; min-height: 70px; font-family: inherit; resize: vertical; font-size: 0.95rem;"></textarea>
+                    </div>
+
+                    <div class="glass-card" style="padding: 1.2rem;">
+                        <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem;">
+                            <span style="font-size: 1.8rem;">💡</span>
+                            <div>
+                                <strong style="color: var(--houston-pink); font-size: 1.1rem;">Anyone Else?</strong>
+                                <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin: 0;">Friends, family, neighbours in the industry?</p>
+                            </div>
+                        </div>
+                        <textarea id="network-other" placeholder="e.g., Mate's brother at a solar developer..." style="width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1); color: white; min-height: 70px; font-family: inherit; resize: vertical; font-size: 0.95rem;"></textarea>
+                    </div>
+                </div>
+
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <button class="btn btn-secondary" onclick="saveNetworkNotes()" style="margin-right: 0.5rem;">💾 Save My Notes</button>
+                    <button class="btn btn-primary" onclick="showToolkitMode('quick')">Got names? → Get Templates ⚡</button>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="showScreen('screen-scenarios')" style="margin-right: 1rem;">
+                    Practice Scenarios 🎬
+                </button>
+                <button class="btn btn-primary" onclick="showScreen('screen-welcome')">
+                    Back to Home 🏠
+                </button>
+            </div>
+        </div>
+
+        <!-- Scenarios Screen -->
+        <div class="screen" id="screen-scenarios">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>🎬 Real-World Scenarios</h2>
+            </div>
+
+            <div class="glass-card">
+                <p style="color: rgba(255,255,255,0.9); text-align: center; margin-bottom: 1.5rem;">
+                    Different situations call for different approaches. Select a scenario to learn the best conversation starters and questions for each context.
+                </p>
+            </div>
+
+            <div class="modules-grid">
+                <!-- Scenario 1: Existing Client Call -->
+                <div class="module-card" onclick="startScenario(1)">
+                    <span class="xp-reward">+75 XP</span>
+                    <div class="icon">📞</div>
+                    <h3>On a Client Call</h3>
+                    <p>You're on a project call with an existing client. How do you naturally ask about other opportunities?</p>
+                    <span class="status-badge" id="scenario-status-1"></span>
+                </div>
+
+                <!-- Scenario 2: Industry Event -->
+                <div class="module-card" onclick="startScenario(2)">
+                    <span class="xp-reward">+75 XP</span>
+                    <div class="icon">🎪</div>
+                    <h3>At an Industry Event</h3>
+                    <p>You're at a conference or networking event. How do you start a conversation with someone new?</p>
+                    <span class="status-badge" id="scenario-status-2"></span>
+                </div>
+
+                <!-- Scenario 3: Cold Outreach -->
+                <div class="module-card" onclick="startScenario(3)">
+                    <span class="xp-reward">+75 XP</span>
+                    <div class="icon">📧</div>
+                    <h3>Reaching Out Cold</h3>
+                    <p>You know someone in your network who might have opportunities. How do you reach out?</p>
+                    <span class="status-badge" id="scenario-status-3"></span>
+                </div>
+
+                <!-- Scenario 4: Former Colleague -->
+                <div class="module-card" onclick="startScenario(4)">
+                    <span class="xp-reward">+75 XP</span>
+                    <div class="icon">🤝</div>
+                    <h3>Catching Up with a Contact</h3>
+                    <p>You're catching up with a former colleague or industry contact. How do you steer toward work?</p>
+                    <span class="status-badge" id="scenario-status-4"></span>
+                </div>
+
+                <!-- Scenario 5: LinkedIn -->
+                <div class="module-card" onclick="startScenario(5)">
+                    <span class="xp-reward">+75 XP</span>
+                    <div class="icon">💼</div>
+                    <h3>LinkedIn Opportunity</h3>
+                    <p>You see someone post about a new project or role. How do you engage professionally?</p>
+                    <span class="status-badge" id="scenario-status-5"></span>
+                </div>
+
+                <!-- Scenario 6: Site Visit -->
+                <div class="module-card" onclick="startScenario(6)">
+                    <span class="xp-reward">+75 XP</span>
+                    <div class="icon">🏗️</div>
+                    <h3>On a Site Visit</h3>
+                    <p>You're visiting a project site and meet people from the client's team. How do you explore other work?</p>
+                    <span class="status-badge" id="scenario-status-6"></span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="showScreen('screen-modules')">
+                    Continue to Questions Training 🎯
+                </button>
+            </div>
+        </div>
+
+        <!-- Scenario Content Screen -->
+        <div class="screen" id="screen-scenario-content">
+            <div class="question-container">
+                <div class="question-header">
+                    <button class="back-btn" onclick="showScreen('screen-scenarios')">←</button>
+                    <h2 id="scenario-title">Scenario Title</h2>
+                </div>
+                <div class="question-content" id="scenario-content"></div>
+                <div class="choices-container" id="scenario-choices"></div>
+            </div>
+        </div>
+
+        <!-- Network Mapping Screen -->
+        <div class="screen" id="screen-network">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>🌐 Map Your Network</h2>
+            </div>
+
+            <div class="glass-card">
+                <h3 style="color: var(--stockholm-neon); margin-bottom: 1rem;">Your Network is Your Pipeline</h3>
+                <p style="color: rgba(255,255,255,0.9); margin-bottom: 1.5rem;">
+                    Take 10 minutes to think through the people you know in the industry. These contacts could lead to grid connection opportunities for Vysus Group.
+                </p>
+
+                <div style="display: grid; gap: 1.5rem;">
+                    <!-- Category 1 -->
+                    <div style="background: rgba(0,227,169,0.1); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--stockholm-neon); margin-bottom: 0.5rem;">👥 Former Employers & Colleagues</h4>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem;">People you've worked with at previous companies - developers, EPCs, utilities, consultancies.</p>
+                        <p style="font-size: 0.85rem; color: var(--houston-pink);"><strong>Ask yourself:</strong> Who from your past roles is now at a company developing renewable projects?</p>
+                    </div>
+
+                    <!-- Category 2 -->
+                    <div style="background: rgba(75,129,239,0.1); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--bath-sky); margin-bottom: 0.5rem;">🎓 University & Study Contacts</h4>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem;">Engineering classmates, professors, people from industry events or courses.</p>
+                        <p style="font-size: 0.85rem; color: var(--houston-pink);"><strong>Ask yourself:</strong> Where are your uni mates working now? Anyone in renewables or utilities?</p>
+                    </div>
+
+                    <!-- Category 3 -->
+                    <div style="background: rgba(241,136,244,0.1); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--houston-pink); margin-bottom: 0.5rem;">🏭 Industry Contacts</h4>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem;">OEM reps, contractors, other consultants, NSP contacts, AEMO contacts.</p>
+                        <p style="font-size: 0.85rem; color: var(--houston-pink);"><strong>Ask yourself:</strong> Who have you dealt with on projects that might know about upcoming work?</p>
+                    </div>
+
+                    <!-- Category 4 -->
+                    <div style="background: rgba(249,45,99,0.1); padding: 1.5rem; border-radius: 12px;">
+                        <h4 style="color: var(--orlando-red); margin-bottom: 0.5rem;">🔗 LinkedIn & Online</h4>
+                        <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); margin-bottom: 1rem;">Your LinkedIn connections, people who engage with your posts, industry group members.</p>
+                        <p style="font-size: 0.85rem; color: var(--houston-pink);"><strong>Ask yourself:</strong> Who's been posting about new projects or job changes recently?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card" style="border-left: 4px solid var(--stockholm-neon);">
+                <h3 style="color: var(--stockholm-neon); margin-bottom: 1rem;">📝 Action: Write Down 5 Names</h3>
+                <p style="color: rgba(255,255,255,0.9); margin-bottom: 1rem;">
+                    Right now, think of <strong>5 people</strong> you could reach out to. They don't need to be decision-makers - they just need to be connected to the industry.
+                </p>
+                <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; font-family: monospace; color: var(--stockholm-neon);">
+                    1. ____________________<br>
+                    2. ____________________<br>
+                    3. ____________________<br>
+                    4. ____________________<br>
+                    5. ____________________
+                </div>
+                <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-top: 1rem;">
+                    <strong>Next step:</strong> Pick one person from your list and reach out this week. Use the scenarios training for conversation starters.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="showScreen('screen-scenarios')" style="margin-right: 1rem;">
+                    ← Scenario Training
+                </button>
+                <button class="btn btn-primary" onclick="showScreen('screen-modules')">
+                    Continue to Questions 🎯
+                </button>
+            </div>
+        </div>
+
+        <!-- Modules List Screen -->
+        <div class="screen" id="screen-modules">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>Key Questions Training</h2>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card" id="module-1" onclick="startModule(1)">
+                    <span class="xp-reward">+100 XP</span>
+                    <div class="icon">📅</div>
+                    <h3>Question 1: Timeline</h3>
+                    <p>"What's your timeline for getting this project connected to the grid?"</p>
+                    <span class="status-badge" id="status-1"></span>
+                </div>
+                <div class="module-card" id="module-2" onclick="startModule(2)">
+                    <span class="xp-reward">+100 XP</span>
+                    <div class="icon">😰</div>
+                    <h3>Question 2: Concerns</h3>
+                    <p>"What's your biggest concern about the grid connection process?"</p>
+                    <span class="status-badge" id="status-2"></span>
+                </div>
+                <div class="module-card" id="module-3" onclick="startModule(3)">
+                    <span class="xp-reward">+100 XP</span>
+                    <div class="icon">⚙️</div>
+                    <h3>Question 3: Equipment</h3>
+                    <p>"Have you selected your equipment supplier yet?"</p>
+                    <span class="status-badge" id="status-3"></span>
+                </div>
+                <div class="module-card" id="module-4" onclick="startModule(4)">
+                    <span class="xp-reward">+100 XP</span>
+                    <div class="icon">👥</div>
+                    <h3>Question 4: Current Support</h3>
+                    <p>"Who's handling your grid connection studies currently?"</p>
+                    <span class="status-badge" id="status-4"></span>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-secondary" onclick="showScreen('screen-tips')" style="margin-right: 1rem;">
+                    💡 Conversation Tips
+                </button>
+                <button class="btn btn-primary" onclick="showScreen('screen-quiz')" id="quiz-btn" disabled>
+                    🎯 Take Final Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- Module Content Screen -->
+        <div class="screen" id="screen-module-content">
+            <div class="question-container">
+                <div class="question-header">
+                    <button class="back-btn" onclick="showScreen('screen-modules')">←</button>
+                    <h2 id="module-title">Question Title</h2>
+                </div>
+                <div class="question-progress" id="question-progress"></div>
+                <div class="question-content" id="question-content"></div>
+                <div class="choices-container" id="choices-container"></div>
+            </div>
+        </div>
+
+        <!-- Tips Screen -->
+        <div class="screen" id="screen-tips">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-modules')">←</button>
+                <h2>Key Conversation Tips</h2>
+            </div>
+
+            <div class="modules-grid">
+                <div class="glass-card" style="cursor: default;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">👂</div>
+                    <h3 style="color: var(--stockholm-neon); margin-bottom: 0.5rem;">Listen More Than You Talk</h3>
+                    <p style="color: rgba(255,255,255,0.8);">Your job is to understand their situation, not pitch services. Ask the question, then let them talk. Take notes. The more they share, the better positioned you are to help.</p>
+                </div>
+                <div class="glass-card" style="cursor: default;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎯</div>
+                    <h3 style="color: var(--stockholm-neon); margin-bottom: 0.5rem;">Focus on Their Problem</h3>
+                    <p style="color: rgba(255,255,255,0.8);">Clients don't care about our 280+ projects - they care about their project. Frame everything in terms of how it helps them succeed, avoid delays, or reduce risk.</p>
+                </div>
+                <div class="glass-card" style="cursor: default;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📧</div>
+                    <h3 style="color: var(--stockholm-neon); margin-bottom: 0.5rem;">Always Follow Up</h3>
+                    <p style="color: rgba(255,255,255,0.8);">After any conversation where you learn about a potential opportunity, send a brief follow-up email within 24 hours. Reference what you discussed and offer a next step.</p>
+                </div>
+                <div class="glass-card" style="cursor: default;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📋</div>
+                    <h3 style="color: var(--stockholm-neon); margin-bottom: 0.5rem;">Report Back to Chris</h3>
+                    <p style="color: rgba(255,255,255,0.8);">If you uncover a real opportunity, let Chris know immediately. Include: client name, project details, their timeline, who they're talking to, and what they need.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="showScreen('screen-modules')">
+                    ← Back to Questions
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div class="screen" id="screen-quiz">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-modules')">←</button>
+                <h2>📝 Knowledge Check</h2>
+            </div>
+            <div class="glass-card">
+                <div id="quiz-container"></div>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="submitQuiz()" id="submit-quiz-btn">
+                        Submit Answers ✓
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Badges Screen -->
+        <div class="screen" id="screen-badges">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>🏆 Your Achievements</h2>
+            </div>
+            <div class="badges-grid" id="badges-container"></div>
+        </div>
+
+        <!-- Quick Reference Screen -->
+        <div class="screen" id="screen-reference">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>📋 Quick Reference Guide</h2>
+            </div>
+
+            <!-- Search/Filter -->
+            <div class="glass-card" style="padding: 1rem 1.5rem;">
+                <input type="text" id="reference-search" placeholder="Search questions and tips..."
+                    style="width: 100%; padding: 0.8rem 1rem; border: 1px solid rgba(255,255,255,0.2);
+                    border-radius: 10px; background: rgba(255,255,255,0.05); color: white; font-size: 1rem;"
+                    oninput="filterReference(this.value)">
+            </div>
+
+            <div class="reference-grid" id="reference-content">
+                <!-- Question 1 -->
+                <div class="reference-card" data-keywords="timeline urgency schedule deadline connection R0 R1 financial close">
+                    <div class="ref-icon">📅</div>
+                    <h3>Q1: "What's your timeline for getting this project connected to the grid?"</h3>
+                    <div class="ref-content">
+                        <p><strong>Why Ask:</strong> Timeline questions reveal urgency and development cycle stage.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Follow-Ups:</strong></p>
+                        <ul>
+                            <li>"Have you submitted your connection enquiry to the NSP yet?"</li>
+                            <li>"What stage are you at - R0, R1, or somewhere in between?"</li>
+                            <li>"Is there a financial close date driving that timeline?"</li>
+                        </ul>
+                        <div class="ref-tip"><strong>Tight timeline:</strong> "You'll want to get R1 studies started soon to avoid delays."</div>
+                    </div>
+                </div>
+
+                <!-- Question 2 -->
+                <div class="reference-card" data-keywords="concerns worry problems issues weak grid resubmission cost delay">
+                    <div class="ref-icon">😰</div>
+                    <h3>Q2: "What's your biggest concern about the grid connection process?"</h3>
+                    <div class="ref-content">
+                        <p><strong>Why Ask:</strong> Invites clients to share pain points. Most have been burned before.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Follow-Ups:</strong></p>
+                        <ul>
+                            <li>"Have you had issues with connection studies on previous projects?"</li>
+                            <li>"Is system strength a worry at your connection point?"</li>
+                            <li>"What's the NSP been like to work with so far?"</li>
+                        </ul>
+                        <div class="ref-tip"><strong>Weak grid worries:</strong> "Weak grids are our specialty - we've successfully connected many projects in low SCR areas."</div>
+                    </div>
+                </div>
+
+                <!-- Question 3 -->
+                <div class="reference-card" data-keywords="equipment OEM supplier inverter turbine BESS battery EPC models">
+                    <div class="ref-icon">⚙️</div>
+                    <h3>Q3: "Have you selected your equipment supplier yet?"</h3>
+                    <div class="ref-content">
+                        <p><strong>Why Ask:</strong> Equipment selection directly impacts grid connection success.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Follow-Ups:</strong></p>
+                        <ul>
+                            <li>"Which OEMs are you considering?"</li>
+                            <li>"Has the OEM provided validated PSS/E or PowerFactory models yet?"</li>
+                            <li>"Are you looking at hybrid configurations - wind plus BESS?"</li>
+                        </ul>
+                        <div class="ref-tip"><strong>Comparing OEMs:</strong> "We can help evaluate them from a grid compliance perspective - some have better track records with AEMO."</div>
+                    </div>
+                </div>
+
+                <!-- Question 4 -->
+                <div class="reference-card" data-keywords="consultant studies current support incumbent competitor review">
+                    <div class="ref-icon">👥</div>
+                    <h3>Q4: "Who's handling your grid connection studies currently?"</h3>
+                    <div class="ref-content">
+                        <p><strong>Why Ask:</strong> Tells you if there's an incumbent, in-house capability, or opportunity.</p>
+                        <p style="margin-top: 0.5rem;"><strong>Follow-Ups:</strong></p>
+                        <ul>
+                            <li>"How's that going so far?"</li>
+                            <li>"Do you have in-house capability, or looking for external support?"</li>
+                            <li>"Would you value a second opinion on any of the technical work?"</li>
+                        </ul>
+                        <div class="ref-tip"><strong>No one engaged:</strong> "Perfect timing - let me tell you about our approach and how we can help."</div>
+                    </div>
+                </div>
+
+                <!-- Key Stats -->
+                <div class="reference-card" data-keywords="stats numbers track record vysus group experience" style="grid-column: 1 / -1; border-color: rgba(0, 227, 169, 0.3);">
+                    <div class="ref-icon">⚡</div>
+                    <h3>Vysus Group Key Stats to Know</h3>
+                    <div class="ref-content">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
+                            <div>
+                                <strong style="font-size: 2rem; color: var(--stockholm-neon);">280+</strong>
+                                <p>Grid connection projects delivered</p>
+                            </div>
+                            <div>
+                                <strong style="font-size: 2rem; color: var(--stockholm-neon);">0</strong>
+                                <p>AEMO rejections - right-first-time approach</p>
+                            </div>
+                            <div>
+                                <strong style="font-size: 2rem; color: var(--stockholm-neon);">Low SCR</strong>
+                                <p>Weak grid specialty - VRCS design expertise</p>
+                            </div>
+                            <div>
+                                <strong style="font-size: 2rem; color: var(--stockholm-neon);">Fixed Price</strong>
+                                <p>Clear deliverables, no surprises</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="showScreen('screen-modules')">
+                    Start Training ⚡
+                </button>
+            </div>
+        </div>
+
+        <!-- Communication Training Screen (Embedded) -->
+        <div class="screen" id="screen-communication">
+            <div class="question-header">
+                <button class="back-btn" onclick="showScreen('screen-welcome')">←</button>
+                <h2>🎤 Communication Mastery</h2>
+            </div>
+            <div class="glass-card" style="padding: 1.2rem 1.5rem; margin-bottom: 1rem;">
+                <div style="display: flex; align-items: center; gap: 1.5rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px; color: rgba(255,255,255,0.9);">
+                        <p style="margin-bottom: 0.5rem;">Professional communication techniques from <strong style="color: var(--houston-pink);">Dr Louise Mahler</strong> - internationally recognised expert in voice, body language, and executive presence. Her methods are used by leaders across Fortune 500 companies and government.</p>
+                        <p style="font-size: 0.85rem; opacity: 0.8;">
+                            <a href="https://www.louisemahler.com.au" target="_blank" style="color: var(--houston-pink); margin-right: 1rem;">🌐 Website</a>
+                            <a href="https://www.youtube.com/results?search_query=louise+mahler" target="_blank" style="color: var(--houston-pink);">▶️ YouTube</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="training-iframe-container">
+                <iframe src="../communication-mastery/Louise-Mahler-Communication-Training.html" title="Communication Training"></iframe>
+            </div>
+        </div>
+
+        <!-- Completion Screen -->
+        <div class="screen" id="screen-completion">
+            <div class="completion-screen glass-card">
+                <div class="completion-icon">⚡</div>
+                <h2>Training Complete!</h2>
+                <p>You've mastered the key questions for uncovering grid connection opportunities</p>
+                <div class="final-stats">
+                    <div class="final-stat">
+                        <div class="value" id="final-xp">0</div>
+                        <div class="label">Total XP</div>
+                    </div>
+                    <div class="final-stat">
+                        <div class="value" id="final-level">1</div>
+                        <div class="label">Level</div>
+                    </div>
+                    <div class="final-stat">
+                        <div class="value" id="final-badges">0</div>
+                        <div class="label">Badges</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showScreen('screen-badges')">
+                        View Achievements 🏆
+                    </button>
+                    <button class="btn btn-communication" onclick="showScreen('screen-communication')">
+                        Communication Training 🎤
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="feedback-overlay" id="feedback-overlay">
+        <div class="feedback-modal" id="feedback-modal">
+            <div class="icon" id="feedback-icon"></div>
+            <h3 id="feedback-title"></h3>
+            <p id="feedback-text"></p>
+            <div class="xp-gained" id="feedback-xp"></div>
+            <button class="btn btn-primary" onclick="closeFeedback()">Continue</button>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // SECURITY & ACCESS CONTROL SCRIPT
+        // ========================================
+
+        // ALLOWED DOMAIN - Only vysusgroup.com emails can access
+        const ALLOWED_DOMAIN = 'vysusgroup.com';
+
+        // Log document access attempt
+        console.log('Training access attempted:', new Date().toLocaleString('en-AU'));
+
+        // Vysus Group email verification
+        function verifyAccess() {
+            const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
+            const errorElement = document.getElementById('accessError');
+
+            // Validate email format
+            if (!emailInput || !emailInput.includes('@') || emailInput.indexOf('@') === 0 || emailInput.indexOf('@') === emailInput.length - 1) {
+                errorElement.textContent = 'Please enter a valid email address';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Extract domain from email
+            const domain = emailInput.split('@')[1];
+
+            // Check if domain is vysusgroup.com
+            if (domain !== ALLOWED_DOMAIN) {
+                errorElement.textContent = 'Access denied. Only @vysusgroup.com email addresses can access this training.';
+                errorElement.style.display = 'block';
+                console.log('ACCESS DENIED - Not Vysus domain:', {
+                    attemptedEmail: emailInput,
+                    attemptedDomain: domain,
+                    requiredDomain: ALLOWED_DOMAIN,
+                    timestamp: new Date().toLocaleString('en-AU')
+                });
+                return;
+            }
+
+            // Valid Vysus email - grant access
+            const accessData = {
+                email: emailInput,
+                firstAccess: new Date().toISOString(),
+                lastAccess: new Date().toISOString(),
+                accessCount: 1
+            };
+
+            // Check if returning user
+            const storedData = localStorage.getItem('vysus_presales_training_access');
+            if (storedData) {
+                const existingData = JSON.parse(storedData);
+                accessData.firstAccess = existingData.firstAccess;
+                accessData.accessCount = (existingData.accessCount || 1) + 1;
+            }
+
+            localStorage.setItem('vysus_presales_training_access', JSON.stringify(accessData));
+
+            console.log('ACCESS GRANTED:', {
+                email: emailInput,
+                accessCount: accessData.accessCount,
+                timestamp: new Date().toLocaleString('en-AU')
+            });
+
+            // Hide access control
+            document.getElementById('accessControl').classList.add('hidden');
+
+            // Show user info banner
+            document.getElementById('userEmailDisplay').textContent = emailInput;
+            document.getElementById('userInfoBanner').classList.add('show');
+
+            // Alert user
+            alert(`Welcome!\n\nLogged in as: ${emailInput}\n\nREMINDER: This is internal training material - do not share outside Vysus Group.`);
+        }
+
+        // Check for existing valid access on page load
+        window.addEventListener('load', function() {
+            const storedData = localStorage.getItem('vysus_presales_training_access');
+
+            if (storedData) {
+                const accessData = JSON.parse(storedData);
+
+                // Verify stored email is still vysusgroup.com
+                const storedDomain = accessData.email.split('@')[1];
+                if (storedDomain === ALLOWED_DOMAIN) {
+                    // Grant automatic access
+                    document.getElementById('accessControl').classList.add('hidden');
+
+                    // Update access tracking
+                    accessData.lastAccess = new Date().toISOString();
+                    accessData.accessCount = (accessData.accessCount || 1) + 1;
+                    localStorage.setItem('vysus_presales_training_access', JSON.stringify(accessData));
+
+                    // Show user info banner
+                    document.getElementById('userEmailDisplay').textContent = accessData.email;
+                    document.getElementById('userInfoBanner').classList.add('show');
+
+                    console.log('AUTO-ACCESS GRANTED:', {
+                        email: accessData.email,
+                        accessCount: accessData.accessCount,
+                        timestamp: new Date().toLocaleString('en-AU')
+                    });
+                }
+            }
+        });
+
+        // ========================================
+        // GAME STATE & LOGIC
+        // ========================================
+
+        // Game State
+        const state = {
+            xp: 0,
+            level: 1,
+            completedModules: [],
+            completedScenarios: [],
+            earnedBadges: [],
+            currentModule: null,
+            currentScenario: null,
+            currentStep: 0,
+            quizAnswers: {}
+        };
+
+        // ========================================
+        // SCENARIO CONTENT
+        // ========================================
+
+        const scenarios = {
+            1: {
+                title: "📞 On a Client Call",
+                content: `
+                    <h3>Scenario: You're on a project call with an existing client</h3>
+                    <p>You've just finished discussing technical progress on a current project. The client seems happy with the work. This is a natural opportunity to explore other needs.</p>
+
+                    <div class="highlight-box">
+                        <strong>The Situation:</strong><br>
+                        You're wrapping up a weekly progress call with a developer you're doing R1 studies for. They mention they have "a few other projects in the pipeline."
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Your Goal:</strong> Learn more about those other projects without being pushy. Get enough info to follow up with the capability flyer.
+                    </div>
+                `,
+                question: "What's the best way to explore those other projects?",
+                choices: [
+                    { text: "\"We'd love to work on those too - send us the details!\"", correct: false, feedback: "Too eager. This puts pressure on them without understanding their needs." },
+                    { text: "\"That's great to hear. What stage are those projects at? Are you looking at similar timelines for grid connection?\"", correct: true, feedback: "Perfect! You're showing genuine interest and asking an open question that invites them to share more." },
+                    { text: "\"Are you using us for those as well?\"", correct: false, feedback: "Too direct and assumptive. Let them tell you about their plans." },
+                    { text: "Change the subject - you shouldn't mix sales with project work.", correct: false, feedback: "Wrong approach! This is exactly when you should explore - you have rapport and context." }
+                ],
+                followUp: `
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <strong>✅ Next Steps After This Conversation:</strong>
+                        <ol style="margin-left: 1rem; margin-top: 0.5rem;">
+                            <li>Send a follow-up email within 24 hours</li>
+                            <li>Attach the capability flyer</li>
+                            <li>Reference the projects they mentioned</li>
+                            <li>Offer to discuss their specific needs</li>
+                        </ol>
+                    </div>
+                `
+            },
+            2: {
+                title: "🎪 At an Industry Event",
+                content: `
+                    <h3>Scenario: You're at a conference or networking event</h3>
+                    <p>You're at a Clean Energy Council conference, AEMO forum, or similar industry event. You're chatting with someone new over coffee.</p>
+
+                    <div class="highlight-box">
+                        <strong>The Situation:</strong><br>
+                        You've just introduced yourself. They work for a renewable energy developer and mention they're "looking at a few sites in Queensland."
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Your Goal:</strong> Build rapport, understand their role, and identify if there's potential for Vysus to help. Get their contact details for follow-up.
+                    </div>
+                `,
+                question: "What's the best opening question to learn more?",
+                choices: [
+                    { text: "\"What's your company's grid connection strategy?\"", correct: false, feedback: "Too formal and business-like for a casual networking conversation." },
+                    { text: "\"Interesting - what kind of technology? Solar, wind, BESS?\"", correct: true, feedback: "Natural, conversational, and shows genuine interest. Opens the door for them to share more." },
+                    { text: "\"Do you need help with grid connection studies?\"", correct: false, feedback: "Too salesy too fast. You haven't built rapport yet." },
+                    { text: "\"Here's my card - let me know if you need anything.\"", correct: false, feedback: "You're ending the conversation before it starts. Keep them talking!" }
+                ],
+                followUp: `
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <strong>✅ Event Follow-Up Tips:</strong>
+                        <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                            <li>Exchange LinkedIn connections before you part</li>
+                            <li>Send a LinkedIn message that evening referencing your chat</li>
+                            <li>If there's real potential, email the capability flyer</li>
+                            <li>Keep it warm - don't go straight to sales mode</li>
+                        </ul>
+                    </div>
+                `
+            },
+            3: {
+                title: "📧 Reaching Out Cold",
+                content: `
+                    <h3>Scenario: Cold outreach to someone in your network</h3>
+                    <p>You've identified someone from your network who works at a company developing renewable projects. You haven't spoken in a while.</p>
+
+                    <div class="highlight-box">
+                        <strong>The Situation:</strong><br>
+                        A former colleague from 3 years ago now works as Development Manager at a solar developer. You saw on LinkedIn they're working on projects in Victoria.
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Your Goal:</strong> Reconnect naturally, understand what they're working on, and position Vysus as a resource if they need grid connection support.
+                    </div>
+                `,
+                question: "What's the best approach for your initial message?",
+                choices: [
+                    { text: "\"Hi! I work at Vysus Group and we do grid connection studies. Would love to chat about how we can help.\"", correct: false, feedback: "Too transactional. You're treating a warm contact like a cold lead." },
+                    { text: "\"Hey [Name], saw you're at [Company] now - looks like you're doing some interesting work. How's it going over there?\"", correct: true, feedback: "Perfect! Personal, warm, and invites them to share. You can naturally explore opportunities as the conversation develops." },
+                    { text: "Send them the capability flyer directly with no context.", correct: false, feedback: "No context = spam. They'll ignore it or feel used." },
+                    { text: "Wait until they reach out to you.", correct: false, feedback: "Passive approach rarely works. Take the initiative - they'll appreciate you reconnecting." }
+                ],
+                followUp: `
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <strong>✅ Cold Outreach Sequence:</strong>
+                        <ol style="margin-left: 1rem; margin-top: 0.5rem;">
+                            <li><strong>Message 1:</strong> Reconnect personally, show interest in their work</li>
+                            <li><strong>Message 2:</strong> If they respond positively, ask about their current projects</li>
+                            <li><strong>Message 3:</strong> If relevant, mention Vysus and offer to share the capability flyer</li>
+                            <li>Don't rush it - build the relationship first</li>
+                        </ol>
+                    </div>
+                `
+            },
+            4: {
+                title: "🤝 Catching Up with a Contact",
+                content: `
+                    <h3>Scenario: Coffee catch-up with a former colleague</h3>
+                    <p>You've arranged to catch up with someone you used to work with. They're now at an EPC that builds renewable projects.</p>
+
+                    <div class="highlight-box">
+                        <strong>The Situation:</strong><br>
+                        You're halfway through coffee. You've talked about life, mutual contacts, and industry news. They mention their company has "won a few new projects recently."
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Your Goal:</strong> Naturally transition to understanding their project pipeline and whether there's opportunity for Vysus to support.
+                    </div>
+                `,
+                question: "How do you explore the opportunity without making it awkward?",
+                choices: [
+                    { text: "\"Are you looking for help with grid connection on those?\"", correct: false, feedback: "Too direct too fast. The question comes out of nowhere." },
+                    { text: "\"That's great! What kind of projects - solar, wind? Where are they located?\"", correct: true, feedback: "Natural curiosity that keeps the conversation flowing. Location and technology type help you understand potential grid connection complexity." },
+                    { text: "\"My company could help with that - here's what we do.\"", correct: false, feedback: "You've jumped to pitching before understanding their needs." },
+                    { text: "Avoid discussing work - keep it social.", correct: false, feedback: "Work is a natural topic. Avoiding it seems odd and you miss the opportunity." }
+                ],
+                followUp: `
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <strong>✅ After a Catch-Up Coffee:</strong>
+                        <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                            <li>If they mentioned specific projects, send a follow-up email</li>
+                            <li>Reference what they shared - show you were listening</li>
+                            <li>Offer to send the capability flyer "in case it's useful"</li>
+                            <li>Keep the door open: "Let me know if any grid connection questions come up"</li>
+                        </ul>
+                    </div>
+                `
+            },
+            5: {
+                title: "💼 LinkedIn Opportunity",
+                content: `
+                    <h3>Scenario: Someone posts about a new project</h3>
+                    <p>You see a post in your LinkedIn feed from someone in your network.</p>
+
+                    <div class="highlight-box">
+                        <strong>The Situation:</strong><br>
+                        A connection posts: "Excited to announce our company has secured development rights for a 150MW wind farm in NSW! Big things ahead 🌱"
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Your Goal:</strong> Engage professionally, show interest, and open the door for a conversation about grid connection support.
+                    </div>
+                `,
+                question: "What's the best way to engage with this post?",
+                choices: [
+                    { text: "Like the post and move on.", correct: false, feedback: "You've missed the opportunity to start a conversation." },
+                    { text: "Comment: \"Congrats! Let me know if you need help with grid connection studies - we work across Australia.\"", correct: false, feedback: "Too salesy in a public comment. Others will see you pitching and it looks desperate." },
+                    { text: "Comment: \"Congrats! That's exciting news - NSW has some interesting grid challenges. Best of luck with it!\" Then send a private message.", correct: true, feedback: "Public comment shows support, private message allows real conversation. You've demonstrated knowledge without pitching publicly." },
+                    { text: "Send them the capability flyer directly via LinkedIn message.", correct: false, feedback: "No context, no conversation. They'll see it as spam." }
+                ],
+                followUp: `
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <strong>✅ LinkedIn Follow-Up Message:</strong>
+                        <p style="margin-top: 0.5rem; font-style: italic; background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px;">
+                            "Hey [Name], congrats again on the NSW project. 150MW wind in NSW will have some interesting grid dynamics to work through. If you ever want to chat about connection options or get a second opinion on studies, happy to help. We've done a lot of work in that area."
+                        </p>
+                    </div>
+                `
+            },
+            6: {
+                title: "🏗️ On a Site Visit",
+                content: `
+                    <h3>Scenario: You're visiting a project site</h3>
+                    <p>You're on site for a project inspection or commissioning support. You meet various people from the client's team.</p>
+
+                    <div class="highlight-box">
+                        <strong>The Situation:</strong><br>
+                        During lunch break on site, you're chatting with the client's Project Manager. They mention their company has "just signed another site further north" and they're "going through the development process again."
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>Your Goal:</strong> Understand the new project and whether Vysus could support the grid connection work.
+                    </div>
+                `,
+                question: "How do you explore this opportunity?",
+                choices: [
+                    { text: "\"We should definitely do the grid studies for that one too!\"", correct: false, feedback: "Presumptuous. You don't know their plans or whether they even need external support." },
+                    { text: "\"Oh nice - similar technology to this site? Have you started looking at the connection process yet?\"", correct: true, feedback: "Shows interest, asks open questions, and naturally leads to understanding their needs and timeline." },
+                    { text: "Get their email so you can send them information later.", correct: false, feedback: "You're cutting the conversation short. Keep them talking - you're already in the perfect setting." },
+                    { text: "Focus on the current project - don't mix business development with delivery.", correct: false, feedback: "Wrong! Site visits are prime opportunities. You have credibility and rapport from the current work." }
+                ],
+                followUp: `
+                    <div class="highlight-box" style="margin-top: 1.5rem;">
+                        <strong>✅ After a Site Visit Conversation:</strong>
+                        <ul style="margin-left: 1rem; margin-top: 0.5rem;">
+                            <li>Note down the details as soon as you can</li>
+                            <li>Report the opportunity to Chris</li>
+                            <li>Send a follow-up email to the PM referencing your conversation</li>
+                            <li>Offer to send the capability flyer for their new project</li>
+                        </ul>
+                    </div>
+                `
+            }
+        };
+
+        // Scenario Functions
+        function startScenario(scenarioId) {
+            state.currentScenario = scenarioId;
+            renderScenario();
+            showScreen('screen-scenario-content');
+        }
+
+        function renderScenario() {
+            const scenario = scenarios[state.currentScenario];
+            document.getElementById('scenario-title').textContent = scenario.title;
+            document.getElementById('scenario-content').innerHTML = scenario.content;
+
+            const choicesHtml = scenario.choices.map((choice, i) =>
+                '<button class="choice-btn" onclick="selectScenarioChoice(' + i + ')">' + choice.text + '</button>'
+            ).join('');
+
+            document.getElementById('scenario-choices').innerHTML =
+                '<h4 style="color: var(--stockholm-neon); margin-bottom: 1rem;">' + scenario.question + '</h4>' +
+                choicesHtml;
+        }
+
+        function selectScenarioChoice(index) {
+            const scenario = scenarios[state.currentScenario];
+            const choice = scenario.choices[index];
+            const isCorrect = choice.correct;
+
+            // Disable all buttons and show correct answer
+            document.querySelectorAll('#scenario-choices .choice-btn').forEach((btn, i) => {
+                btn.classList.add('disabled');
+                if (scenario.choices[i].correct) btn.classList.add('correct');
+                if (i === index && !isCorrect) btn.classList.add('incorrect');
+            });
+
+            // Show feedback and follow-up
+            const bgColor = isCorrect ? 'rgba(0,227,169,0.15)' : 'rgba(249,45,99,0.15)';
+            const textColor = isCorrect ? 'var(--stockholm-neon)' : 'var(--orlando-red)';
+            const resultText = isCorrect ? '✅ Correct!' : '❌ Not quite';
+
+            const feedbackHtml =
+                '<div style="margin-top: 1.5rem; padding: 1.5rem; border-radius: 12px; background: ' + bgColor + ';">' +
+                    '<strong style="color: ' + textColor + ';">' + resultText + '</strong>' +
+                    '<p style="margin-top: 0.5rem; color: rgba(255,255,255,0.9);">' + choice.feedback + '</p>' +
+                '</div>' +
+                scenario.followUp +
+                '<div style="text-align: center; margin-top: 2rem;">' +
+                    '<button class="btn btn-primary" onclick="completeScenario()">Continue →</button>' +
+                '</div>';
+
+            document.getElementById('scenario-choices').innerHTML += feedbackHtml;
+
+            // Award XP for correct answers
+            if (isCorrect && !state.completedScenarios.includes(state.currentScenario)) {
+                addXP(75);
+            }
+        }
+
+        function completeScenario() {
+            if (!state.completedScenarios.includes(state.currentScenario)) {
+                state.completedScenarios.push(state.currentScenario);
+                updateScenarioStatus();
+            }
+            showScreen('screen-scenarios');
+        }
+
+        function updateScenarioStatus() {
+            for (let i = 1; i <= 6; i++) {
+                const status = document.getElementById('scenario-status-' + i);
+                if (status && state.completedScenarios.includes(i)) {
+                    status.textContent = '✅';
+                }
+            }
+        }
+
+        // Module Content - The 4 Key Questions
+        const modules = {
+            1: {
+                title: "Question 1: Timeline",
+                steps: [
+                    {
+                        content: `
+                            <h3>📅 "What's your timeline for getting this project connected to the grid?"</h3>
+                            <p>Timeline questions reveal <strong>urgency</strong> and help you understand where they are in the development cycle.</p>
+                            <div class="highlight-box">
+                                <strong>Why This Works:</strong>
+                                <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                                    <li>Projects with tight timelines need experienced partners who can deliver right-first-time</li>
+                                    <li>Uncovers if they've already engaged someone or are still exploring</li>
+                                    <li>Reveals urgency level and budget constraints</li>
+                                </ul>
+                            </div>
+                        `,
+                        question: "A client says they need to be connected by Q4 next year. What's the best response?",
+                        choices: [
+                            { text: "\"That's plenty of time, no rush.\"", correct: false },
+                            { text: "\"That's a tight timeline - you'll want to get R1 studies started soon to avoid delays.\"", correct: true },
+                            { text: "\"We probably can't help with that timeline.\"", correct: false },
+                            { text: "\"Have you considered pushing that date back?\"", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Excellent! This response validates their urgency while positioning R1 studies as the logical next step.",
+                            incorrect: "The best response is to validate their tight timeline and suggest getting R1 studies started soon."
+                        }
+                    },
+                    {
+                        content: `
+                            <h3>🔍 Follow-Up Questions for Timeline</h3>
+                            <p>Once you understand their timeline, dig deeper with these follow-ups:</p>
+                            <div class="highlight-box">
+                                <ul style="margin-left: 1rem;">
+                                    <li><strong>"Have you submitted your connection enquiry to the NSP yet?"</strong></li>
+                                    <li><strong>"What stage are you at - R0, R1, or somewhere in between?"</strong></li>
+                                    <li><strong>"Is there a financial close date driving that timeline?"</strong></li>
+                                    <li><strong>"Have you had any initial discussions with AEMO or the network operator?"</strong></li>
+                                </ul>
+                            </div>
+                            <div class="tip-box">
+                                <strong>Pro Tip:</strong> If they're in early development, suggest pre-feasibility - it can save significant cost and time later.
+                            </div>
+                        `,
+                        question: "A client says they're \"still in early development\". What's your best action?",
+                        choices: [
+                            { text: "Wait until they're further along before following up", correct: false },
+                            { text: "Suggest a pre-feasibility or R0 assessment", correct: true },
+                            { text: "Push for a full R1 study immediately", correct: false },
+                            { text: "Tell them to come back when they're ready", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Perfect! Early stage is the best time for pre-feasibility - it can save significant cost and time later.",
+                            incorrect: "Early development is actually the best time to suggest a pre-feasibility or R0 assessment."
+                        }
+                    }
+                ]
+            },
+            2: {
+                title: "Question 2: Concerns",
+                steps: [
+                    {
+                        content: `
+                            <h3>😰 "What's your biggest concern about the grid connection process?"</h3>
+                            <p>This open-ended question invites the client to <strong>share their pain points</strong>. Most developers have been burned before.</p>
+                            <div class="highlight-box">
+                                <strong>Why This Works:</strong>
+                                <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                                    <li>Most clients have experienced delays, unexpected costs, or resubmissions</li>
+                                    <li>Understanding concerns lets you position our track record as the solution</li>
+                                    <li>Builds trust by showing you care about their specific situation</li>
+                                </ul>
+                            </div>
+                        `,
+                        question: "A client says they've had resubmissions on previous projects. What's the best response?",
+                        choices: [
+                            { text: "\"That happens to everyone, don't worry about it.\"", correct: false },
+                            { text: "\"That's exactly why we take a right-first-time approach. We've delivered 280+ connections without AEMO rejections.\"", correct: true },
+                            { text: "\"Which consultant did you use? We'll avoid them.\"", correct: false },
+                            { text: "\"That's frustrating. Good luck with the next one.\"", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Excellent! You've acknowledged their pain and positioned our track record as the solution.",
+                            incorrect: "The best approach is to acknowledge their frustration and highlight our right-first-time track record with 280+ connections."
+                        }
+                    },
+                    {
+                        content: `
+                            <h3>🔍 Handling Different Concerns</h3>
+                            <p>Different concerns require different responses:</p>
+                            <div class="highlight-box">
+                                <strong>Weak Grid Worries:</strong><br>
+                                "Weak grids are our specialty - we've successfully connected many projects in low SCR areas. It requires the right VRCS design and detailed EMT modeling."
+                            </div>
+                            <div class="tip-box">
+                                <strong>Cost/Timeline Uncertainty:</strong><br>
+                                "We can give you a fixed-price proposal with clear deliverables and timeline. No surprises."
+                            </div>
+                            <div class="warning-box">
+                                <strong>Remember:</strong> Focus on their problem, not our solution. Frame everything in terms of how it helps them succeed.
+                            </div>
+                        `,
+                        question: "A client is worried about \"weak grid issues\" at their connection point. What's your best response?",
+                        choices: [
+                            { text: "\"That could be a problem. Have you considered a different location?\"", correct: false },
+                            { text: "\"Weak grids are our specialty - we've successfully connected many projects in low SCR areas with VRCS design.\"", correct: true },
+                            { text: "\"Let me check if we can handle that and get back to you.\"", correct: false },
+                            { text: "\"You should talk to the network operator about that.\"", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Perfect! You've turned their concern into a strength by highlighting our low SCR expertise.",
+                            incorrect: "The best response is to position weak grids as our specialty and highlight our VRCS design expertise."
+                        }
+                    }
+                ]
+            },
+            3: {
+                title: "Question 3: Equipment",
+                steps: [
+                    {
+                        content: `
+                            <h3>⚙️ "Have you selected your equipment supplier yet, or are you still evaluating options?"</h3>
+                            <p>Equipment selection <strong>directly impacts grid connection success</strong>. This question opens doors for OEM evaluation and Owner's Engineer work.</p>
+                            <div class="highlight-box">
+                                <strong>Why This Works:</strong>
+                                <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                                    <li>If not selected yet, we can provide independent advice</li>
+                                    <li>If selected, we need to understand OEM and model availability</li>
+                                    <li>Opens doors for Owner's Engineer services</li>
+                                </ul>
+                            </div>
+                        `,
+                        question: "A client says \"We're comparing a few OEMs\". What's the best action?",
+                        choices: [
+                            { text: "\"Let me know when you've decided.\"", correct: false },
+                            { text: "\"We can help evaluate them from a grid compliance perspective - some OEMs have better track records with AEMO.\"", correct: true },
+                            { text: "\"Which one is cheapest? Go with that.\"", correct: false },
+                            { text: "\"Just make sure they have models.\"", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Excellent! You've positioned Vysus as a valuable resource in their decision process.",
+                            incorrect: "The best approach is to offer OEM evaluation from a grid compliance perspective - position yourself as a valuable advisor."
+                        }
+                    },
+                    {
+                        content: `
+                            <h3>🔍 Equipment Follow-Up Scenarios</h3>
+                            <div class="highlight-box">
+                                <strong>If they've selected an OEM:</strong><br>
+                                "Great, we've worked with [OEM] before. We'll need their latest validated models for the connection studies."
+                            </div>
+                            <div class="tip-box">
+                                <strong>If the EPC is handling equipment:</strong><br>
+                                "It's worth having independent eyes on equipment compliance - EPCs sometimes overlook grid code nuances."
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>Key Follow-Up Questions:</strong></p>
+                            <ul style="margin-left: 1.5rem;">
+                                <li>"Has the OEM provided validated PSS/E or PowerFactory models yet?"</li>
+                                <li>"Do you need help evaluating equipment against grid code requirements?"</li>
+                                <li>"Are you looking at hybrid configurations - wind plus BESS, or solar plus BESS?"</li>
+                            </ul>
+                        `,
+                        question: "A client says \"The EPC is handling equipment selection\". What opportunity does this present?",
+                        choices: [
+                            { text: "No opportunity - the EPC has it covered", correct: false },
+                            { text: "Position independent technical review - EPCs sometimes overlook grid code nuances", correct: true },
+                            { text: "Criticize the EPC's capabilities", correct: false },
+                            { text: "Wait until there are problems", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Perfect! Independent technical review protects the client's interests and often catches issues early.",
+                            incorrect: "This is an opportunity to position independent technical review - EPCs can overlook grid code nuances."
+                        }
+                    }
+                ]
+            },
+            4: {
+                title: "Question 4: Current Support",
+                steps: [
+                    {
+                        content: `
+                            <h3>👥 "Who's handling your grid connection studies currently?"</h3>
+                            <p>This direct question tells you if there's an incumbent, in-house capability, or if they haven't engaged anyone yet.</p>
+                            <div class="highlight-box">
+                                <strong>What You Learn:</strong>
+                                <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                                    <li>Is there a competitor already in place?</li>
+                                    <li>Do they have in-house capability?</li>
+                                    <li>Are they looking for primary consultant, second opinion, or peer reviewer?</li>
+                                </ul>
+                            </div>
+                        `,
+                        question: "A client says \"We haven't engaged anyone yet\". What's the best action?",
+                        choices: [
+                            { text: "\"Take your time deciding.\"", correct: false },
+                            { text: "\"Perfect timing - let me tell you about our approach and how we can help.\"", correct: true },
+                            { text: "\"Who else are you talking to?\"", correct: false },
+                            { text: "\"I'll send you some brochures.\"", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Excellent! This is a full pitch opportunity - take it! Share your capability flyer and propose next steps.",
+                            incorrect: "When no one is engaged yet, it's the perfect time for a full pitch - don't miss this opportunity!"
+                        }
+                    },
+                    {
+                        content: `
+                            <h3>🔍 Handling Different Scenarios</h3>
+                            <div class="highlight-box">
+                                <strong>If they're using a competitor:</strong><br>
+                                "Good to know. If you ever need a peer review or second opinion on any technical issues, we're happy to help."<br>
+                                <em>ACTION: Position for future work or review services</em>
+                            </div>
+                            <div class="tip-box">
+                                <strong>If the OEM/EPC is doing it:</strong><br>
+                                "That can work, but having an independent consultant review the work protects your interests and often catches issues early."<br>
+                                <em>ACTION: Position Owner's Engineer / independent review</em>
+                            </div>
+                            <div class="warning-box">
+                                <strong>Key Follow-Ups:</strong>
+                                <ul style="margin-top: 0.5rem; margin-left: 1rem;">
+                                    <li>"How's that going so far?" (if they have someone)</li>
+                                    <li>"Would you value a second opinion on any of the technical work?"</li>
+                                    <li>"Are there specific study types you need support with?"</li>
+                                </ul>
+                            </div>
+                        `,
+                        question: "A client says they're using a competitor for their connection studies. What's the best approach?",
+                        choices: [
+                            { text: "\"That's unfortunate. Call us if they fail.\"", correct: false },
+                            { text: "\"If you ever need a peer review or second opinion on technical issues, we're happy to help.\"", correct: true },
+                            { text: "\"They're not very good. You should switch.\"", correct: false },
+                            { text: "\"Okay, good luck with that.\"", correct: false }
+                        ],
+                        feedback: {
+                            correct: "Perfect! You've kept the door open for peer review and future work without criticizing the competitor.",
+                            incorrect: "The professional approach is to offer peer review or second opinion services - keep the door open for future work."
+                        }
+                    }
+                ]
+            }
+        };
+
+        // Quiz Questions
+        const quizQuestions = [
+            {
+                question: "What's the PRIMARY purpose of asking timeline questions?",
+                options: ["To fill silence", "To understand urgency and development stage", "To make small talk", "To qualify budget"],
+                correct: 1
+            },
+            {
+                question: "A client has a tight Q4 timeline. What should you suggest?",
+                options: ["Push the date back", "Start R1 studies soon to avoid delays", "Wait and see how it goes", "Find a different project"],
+                correct: 1
+            },
+            {
+                question: "When a client mentions weak grid concerns, how should you respond?",
+                options: ["Suggest a different location", "Position weak grids as our specialty with VRCS design expertise", "Say it's probably not a big deal", "Refer them to the NSP"],
+                correct: 1
+            },
+            {
+                question: "What does Vysus Group's \"right-first-time\" track record mean?",
+                options: ["We only do one revision", "We've delivered 280+ connections without AEMO rejections", "We're the first consultant they should call", "We finish projects quickly"],
+                correct: 1
+            },
+            {
+                question: "A client's EPC is handling equipment selection. What opportunity does this present?",
+                options: ["None - EPC has it covered", "Position independent technical review to catch grid code issues", "Criticize the EPC", "Wait for problems"],
+                correct: 1
+            },
+            {
+                question: "When asking about equipment, what key follow-up should you ask?",
+                options: ["How much does it cost?", "Has the OEM provided validated PSS/E or PowerFactory models?", "What color is it?", "Who recommended them?"],
+                correct: 1
+            },
+            {
+                question: "A competitor is already handling the client's studies. What's your best response?",
+                options: ["Say the competitor is bad", "Offer peer review or second opinion services", "Give up and move on", "Undercut their price"],
+                correct: 1
+            },
+            {
+                question: "After uncovering an opportunity, what should you do within 24 hours?",
+                options: ["Nothing - wait for them to call", "Send a follow-up email referencing the discussion", "Start the work immediately", "Tell everyone about it"],
+                correct: 1
+            },
+            {
+                question: "What should you focus on in conversations - our solutions or their problems?",
+                options: ["Our impressive track record", "Their specific problems and how we help them succeed", "Industry statistics", "Competitor weaknesses"],
+                correct: 1
+            },
+            {
+                question: "What should you do when you uncover a real opportunity?",
+                options: ["Keep it to yourself", "Report back to Chris immediately with details", "Wait until it's confirmed", "Post about it on LinkedIn"],
+                correct: 1
+            }
+        ];
+
+        // Badges Definition
+        const badges = [
+            { id: "starter", icon: "⚡", name: "Getting Started", desc: "Complete your first question module", requirement: 1 },
+            { id: "halfway", icon: "🔥", name: "Building Pipeline", desc: "Complete 2 question modules", requirement: 2 },
+            { id: "expert", icon: "🎯", name: "Conversation Expert", desc: "Complete all 4 question modules", requirement: 4 },
+            { id: "quizmaster", icon: "🧠", name: "Grid Connection Guru", desc: "Score 80%+ on the quiz", requirement: "quiz" },
+            { id: "champion", icon: "🏆", name: "Client Champion", desc: "Earn all other badges", requirement: "all" }
+        ];
+
+        // Initialize particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.width = (Math.random() * 10 + 5) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+
+            if (screenId === 'screen-badges') renderBadges();
+            if (screenId === 'screen-quiz') renderQuiz();
+        }
+
+        // Module Functions
+        function startModule(moduleId) {
+            state.currentModule = moduleId;
+            state.currentStep = 0;
+            renderModuleStep();
+            showScreen('screen-module-content');
+        }
+
+        function renderModuleStep() {
+            const module = modules[state.currentModule];
+            const step = module.steps[state.currentStep];
+
+            document.getElementById('module-title').textContent = module.title;
+
+            // Progress dots
+            const progressHtml = module.steps.map((_, i) => {
+                let cls = 'progress-dot';
+                if (i < state.currentStep) cls += ' completed';
+                if (i === state.currentStep) cls += ' active';
+                return `<div class="${cls}"></div>`;
+            }).join('');
+            document.getElementById('question-progress').innerHTML = progressHtml;
+
+            // Content
+            document.getElementById('question-content').innerHTML = step.content;
+
+            // Choices
+            const choicesHtml = step.choices.map((choice, i) =>
+                `<button class="choice-btn" onclick="selectChoice(${i})">${choice.text}</button>`
+            ).join('');
+            document.getElementById('choices-container').innerHTML = `
+                <h4 style="color: var(--stockholm-neon); margin-bottom: 1rem;">${step.question}</h4>
+                ${choicesHtml}
+            `;
+        }
+
+        function selectChoice(index) {
+            const module = modules[state.currentModule];
+            const step = module.steps[state.currentStep];
+            const isCorrect = step.choices[index].correct;
+
+            // Disable all buttons
+            document.querySelectorAll('.choice-btn').forEach((btn, i) => {
+                btn.classList.add('disabled');
+                if (step.choices[i].correct) btn.classList.add('correct');
+                if (i === index && !isCorrect) btn.classList.add('incorrect');
+            });
+
+            // Show feedback
+            setTimeout(() => {
+                showFeedback(isCorrect, step.feedback, isCorrect ? 25 : 0);
+            }, 500);
+        }
+
+        function showFeedback(success, feedback, xp) {
+            const overlay = document.getElementById('feedback-overlay');
+            const modal = document.getElementById('feedback-modal');
+
+            modal.className = 'feedback-modal ' + (success ? 'success' : 'error');
+            document.getElementById('feedback-icon').textContent = success ? '✅' : '❌';
+            document.getElementById('feedback-title').textContent = success ? 'Correct!' : 'Not Quite';
+            document.getElementById('feedback-text').textContent = success ? feedback.correct : feedback.incorrect;
+            document.getElementById('feedback-xp').textContent = xp > 0 ? `+${xp} XP` : '';
+            document.getElementById('feedback-xp').style.display = xp > 0 ? 'inline-block' : 'none';
+
+            if (xp > 0 && !state.completedModules.includes(state.currentModule)) {
+                addXP(xp);
+            }
+
+            overlay.classList.add('active');
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedback-overlay').classList.remove('active');
+
+            const module = modules[state.currentModule];
+            if (state.currentStep < module.steps.length - 1) {
+                state.currentStep++;
+                renderModuleStep();
+            } else {
+                // Module complete
+                if (!state.completedModules.includes(state.currentModule)) {
+                    state.completedModules.push(state.currentModule);
+                    addXP(50); // Completion bonus
+                    checkBadges();
+                    updateModuleStatus();
+                }
+                showScreen('screen-modules');
+            }
+        }
+
+        // Toolkit Functions
+        function showToolkitMode(mode) {
+            // Hide all modes
+            document.getElementById('toolkit-guided').style.display = 'none';
+            document.getElementById('toolkit-quick').style.display = 'none';
+            document.getElementById('toolkit-network').style.display = 'none';
+
+            // Reset button styles
+            document.getElementById('btn-guided').className = 'btn btn-secondary';
+            document.getElementById('btn-quick').className = 'btn btn-secondary';
+            document.getElementById('btn-network').className = 'btn btn-secondary';
+
+            // Show selected mode and highlight button
+            if (mode === 'guided') {
+                document.getElementById('toolkit-guided').style.display = 'block';
+                document.getElementById('btn-guided').className = 'btn btn-primary';
+            } else if (mode === 'quick') {
+                document.getElementById('toolkit-quick').style.display = 'block';
+                document.getElementById('btn-quick').className = 'btn btn-primary';
+            } else if (mode === 'network') {
+                document.getElementById('toolkit-network').style.display = 'block';
+                document.getElementById('btn-network').className = 'btn btn-primary';
+                loadNetworkNotes(); // Load saved notes when entering network mode
+            }
+        }
+
+        function copyTemplate(templateId) {
+            const template = document.getElementById(templateId);
+            const text = template.textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = template.parentElement.querySelector('button');
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.background = '#00b888';
+                setTimeout(function() {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 2000);
+            });
+        }
+
+        function scrollToTemplates() {
+            document.getElementById('email-templates').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function saveNetworkNotes() {
+            const notes = {
+                uni: document.getElementById('network-uni').value,
+                employers: document.getElementById('network-employers').value,
+                projects: document.getElementById('network-projects').value,
+                events: document.getElementById('network-events').value,
+                linkedin: document.getElementById('network-linkedin').value,
+                other: document.getElementById('network-other').value
+            };
+            localStorage.setItem('vysus_network_notes', JSON.stringify(notes));
+            alert('Notes saved! They will be here next time you open this page.');
+        }
+
+        function loadNetworkNotes() {
+            const saved = localStorage.getItem('vysus_network_notes');
+            if (saved) {
+                const notes = JSON.parse(saved);
+                if (document.getElementById('network-uni')) {
+                    document.getElementById('network-uni').value = notes.uni || '';
+                    document.getElementById('network-employers').value = notes.employers || '';
+                    document.getElementById('network-projects').value = notes.projects || '';
+                    document.getElementById('network-events').value = notes.events || '';
+                    document.getElementById('network-linkedin').value = notes.linkedin || '';
+                    document.getElementById('network-other').value = notes.other || '';
+                }
+            }
+        }
+
+        // Load network notes when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNetworkNotes();
+        });
+
+        // XP System
+        function addXP(amount) {
+            state.xp += amount;
+            const newLevel = Math.floor(state.xp / 200) + 1;
+            if (newLevel > state.level) {
+                state.level = newLevel;
+            }
+            updateXPDisplay();
+        }
+
+        function updateXPDisplay() {
+            document.getElementById('xp-display').textContent = state.xp + ' XP';
+            document.getElementById('level-display').textContent = 'Level ' + state.level;
+            const progress = (state.xp % 200) / 200 * 100;
+            document.getElementById('xp-fill').style.width = progress + '%';
+        }
+
+        // Module Status
+        function updateModuleStatus() {
+            for (let i = 1; i <= 4; i++) {
+                const card = document.getElementById('module-' + i);
+                const status = document.getElementById('status-' + i);
+                if (state.completedModules.includes(i)) {
+                    card.classList.add('completed');
+                    status.textContent = '✅';
+                }
+            }
+
+            // Enable quiz if all modules complete
+            if (state.completedModules.length >= 4) {
+                document.getElementById('quiz-btn').disabled = false;
+            }
+        }
+
+        // Quiz Functions
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = quizQuestions.map((q, i) => `
+                <div class="quiz-question" style="margin-bottom: 2rem;">
+                    <h4 style="color: white; margin-bottom: 1rem;">${i + 1}. ${q.question}</h4>
+                    <div class="choices-container">
+                        ${q.options.map((opt, j) => `
+                            <button class="choice-btn" onclick="selectQuizAnswer(${i}, ${j}, this)">${opt}</button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function selectQuizAnswer(questionIndex, optionIndex, btn) {
+            state.quizAnswers[questionIndex] = optionIndex;
+
+            // Highlight selected
+            const question = btn.closest('.quiz-question');
+            question.querySelectorAll('.choice-btn').forEach(b => b.classList.remove('correct'));
+            btn.classList.add('correct');
+        }
+
+        function submitQuiz() {
+            const answered = Object.keys(state.quizAnswers).length;
+            if (answered < quizQuestions.length) {
+                alert('Please answer all questions before submitting.');
+                return;
+            }
+
+            let correct = 0;
+            quizQuestions.forEach((q, i) => {
+                if (state.quizAnswers[i] === q.correct) correct++;
+            });
+
+            const percentage = (correct / quizQuestions.length) * 100;
+            addXP(correct * 20);
+
+            if (percentage >= 80) {
+                if (!state.earnedBadges.includes('quizmaster')) {
+                    state.earnedBadges.push('quizmaster');
+                }
+            }
+
+            checkBadges();
+
+            // Show completion
+            document.getElementById('final-xp').textContent = state.xp;
+            document.getElementById('final-level').textContent = state.level;
+            document.getElementById('final-badges').textContent = state.earnedBadges.length;
+            showScreen('screen-completion');
+        }
+
+        // Badge Functions
+        function checkBadges() {
+            const completed = state.completedModules.length;
+
+            if (completed >= 1 && !state.earnedBadges.includes('starter')) {
+                state.earnedBadges.push('starter');
+            }
+            if (completed >= 2 && !state.earnedBadges.includes('halfway')) {
+                state.earnedBadges.push('halfway');
+            }
+            if (completed >= 4 && !state.earnedBadges.includes('expert')) {
+                state.earnedBadges.push('expert');
+            }
+
+            // Check for champion (all other badges)
+            const otherBadges = ['starter', 'halfway', 'expert', 'quizmaster'];
+            if (otherBadges.every(b => state.earnedBadges.includes(b)) && !state.earnedBadges.includes('champion')) {
+                state.earnedBadges.push('champion');
+            }
+        }
+
+        function renderBadges() {
+            const container = document.getElementById('badges-container');
+            container.innerHTML = badges.map(badge => {
+                const earned = state.earnedBadges.includes(badge.id);
+                return `
+                    <div class="badge-card ${earned ? 'earned' : 'locked'}">
+                        <div class="badge-icon">${badge.icon}</div>
+                        <h4>${badge.name}</h4>
+                        <p>${badge.desc}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Reference Filter Function
+        function filterReference(query) {
+            const cards = document.querySelectorAll('.reference-card');
+            const lowerQuery = query.toLowerCase().trim();
+
+            cards.forEach(card => {
+                if (!lowerQuery) {
+                    card.classList.remove('hidden');
+                    return;
+                }
+
+                const keywords = card.dataset.keywords || '';
+                const title = card.querySelector('h3')?.textContent || '';
+                const content = card.textContent || '';
+
+                const matches = keywords.toLowerCase().includes(lowerQuery) ||
+                               title.toLowerCase().includes(lowerQuery) ||
+                               content.toLowerCase().includes(lowerQuery);
+
+                card.classList.toggle('hidden', !matches);
+            });
+        }
+
+        // Initialize
+        createParticles();
+        updateXPDisplay();
+    </script>
+</body>
+</html>

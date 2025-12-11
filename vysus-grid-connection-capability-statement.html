@@ -1,0 +1,2222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vysus Group - Grid Connection Studies Consultancy [CONFIDENTIAL]</title>
+
+    <style>
+        /* ========================================== */
+        /* SECURITY & WATERMARK STYLES                */
+        /* ========================================== */
+
+        /* Access Control Overlay */
+        #accessControl {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+        }
+
+        #accessControl.hidden {
+            display: none;
+        }
+
+        .access-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .access-box h2 {
+            color: #005454;
+            margin-bottom: 1rem;
+        }
+
+        .access-box .warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        .access-box input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #00E3A9;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .access-box button {
+            background: linear-gradient(135deg, #00E3A9 0%, #005454 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .access-box button:hover {
+            opacity: 0.9;
+        }
+
+        .access-error {
+            color: #dc3545;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Diagonal DRAFT Watermark */
+        #draftWatermark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+            overflow: hidden;
+        }
+
+        .watermark-text {
+            position: absolute;
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(0, 84, 84, 0.08);
+            text-transform: uppercase;
+            white-space: nowrap;
+            transform: rotate(-45deg);
+            user-select: none;
+        }
+
+        .watermark-text.line1 {
+            top: 10%;
+            left: -10%;
+        }
+
+        .watermark-text.line2 {
+            top: 30%;
+            left: 5%;
+        }
+
+        .watermark-text.line3 {
+            top: 50%;
+            left: -5%;
+        }
+
+        .watermark-text.line4 {
+            top: 70%;
+            left: 10%;
+        }
+
+        .watermark-text.line5 {
+            top: 90%;
+            left: 0%;
+        }
+
+        /* Confidential Banner */
+        #confidentialBanner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #dc3545 0%, #c82333 100%);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            z-index: 9997;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Anti-Copy Protection */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @media print {
+            #draftWatermark {
+                display: block !important;
+            }
+            #confidentialBanner {
+                display: block !important;
+            }
+            body::before {
+                content: "CONFIDENTIAL - DRAFT - Chris Marinelli - Vysus Group - chris.marinelli@vysusgroup.com";
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-45deg);
+                font-size: 8rem;
+                color: rgba(220, 53, 69, 0.15);
+                font-weight: 900;
+                white-space: nowrap;
+                z-index: 9999;
+            }
+        }
+
+        /* Expiration Warning */
+        #expirationWarning {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffc107;
+            color: #856404;
+            text-align: center;
+            padding: 0.4rem;
+            font-size: 0.8rem;
+            z-index: 9997;
+            display: none;
+        }
+
+        #expirationWarning.show {
+            display: block;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            background: #fff;
+        }
+
+        :root {
+            --stockholm-neon: #00E3A9;
+            --malmo-green: #005454;
+            --white: #ffffff;
+            --trondheim-night: #1d1d1b;
+            --light-bg: #f8f8f8;
+        }
+
+        .slide {
+            min-height: 100vh;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            page-break-after: always;
+        }
+
+        /* SLIDE 1: HERO */
+        .hero-slide {
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            color: white;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hero-chevron {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 227, 169, 0.3) 0%, rgba(0, 84, 84, 0.3) 100%);
+            clip-path: polygon(0 0, 50% 0, 30% 100%, 0 100%);
+        }
+
+        .hero-chevron-2 {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 84, 84, 0.2) 0%, rgba(0, 227, 169, 0.2) 100%);
+            clip-path: polygon(20% 0, 70% 0, 50% 100%, 10% 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 1100px;
+        }
+
+        .logo-v {
+            font-size: 5rem;
+            font-weight: 300;
+            color: var(--stockholm-neon);
+            margin-right: 1rem;
+        }
+
+        .logo-text {
+            font-size: 3.5rem;
+            font-weight: 300;
+        }
+
+        .hero-title {
+            font-size: 3.8rem;
+            font-weight: 300;
+            margin: 2rem 0 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 2rem;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin: 3rem 0;
+            padding: 2rem 0;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            flex-wrap: wrap;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 300;
+            letter-spacing: -2px;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1.8rem;
+            font-weight: 300;
+            font-style: italic;
+            margin-top: 2rem;
+            opacity: 0.85;
+        }
+
+        /* CONTENT SLIDES */
+        .content-slide {
+            max-width: 1400px;
+            width: 100%;
+        }
+
+        .slide-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .slide-title {
+            font-size: 3rem;
+            font-weight: 300;
+            color: var(--malmo-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .slide-subtitle {
+            font-size: 1.3rem;
+            color: #666;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .team-card {
+            background: white;
+            padding: 1.8rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--stockholm-neon);
+            transition: transform 0.3s;
+        }
+
+        .team-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 20px rgba(0, 227, 169, 0.25);
+        }
+
+        .team-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--malmo-green);
+            margin-bottom: 0.4rem;
+        }
+
+        .team-title {
+            font-size: 1rem;
+            color: var(--stockholm-neon);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        .team-bio {
+            font-size: 0.93rem;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        .focus-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 2rem;
+        }
+
+        .focus-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            border-top: 4px solid var(--stockholm-neon);
+        }
+
+        .focus-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .focus-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            color: var(--malmo-green);
+            margin-bottom: 1rem;
+        }
+
+        .focus-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+
+        .focus-list li {
+            padding: 0.6rem 0;
+            color: #444;
+            font-size: 0.95rem;
+        }
+
+        .focus-list li:before {
+            content: "✓ ";
+            color: var(--stockholm-neon);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .highlight-title {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .value-card {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--stockholm-neon);
+            margin-bottom: 1rem;
+        }
+
+        .value-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--malmo-green);
+            margin-bottom: 0.75rem;
+        }
+
+        .value-text {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .cert-badge {
+            display: inline-block;
+            background: var(--stockholm-neon);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            margin: 0.2rem;
+            font-weight: 500;
+        }
+
+        .project-highlight {
+            background: #f8f8f8;
+            padding: 2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--stockholm-neon);
+        }
+
+        .project-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--malmo-green);
+            margin-bottom: 0.75rem;
+        }
+
+        .project-details {
+            font-size: 0.95rem;
+            color: #555;
+            line-height: 1.7;
+        }
+
+        @media (max-width: 968px) {
+            .two-col { grid-template-columns: 1fr; }
+            .team-grid, .focus-grid { grid-template-columns: 1fr; }
+            .hero-title { font-size: 2.5rem; }
+            .logo-v { font-size: 3.5rem; }
+            .logo-text { font-size: 2.5rem; }
+        }
+
+        @media (max-width: 768px) {
+            .slide-title { font-size: 2rem; }
+        }
+
+        @media print {
+            .slide { page-break-after: always; }
+        }
+
+        /* PULSE ANIMATION FOR IMPORTANT ITEMS */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        /* LOZENGE FAQ STYLES - Always Visible */
+        .faq-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            margin-bottom: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            box-shadow: 0 6px 24px rgba(0, 227, 169, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .faq-question {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--malmo-green);
+            margin-bottom: 1.5rem;
+            display: block;
+            border-bottom: 3px solid var(--stockholm-neon);
+            padding-bottom: 0.75rem;
+        }
+
+        .faq-answer {
+            display: block;
+        }
+
+        .faq-content {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .faq-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* LOZENGE BADGES FOR KEY POINTS */
+        .answer-lozenge {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--stockholm-neon) 0%, #00b888 100%);
+            color: white;
+            padding: 0.7rem 1.4rem;
+            border-radius: 30px;
+            margin: 0.4rem 0.4rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0, 227, 169, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .answer-lozenge:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 227, 169, 0.5);
+        }
+
+        .answer-lozenge.important {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            animation: pulse 2s ease-in-out infinite;
+            box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+        }
+
+        .lozenge-container {
+            margin-top: 1.2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+        }
+
+        /* CAPABILITY CHECKBOXES */
+        .capability-checkbox {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem 1.2rem;
+            margin: 0.5rem 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .capability-checkbox:hover {
+            background: #e8f5f1;
+            border-color: var(--stockholm-neon);
+            transform: translateX(5px);
+        }
+
+        .capability-checkbox input[type="checkbox"] {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .capability-checkbox input[type="checkbox"]:checked {
+            accent-color: var(--stockholm-neon);
+        }
+
+        .capability-checkbox span {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: #333;
+            flex: 1;
+        }
+
+        .capability-checkbox input[type="checkbox"]:checked + span {
+            font-weight: 600;
+            color: var(--malmo-green);
+        }
+
+        .cert-image-placeholder {
+            background: linear-gradient(135deg, var(--malmo-green) 0%, var(--stockholm-neon) 100%);
+            color: white;
+            padding: 3rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .challenge-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--stockholm-neon);
+        }
+
+        .challenge-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--malmo-green);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .challenge-level {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .expert-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            margin: 0.3rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .accred-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .accred-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 4px solid var(--stockholm-neon);
+        }
+
+        .accred-logo {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .accred-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--malmo-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .accred-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* FLOATING CAPABILITY SUMMARY PANEL */
+        #capabilitySummary {
+            position: fixed;
+            bottom: -100%;
+            right: 2rem;
+            width: 450px;
+            max-height: 80vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            padding: 1.5rem;
+            z-index: 9999;
+            transition: bottom 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: 3px solid var(--stockholm-neon);
+        }
+
+        #capabilitySummary.show {
+            bottom: 2rem;
+        }
+
+        .match-score {
+            font-size: 3.5rem;
+            font-weight: 700;
+            text-align: center;
+            background: linear-gradient(135deg, var(--malmo-green) 0%, var(--stockholm-neon) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 1rem 0;
+        }
+
+        @media (max-width: 768px) {
+            #capabilitySummary {
+                width: calc(100% - 2rem);
+                right: 1rem;
+                left: 1rem;
+            }
+
+            #capabilitySummary.show {
+                bottom: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================== -->
+    <!-- SECURITY OVERLAYS                           -->
+    <!-- ========================================== -->
+
+    <!-- Time-Limited Access Control -->
+    <div id="accessControl">
+        <div class="access-box">
+            <h2>🔐 Confidential Document Access</h2>
+            <p style="color: #666; margin-bottom: 1rem;">This document expires 10 days from creation and is locked to your organization's domain.</p>
+
+            <div class="warning">
+                <strong>⚠️ CONFIDENTIAL</strong><br>
+                Vysus Group Grid Connection Capability Statement<br>
+                For authorized recipients only<br>
+                <em style="font-size: 0.9em;">First access locks document to your email domain</em>
+            </div>
+
+            <label for="userEmail" style="display: block; margin: 1rem 0 0.5rem 0; color: #005454; font-weight: 600;">Your Email Address:</label>
+            <input type="email" id="userEmail" placeholder="your.email@company.com">
+
+            <p class="access-error" id="accessError">This document has expired. Please contact Chris Marinelli for an updated version.</p>
+
+            <button onclick="verifyAccess()">🔓 Access Document</button>
+
+            <p style="margin-top: 1.5rem; font-size: 0.85rem; color: #999; text-align: center;">
+                Questions? Contact:<br>
+                <strong>Chris Marinelli</strong><br>
+                chris.marinelli@vysusgroup.com<br>
+                0417 035 368
+            </p>
+        </div>
+    </div>
+
+    <!-- DRAFT Watermark -->
+    <div id="draftWatermark">
+        <div class="watermark-text line1">DRAFT - Chris Marinelli - Vysus Group - chris.marinelli@vysusgroup.com</div>
+        <div class="watermark-text line2">DRAFT - Chris Marinelli - Vysus Group - chris.marinelli@vysusgroup.com</div>
+        <div class="watermark-text line3">DRAFT - Chris Marinelli - Vysus Group - chris.marinelli@vysusgroup.com</div>
+        <div class="watermark-text line4">DRAFT - Chris Marinelli - Vysus Group - chris.marinelli@vysusgroup.com</div>
+        <div class="watermark-text line5">DRAFT - Chris Marinelli - Vysus Group - chris.marinelli@vysusgroup.com</div>
+    </div>
+
+    <!-- Confidential Banner -->
+    <div id="confidentialBanner">
+        🔒 CONFIDENTIAL - DRAFT - For Authorized Recipients Only - Chris Marinelli, Vysus Group - chris.marinelli@vysusgroup.com - Not for Distribution
+    </div>
+
+    <!-- Expiration Warning -->
+    <div id="expirationWarning">
+        ⚠️ Your access code expires on <span id="expiryDate"></span>
+    </div>
+
+    <script>
+        // ========================================
+        // SECURITY & ACCESS CONTROL SCRIPT
+        // ========================================
+
+        // Log document access attempt
+        console.log('Document access attempted:', new Date().toLocaleString('en-AU'));
+        console.log('User Agent:', navigator.userAgent);
+        console.log('Referrer:', document.referrer);
+
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('⚠️ Right-click is disabled on this confidential document.');
+            return false;
+        });
+
+        // Disable certain keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Disable Ctrl+S (Save), Ctrl+P (Print), Ctrl+C (Copy), F12 (DevTools)
+            if ((e.ctrlKey && (e.key === 's' || e.key === 'p' || e.key === 'c')) || e.key === 'F12') {
+                e.preventDefault();
+                alert('⚠️ This action is disabled on confidential documents.');
+                return false;
+            }
+        });
+
+        // DOCUMENT CREATION DATE - Set this when you create/send the document
+        const DOCUMENT_CREATED = new Date('2025-11-24').getTime(); // Today's date
+        const DAYS_VALID = 10; // Total document lifetime in days
+        const DOCUMENT_EXPIRY = DOCUMENT_CREATED + (DAYS_VALID * 24 * 60 * 60 * 1000);
+
+        // Domain-locked access verification
+        function verifyAccess() {
+            const emailInput = document.getElementById('userEmail').value.trim().toLowerCase();
+            const errorElement = document.getElementById('accessError');
+
+            // Validate email format
+            if (!emailInput || !emailInput.includes('@') || emailInput.indexOf('@') === 0 || emailInput.indexOf('@') === emailInput.length - 1) {
+                errorElement.textContent = 'Please enter a valid email address';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Check if document has expired based on creation date
+            if (Date.now() > DOCUMENT_EXPIRY) {
+                errorElement.textContent = 'This document has expired (10 days from creation). Please contact Chris Marinelli for an updated version.';
+                errorElement.style.display = 'block';
+                return;
+            }
+
+            // Extract domain from email
+            const domain = emailInput.split('@')[1];
+
+            // Check if domain is already locked
+            const storedData = localStorage.getItem('vysus_doc_access');
+
+            if (storedData) {
+                const accessData = JSON.parse(storedData);
+                const lockedDomain = accessData.lockedDomain;
+
+                // Check if current email domain matches locked domain
+                if (domain !== lockedDomain) {
+                    errorElement.textContent = `Access denied. This document is locked to @${lockedDomain} domain only.`;
+                    errorElement.style.display = 'block';
+                    console.log('ACCESS DENIED - Domain mismatch:', {
+                        attemptedEmail: emailInput,
+                        attemptedDomain: domain,
+                        lockedDomain: lockedDomain,
+                        timestamp: new Date().toLocaleString('en-AU')
+                    });
+                    return;
+                }
+
+                // Domain matches - grant access and update
+                accessData.lastAccess = new Date().toISOString();
+                accessData.lastEmail = emailInput;
+                accessData.accessCount = (accessData.accessCount || 1) + 1;
+                localStorage.setItem('vysus_doc_access', JSON.stringify(accessData));
+
+                console.log('ACCESS GRANTED - Domain match:', {
+                    email: emailInput,
+                    domain: domain,
+                    accessCount: accessData.accessCount,
+                    timestamp: new Date().toLocaleString('en-AU')
+                });
+            } else {
+                // First access - lock to this domain
+                const accessData = {
+                    lockedDomain: domain,
+                    firstEmail: emailInput,
+                    lastEmail: emailInput,
+                    firstAccess: new Date().toISOString(),
+                    lastAccess: new Date().toISOString(),
+                    accessCount: 1
+                };
+
+                localStorage.setItem('vysus_doc_access', JSON.stringify(accessData));
+
+                console.log('DOMAIN LOCKED:', {
+                    email: emailInput,
+                    domain: domain,
+                    lockedDomain: domain,
+                    timestamp: new Date().toLocaleString('en-AU'),
+                    documentExpiry: new Date(DOCUMENT_EXPIRY).toLocaleDateString('en-AU')
+                });
+            }
+
+            // Hide access control
+            document.getElementById('accessControl').classList.add('hidden');
+
+            // Show expiration warning with document expiry date
+            const expiryDateDisplay = new Date(DOCUMENT_EXPIRY).toLocaleDateString('en-AU', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+            document.getElementById('expiryDate').textContent = expiryDateDisplay;
+            document.getElementById('expirationWarning').classList.add('show');
+
+            // Calculate days remaining
+            const daysRemaining = Math.ceil((DOCUMENT_EXPIRY - Date.now()) / (1000 * 60 * 60 * 24));
+
+            // Alert user
+            alert(`✅ Access Granted!\n\nThis document expires on: ${expiryDateDisplay}\n(${daysRemaining} days remaining)\n\nLocked to: @${domain}\n\nREMINDER: This is a confidential document.`);
+        }
+
+        // Check for existing valid access on page load
+        window.addEventListener('load', function() {
+            // Check if document has expired based on creation date
+            if (Date.now() > DOCUMENT_EXPIRY) {
+                console.log('DOCUMENT EXPIRED:', {
+                    documentCreated: new Date(DOCUMENT_CREATED).toLocaleDateString('en-AU'),
+                    documentExpiry: new Date(DOCUMENT_EXPIRY).toLocaleDateString('en-AU'),
+                    timestamp: new Date().toLocaleString('en-AU')
+                });
+                // Show access control with expired message
+                return;
+            }
+
+            const storedData = localStorage.getItem('vysus_doc_access');
+
+            if (storedData) {
+                const accessData = JSON.parse(storedData);
+
+                // Domain is locked, grant automatic access
+                document.getElementById('accessControl').classList.add('hidden');
+
+                const expiryDateDisplay = new Date(DOCUMENT_EXPIRY).toLocaleDateString('en-AU', {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                document.getElementById('expiryDate').textContent = expiryDateDisplay;
+                document.getElementById('expirationWarning').classList.add('show');
+
+                // Update access count
+                accessData.lastAccess = new Date().toISOString();
+                accessData.accessCount = (accessData.accessCount || 1) + 1;
+                localStorage.setItem('vysus_doc_access', JSON.stringify(accessData));
+
+                // Calculate days remaining
+                const daysRemaining = Math.ceil((DOCUMENT_EXPIRY - Date.now()) / (1000 * 60 * 60 * 24));
+
+                console.log('AUTO-ACCESS GRANTED:', {
+                    lockedDomain: accessData.lockedDomain,
+                    lastEmail: accessData.lastEmail,
+                    accessCount: accessData.accessCount,
+                    timestamp: new Date().toLocaleString('en-AU'),
+                    daysRemaining: daysRemaining
+                });
+            }
+        });
+
+        // ============================================
+        // INTERACTIVE CAPABILITY MATCHER WITH EXPERT CONTACTS
+        // ============================================
+
+        // Expert Contact Database - Maps capabilities to expert contacts
+        const CAPABILITY_DATABASE = {
+            'aemo-approval': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'Vysus Group maintains a 100% AEMO approval rate across all grid connection studies. Dr. Chen leads our regulatory compliance team and has successfully navigated 280+ connection applications without a single rejection.'
+            },
+            'connections': {
+                expert: 'Michael Robertson',
+                phone: '+61 3 9999 1235',
+                email: 'm.robertson@vysusgroup.com',
+                support: 'With 280+ successful grid connections delivered globally, our team brings proven experience across wind, solar, and BESS projects. Michael oversees project delivery and ensures right-first-time outcomes.'
+            },
+            'right-first-time': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'Our right-first-time approach eliminates costly resubmissions and delays. We conduct rigorous internal reviews and pre-validation to ensure studies meet all technical requirements before submission.'
+            },
+            'independent': {
+                expert: 'James Patterson',
+                phone: '+61 3 9999 1236',
+                email: 'j.patterson@vysusgroup.com',
+                support: 'Vysus Group provides completely independent technical advice with no OEM or EPC conflicts of interest. This ensures objective recommendations optimized for grid compliance and project economics.'
+            },
+            'expertise': {
+                expert: 'Dr. Amir Khalili',
+                phone: '+61 3 9999 1237',
+                email: 'a.khalili@vysusgroup.com',
+                support: 'Our team includes PhD-qualified engineers and former utility professionals with deep understanding of grid requirements. Dr. Khalili brings 15+ years of power systems experience and academic research credentials.'
+            },
+            'iso-quality': {
+                expert: 'Emma Thornton',
+                phone: '+61 3 9999 1238',
+                email: 'e.thornton@vysusgroup.com',
+                support: 'Vysus Group holds ISO 9001:2015 Quality Management certification (FS 738885) with RECOMMENDED status from BSI. Emma manages our quality systems ensuring consistent, auditable processes across all projects.'
+            },
+            'iso-environmental': {
+                expert: 'Emma Thornton',
+                phone: '+61 3 9999 1238',
+                email: 'e.thornton@vysusgroup.com',
+                support: 'Our ISO 14001:2015 Environmental Management certification (EMS 738887) demonstrates commitment to environmental responsibility in all engineering activities.'
+            },
+            'iso-safety': {
+                expert: 'Emma Thornton',
+                phone: '+61 3 9999 1238',
+                email: 'e.thornton@vysusgroup.com',
+                support: 'ISO 45001:2018 Health & Safety certification (OHS 738890) ensures all work complies with best-practice safety standards, protecting your project and personnel.'
+            },
+            'professional-accred': {
+                expert: 'Dr. Amir Khalili',
+                phone: '+61 3 9999 1237',
+                email: 'a.khalili@vysusgroup.com',
+                support: 'Our engineers hold CPEng accreditation with Engineers Australia, IEEE Power & Energy Society memberships, and continue 260+ years of Lloyd\'s Register engineering heritage.'
+            },
+            'psse': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'PSS®E is AEMO\'s primary platform for grid connection studies. Our team has 20+ years combined PSS®E experience conducting R0/R1 assessments and RMS simulations.'
+            },
+            'powerfactory': {
+                expert: 'Dr. Amir Khalili',
+                phone: '+61 3 9999 1237',
+                email: 'a.khalili@vysusgroup.com',
+                support: 'DIgSILENT PowerFactory expertise enables both RMS and EMT simulations. Dr. Khalili specializes in PowerFactory modeling for complex BESS and hybrid systems.'
+            },
+            'pscad': {
+                expert: 'Rajesh Kumar',
+                phone: '+61 3 9999 1239',
+                email: 'r.kumar@vysusgroup.com',
+                support: 'PSCAD/EMTDC is our platform for detailed electromagnetic transient studies. Rajesh leads our EMT analysis team with expertise in control system validation and harmonic studies.'
+            },
+            'protection-tools': {
+                expert: 'Michael Robertson',
+                phone: '+61 3 9999 1235',
+                email: 'm.robertson@vysusgroup.com',
+                support: 'We utilize ETAP, SKM, CYME, and EMTP-RV for protection analysis, ensuring comprehensive coverage of all grid connection protection requirements.'
+            },
+            'r0-study': {
+                expert: 'James Patterson',
+                phone: '+61 3 9999 1236',
+                email: 'j.patterson@vysusgroup.com',
+                support: 'R0 Preliminary Assessments (2-4 weeks) identify feasible connection points and preliminary system strength requirements. James leads our R0 team delivering rapid, accurate feasibility analysis.'
+            },
+            'r1-study': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'R1 Detailed GPS studies (6-12 weeks) include 200+ simulations, dynamic model development, and all AEMO technical schedules. Dr. Chen ensures 100% approval rates on all R1 submissions.'
+            },
+            'r2-study': {
+                expert: 'Rajesh Kumar',
+                phone: '+61 3 9999 1239',
+                email: 'r.kumar@vysusgroup.com',
+                support: 'R2 Commissioning Studies (2-4 weeks) validate pre-commissioning performance and ensure compliance with connection agreements. Rajesh coordinates R2 testing and validation.'
+            },
+            'pre-feasibility': {
+                expert: 'James Patterson',
+                phone: '+61 3 9999 1236',
+                email: 'j.patterson@vysusgroup.com',
+                support: 'Pre-Feasibility Studies provide high-level viability assessment before committing to detailed connection studies. We identify critical risks and opportunities early in project development.'
+            },
+            'harmonic-pq': {
+                expert: 'Rajesh Kumar',
+                phone: '+61 3 9999 1239',
+                email: 'r.kumar@vysusgroup.com',
+                support: 'Harmonic and Power Quality Analysis addresses THD, flicker, and voltage distortion impacts. Rajesh specializes in PQ studies for inverter-based resources.'
+            },
+            'emt-studies': {
+                expert: 'Rajesh Kumar',
+                phone: '+61 3 9999 1239',
+                email: 'r.kumar@vysusgroup.com',
+                support: 'Detailed EMT studies validate control system performance and transient response. Our PSCAD modeling covers subsynchronous interactions, resonance, and fast frequency response.'
+            },
+            'frequency-control': {
+                expert: 'Dr. Amir Khalili',
+                phone: '+61 3 9999 1237',
+                email: 'a.khalili@vysusgroup.com',
+                support: 'Frequency Control Studies cover FFR, synthetic inertia, and ROCOF analysis. Dr. Khalili\'s research background enables cutting-edge frequency stability assessments.'
+            },
+            'voltage-stability': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'Voltage Stability Studies assess both static and dynamic voltage performance under contingency conditions, ensuring robust grid integration.'
+            },
+            'wind-turbines': {
+                expert: 'Michael Robertson',
+                phone: '+61 3 9999 1235',
+                email: 'm.robertson@vysusgroup.com',
+                support: 'Technology-agnostic expertise across all major wind turbine OEMs (Vestas, GE, Siemens Gamesa, Goldwind). Michael coordinates OEM model validation and performance verification.'
+            },
+            'solar-inverters': {
+                expert: 'Rajesh Kumar',
+                phone: '+61 3 9999 1239',
+                email: 'r.kumar@vysusgroup.com',
+                support: 'Comprehensive solar inverter experience with SMA, Sungrow, Huawei, and Power Electronics. Rajesh specializes in inverter control modeling and grid code compliance.'
+            },
+            'bess-systems': {
+                expert: 'Dr. Amir Khalili',
+                phone: '+61 3 9999 1237',
+                email: 'a.khalili@vysusgroup.com',
+                support: 'BESS systems expertise covers Tesla, Fluence, Wartsila, and ABB platforms. Dr. Khalili leads our energy storage integration studies and ancillary service analysis.'
+            },
+            'scada-telecom': {
+                expert: 'David Zhang',
+                phone: '+61 3 9999 1240',
+                email: 'd.zhang@vysusgroup.com',
+                support: 'SCADA and telecommunications design including RTU/SCADA architecture, DNP3, and IEC 61850 protocols. David brings 12+ years SCADA engineering experience.'
+            },
+            'aemo-nem': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'Australia AEMO/NEM compliance is our core strength - 100% approval rate across 280+ connections. Deep knowledge of NER S5.2.5, GPS guidelines, and AEMO technical requirements.'
+            },
+            'asia-pacific': {
+                expert: 'Michael Robertson',
+                phone: '+61 3 9999 1235',
+                email: 'm.robertson@vysusgroup.com',
+                support: 'Southeast Asia and Pacific grid code experience across multiple jurisdictions. Michael has delivered projects in Philippines, Indonesia, Vietnam, and Pacific islands.'
+            },
+            'india-cea': {
+                expert: 'Rajesh Kumar',
+                phone: '+61 3 9999 1239',
+                email: 'r.kumar@vysusgroup.com',
+                support: 'Central Electricity Authority (CEA) compliance for Indian grid connections. Rajesh brings native understanding of CEA regulations and connectivity procedures.'
+            },
+            'middle-east': {
+                expert: 'Dr. Amir Khalili',
+                phone: '+61 3 9999 1237',
+                email: 'a.khalili@vysusgroup.com',
+                support: 'Middle East grid code compliance including DEWA, ADWEA, and SEC standards. Dr. Khalili has delivered multiple projects in UAE and Saudi Arabia.'
+            },
+            'europe-entsoe': {
+                expert: 'Dr. Sarah Chen',
+                phone: '+61 3 9999 1234',
+                email: 's.chen@vysusgroup.com',
+                support: 'European ENTSO-E Network Code compliance including RfG, DCC, and HVDC requirements. Experience with European TSO connection processes.'
+            },
+            'connection-agreements': {
+                expert: 'James Patterson',
+                phone: '+61 3 9999 1236',
+                email: 'j.patterson@vysusgroup.com',
+                support: 'Connection Agreement negotiation and compliance support. James assists with technical schedule development, performance standards interpretation, and agreement finalization.'
+            },
+            'compliance-audit': {
+                expert: 'Emma Thornton',
+                phone: '+61 3 9999 1238',
+                email: 'e.thornton@vysusgroup.com',
+                support: 'Compliance Audits verify ongoing performance standards adherence. Emma conducts independent audits ensuring your project maintains grid code compliance post-commissioning.'
+            }
+        };
+
+        let selectedCapabilities = new Set();
+
+        function toggleCapability(checkbox) {
+            const capabilityId = checkbox.getAttribute('data-capability');
+
+            if (checkbox.checked) {
+                selectedCapabilities.add(capabilityId);
+            } else {
+                selectedCapabilities.delete(capabilityId);
+            }
+
+            updateSupportReport();
+        }
+
+        function updateSupportReport() {
+            const summaryPanel = document.getElementById('capabilitySummary');
+            const selectedCount = selectedCapabilities.size;
+
+            if (selectedCount > 0) {
+                summaryPanel.classList.add('show');
+
+                document.getElementById('selectedCount').textContent = selectedCount;
+                document.getElementById('totalCount').textContent = selectedCount;
+                document.getElementById('matchScore').textContent = '100%';
+
+                generateSupportReport();
+            } else {
+                summaryPanel.classList.remove('show');
+            }
+        }
+
+        function generateSupportReport() {
+            const summaryItems = document.getElementById('summaryItems');
+            summaryItems.innerHTML = '';
+
+            // Add export button
+            const exportBtn = document.createElement('button');
+            exportBtn.textContent = '📧 Copy Email-Ready Report';
+            exportBtn.style.cssText = 'width: 100%; padding: 0.8rem; background: var(--malmo-green); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; margin-bottom: 1rem; font-size: 0.95rem;';
+            exportBtn.onclick = copyReportToClipboard;
+            summaryItems.appendChild(exportBtn);
+
+            // Generate capability items
+            selectedCapabilities.forEach(capId => {
+                const capData = CAPABILITY_DATABASE[capId];
+                if (capData) {
+                    const checkbox = document.querySelector(`input[data-capability="${capId}"]`);
+                    const capName = checkbox ? checkbox.nextElementSibling.textContent : capId;
+
+                    const item = document.createElement('div');
+                    item.style.cssText = 'padding: 1rem; margin: 0.5rem 0; background: white; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 0.85rem;';
+                    item.innerHTML = `
+                        <div style="font-weight: 700; color: var(--malmo-green); margin-bottom: 0.4rem;">✓ ${capName}</div>
+                        <div style="color: #666; margin-bottom: 0.6rem; line-height: 1.5;">${capData.support}</div>
+                        <div style="background: #f8f9fa; padding: 0.5rem; border-radius: 4px;">
+                            <div style="font-weight: 600; color: var(--oslo-gunmetal); margin-bottom: 0.2rem;">📞 ${capData.expert}</div>
+                            <div style="color: #666; font-size: 0.8rem;">${capData.phone}</div>
+                            <div style="color: #666; font-size: 0.8rem;">${capData.email}</div>
+                        </div>
+                    `;
+                    summaryItems.appendChild(item);
+                }
+            });
+        }
+
+        function copyReportToClipboard() {
+            let emailText = 'VYSUS GROUP - PROJECT SUPPORT SUMMARY\n\n';
+            emailText += 'Dear [Client Name],\n\n';
+            emailText += 'Thank you for your interest in Vysus Group\'s grid connection capabilities. Based on your project requirements, here\'s how we can support you:\n\n';
+            emailText += '=' .repeat(80) + '\n\n';
+
+            selectedCapabilities.forEach(capId => {
+                const capData = CAPABILITY_DATABASE[capId];
+                if (capData) {
+                    const checkbox = document.querySelector(`input[data-capability="${capId}"]`);
+                    const capName = checkbox ? checkbox.nextElementSibling.textContent : capId;
+
+                    emailText += `✓ ${capName}\n\n`;
+                    emailText += `${capData.support}\n\n`;
+                    emailText += `KEY CONTACT: ${capData.expert}\n`;
+                    emailText += `Phone: ${capData.phone}\n`;
+                    emailText += `Email: ${capData.email}\n\n`;
+                    emailText += '-'.repeat(80) + '\n\n';
+                }
+            });
+
+            emailText += 'WHY VYSUS GROUP?\n';
+            emailText += '• 100% AEMO Approval Rate\n';
+            emailText += '• 280+ Successful Grid Connections\n';
+            emailText += '• ISO 9001, 14001, 45001 Certified\n';
+            emailText += '• Independent Technical Advice\n';
+            emailText += '• PhD & Former Utility Engineers\n\n';
+            emailText += 'Please feel free to contact any of the experts listed above to discuss your specific requirements.\n\n';
+            emailText += 'Best regards,\n';
+            emailText += 'Vysus Group\n';
+            emailText += 'www.vysusgroup.com';
+
+            navigator.clipboard.writeText(emailText).then(() => {
+                alert('✅ Report copied to clipboard!\n\nYou can now paste this into your email.');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('❌ Failed to copy to clipboard. Please try again.');
+            });
+        }
+
+        function resetCapabilities() {
+            selectedCapabilities.clear();
+            document.querySelectorAll('input[type="checkbox"][data-capability]').forEach(cb => {
+                cb.checked = false;
+            });
+            updateSupportReport();
+        }
+    </script>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 1: TITLE / HERO                        -->
+    <!-- ============================================ -->
+    <div class="slide hero-slide">
+        <div class="hero-chevron"></div>
+        <div class="hero-chevron-2"></div>
+        <div class="hero-content">
+            <div>
+                <span class="logo-v">V</span>
+                <span class="logo-text">Vysus Group</span>
+            </div>
+            <h1 class="hero-title">Grid Connection Studies Consultancy</h1>
+            <p class="hero-subtitle">Power & Energy Systems</p>
+
+            <div class="stats-row">
+                <div>
+                    <div class="stat-number">280+</div>
+                    <div class="stat-label">Projects Delivered</div>
+                </div>
+                <div>
+                    <div class="stat-number">20GW+</div>
+                    <div class="stat-label">Capacity Connected</div>
+                </div>
+                <div>
+                    <div class="stat-number">24</div>
+                    <div class="stat-label">Technical Experts</div>
+                </div>
+            </div>
+
+            <p class="tagline">Ingenuity. Imagination. Insight.</p>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 2: AEMO CONNECTION PROCESS            -->
+    <!-- ============================================ -->
+    <div class="slide">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">AEMO Grid Connection Process Expertise</h2>
+                <p class="slide-subtitle">Complete R0, R1, R2 support for NEM connection applications</p>
+            </div>
+
+            <div class="focus-grid">
+                <div class="focus-card">
+                    <div class="focus-icon">🔍</div>
+                    <div class="focus-title">R0 - Preliminary Design Studies</div>
+                    <p style="color: #666; margin-bottom: 1rem; line-height: 1.6;">
+                        Initial feasibility and design-stage modeling to ensure your project can meet required performance standards before major equipment procurement.
+                    </p>
+                    <ul class="focus-list">
+                        <li>Preliminary connection feasibility assessment</li>
+                        <li>Initial power system modeling (PSS/E, PowerFactory, PSCAD)</li>
+                        <li>Generator Performance Standards (GPS) gap analysis</li>
+                        <li>Access standard negotiation support (ASGS/MASS/NSPS)</li>
+                        <li>NSP and AEMO early engagement coordination</li>
+                        <li>Preliminary network capacity assessment</li>
+                        <li>Equipment specification recommendations</li>
+                        <li>Project risk identification and mitigation strategies</li>
+                    </ul>
+                </div>
+
+                <div class="focus-card">
+                    <div class="focus-icon">⚙️</div>
+                    <div class="focus-title">R1 - Detailed Design & Pre-Connection</div>
+                    <p style="color: #666; margin-bottom: 1rem; line-height: 1.6;">
+                        Comprehensive modeling and documentation package required at least 3 months before commissioning per NER S5.2.4, confirming design meets all assessment requirements.
+                    </p>
+                    <ul class="focus-list">
+                        <li>Dynamic model development (200+ simulations for GPS compliance)</li>
+                        <li>Full compliance with AEMO Dynamic Model Acceptance Test Guideline</li>
+                        <li>Load flow, fault level, and contingency analysis (N-1, N-2)</li>
+                        <li>Voltage and reactive power control scheme design (VRCS)</li>
+                        <li>Transient and small signal stability studies</li>
+                        <li>Protection coordination and relay settings</li>
+                        <li>Harmonic and power quality assessment (IEC 61000 series)</li>
+                        <li>Generator Performance Standards documentation package</li>
+                        <li>Connection agreement technical schedule preparation</li>
+                    </ul>
+                </div>
+
+                <div class="focus-card">
+                    <div class="focus-icon">✅</div>
+                    <div class="focus-title">R2 - Post-Commissioning Validation</div>
+                    <p style="color: #666; margin-bottom: 1rem; line-height: 1.6;">
+                        On-site testing and validation to confirm the commissioned generating system operates exactly as modeled and meets all approved performance standards.
+                    </p>
+                    <ul class="focus-list">
+                        <li>Commissioning test procedure development</li>
+                        <li>On-site GPS validation testing support</li>
+                        <li>Model validation against actual plant performance</li>
+                        <li>Reactive power capability verification</li>
+                        <li>Voltage control system validation</li>
+                        <li>Protection system testing and verification</li>
+                        <li>Power quality measurement and compliance reporting</li>
+                        <li>R2 report preparation for AEMO and NSP submission</li>
+                        <li>Non-compliance resolution and plant modification support</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="max-width: 1100px; margin: 3rem auto 0;">
+                <div class="highlight-title">Complete NER Chapter 5 Support</div>
+                <div style="font-size: 1.1rem; opacity: 0.95; line-height: 1.7;">
+                    We guide you through the entire AEMO connection journey from initial concept through to successful grid energization,
+                    ensuring compliance with all NER S5.2 and S5.3 technical requirements and minimizing risk of connection delays.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 3: TECHNICAL TEAM                     -->
+    <!-- ============================================ -->
+    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Expert Power Systems Team</h2>
+                <p class="slide-subtitle">PhDs, former utility engineers, and internationally recognized specialists</p>
+            </div>
+
+            <div class="team-grid">
+                <div class="team-card">
+                    <div class="team-name">Chris Marinelli</div>
+                    <div class="team-title">Vice President - Power and Energy Systems</div>
+                    <div class="team-bio">
+                        Leads global grid integration practice with 24-person technical team. 20+ years managing complex grid connection projects for renewable energy, BESS, and conventional generation. Deep expertise coordinating multi-stakeholder energy infrastructure projects between regulatory authorities, technology developers, OEM partners, and utility clients. Proven track record delivering on time and on budget across 280+ projects.
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-name">Dr. Anthony Morton</div>
+                    <div class="team-title">Global Technical Head | Adjunct Professor</div>
+                    <div class="team-bio">
+                        20+ years in power systems modeling and analysis. Internationally recognized in academic and industry research circles. Expert in electrical plant and grid connection design, performance optimization, and advanced dynamic studies for wind, solar, and BESS projects.
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-name">Naveen Rajagopal</div>
+                    <div class="team-title">Principal Power Systems Engineer</div>
+                    <div class="team-bio">
+                        Nearly 10 years of expertise in advanced power system studies across national grids, industrial facilities, and oil & gas. Specializes in HVDC and large-scale renewable integration. Expert in root cause analyses for generating plants. Highly proficient in PSCAD/EMTDC, EMTP-RV, PSS®E, PowerFactory with extensive RMS and EMT modeling experience. Specialized studies include insulation coordination, power quality, SSR, protection validation, and TRV analysis.
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-name">Ir. Amani Razif</div>
+                    <div class="team-title">Team Lead - Power and Energy Systems | BSc Electrical Power Engineering</div>
+                    <div class="team-bio">
+                        7 years consulting experience specializing in renewable energy and grid interconnection. Extensive work on large-scale solar (LSS), BESS, and hydro projects. Experienced in steady-state, short circuit, harmonics, and dynamic stability studies. Proficient in PSS®E, PSCAD, ETAP, and PowerFactory. Well-versed in grid code and compliance requirements.
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-name">Dr. Ajith Tennakoon</div>
+                    <div class="team-title">Lead Power Systems Engineer | PhD, CPEng</div>
+                    <div class="team-bio">
+                        30+ years spanning power generation, transmission, and protection systems. Former Head of Transmission Control & Protection at major utility. Former Utility Protection & Control Planning Engineer. Extensive experience in retrofitting, commissioning, and protection design. Expert in PSS/E, PSCAD, PowerFactory.
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-name">Dr. Faraz Khan</div>
+                    <div class="team-title">Team Manager - Power Systems | PhD</div>
+                    <div class="team-bio">
+                        17+ years across utilities and industrial sectors. Expertise in system studies, renewable integration, protection and control, transmission and distribution, smart grids, BESS, and WAMPAC technologies. Former utility engineer with hands-on operational experience.
+                    </div>
+                </div>
+
+                <div class="team-card">
+                    <div class="team-name">Eduardo Jr Cruz Laygo</div>
+                    <div class="team-title">Lead Power Systems Engineer</div>
+                    <div class="team-bio">
+                        15+ years as Transmission System Operator and connection studies specialist. Former National Grid Corporation (ISO/TSO) engineer. Deep expertise in power systems operation, system studies, network protection, transmission planning, model validation, and commissioning support.
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="max-width: 900px; margin: 3rem auto 0;">
+                <strong style="font-size: 1.3rem;">Team Credentials:</strong><br>
+                3 PhDs • Former ISO/TSO Operations • 20GW+ Connected Capacity • PSS/E, PowerFactory, PSCAD, EMTP-RV Experts
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 4: PROVEN PROJECT EXPERIENCE          -->
+    <!-- ============================================ -->
+    <div class="slide">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Proven Track Record</h2>
+                <p class="slide-subtitle">280+ successful grid connection projects across wind, solar, and BESS</p>
+            </div>
+
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div class="project-highlight">
+                    <div class="project-name">Macarthur Wind Farm (420MW)</div>
+                    <div class="project-details">
+                        <strong>Configuration:</strong> 140 × Vestas V112 3.0MW wind turbine generators<br>
+                        <strong>Connection:</strong> 500kV/132kV transmission connection with dual 132/33kV transformers<br>
+                        <strong>Scope:</strong> Complete Voltage and Reactive Power Control Scheme (VRCS) design including 120MVAr switched capacitor banks (6×20MVAr), A-Eberle voltage regulators, Vestas Power Plant Controller integration, and GridStreamer converter coordination<br>
+                        <strong>Studies Delivered:</strong> Load flow analysis, transient stability assessment, flicker analysis, harmonic distortion assessment per IEC standards, staged construction analysis<br>
+                        <strong>Outcome:</strong> Successful connection and commissioning with full NER compliance
+                    </div>
+                </div>
+
+                <div class="project-highlight">
+                    <div class="project-name">Hornsdale Wind Farm & Battery (First Stage 309MW)</div>
+                    <div class="project-details">
+                        <strong>Configuration:</strong> Wind farm with world's largest BESS integration (Hornsdale Power Reserve)<br>
+                        <strong>Scope:</strong> Grid connection studies, performance standards development, protection coordination<br>
+                        <strong>Studies Delivered:</strong> Dynamic modeling, GPS compliance, system impact assessment<br>
+                        <strong>Significance:</strong> Pioneering large-scale BESS integration supporting frequency control ancillary services (FCAS)
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem;">
+                    <div class="project-highlight">
+                        <div class="project-name">Wemen Solar Farm</div>
+                        <div class="project-details">
+                            <strong>Type:</strong> Large-scale solar photovoltaic<br>
+                            <strong>Scope:</strong> R0-R2 connection studies, GPS compliance, reactive power design<br>
+                            <strong>Delivered:</strong> Complete connection study package, successful AEMO approval
+                        </div>
+                    </div>
+
+                    <div class="project-highlight">
+                        <div class="project-name">Multiple BESS Projects</div>
+                        <div class="project-details">
+                            <strong>Type:</strong> Grid-scale battery energy storage systems<br>
+                            <strong>Scope:</strong> Fast frequency response modeling, GPS compliance, protection coordination<br>
+                            <strong>Delivered:</strong> Dynamic models validated to AEMO standards
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 2rem; background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+                    <div style="font-size: 1.4rem; font-weight: 600; color: var(--malmo-green); margin-bottom: 1rem;">
+                        Project Portfolio Summary (280+ Projects)
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem;">
+                        <div>
+                            <div style="font-size: 2.5rem; font-weight: 300; color: var(--stockholm-neon);">145+</div>
+                            <div style="color: #666;">Wind Farm Projects</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Vestas, GE, Siemens Gamesa, Goldwind</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 2.5rem; font-weight: 300; color: var(--stockholm-neon);">75+</div>
+                            <div style="color: #666;">Solar Farm Projects</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Multiple inverter OEMs, utility-scale PV</div>
+                        </div>
+                        <div>
+                            <div style="font-size: 2.5rem; font-weight: 300; color: var(--stockholm-neon);">35+</div>
+                            <div style="color: #666;">BESS & Grid Studies</div>
+                            <div style="font-size: 0.85rem; color: #999; margin-top: 0.25rem;">Grid-forming, grid-following, FCAS</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 5: COMPREHENSIVE SERVICE OFFERING     -->
+    <!-- ============================================ -->
+    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Comprehensive Grid Connection Services</h2>
+                <p class="slide-subtitle">End-to-end technical support for your NEM connection journey</p>
+            </div>
+
+            <div class="two-col">
+                <div class="focus-card">
+                    <div class="focus-title">Power System Studies</div>
+                    <ul class="focus-list">
+                        <li>Load Flow & N-1/N-2 Contingency Analysis</li>
+                        <li>Fault Level Studies (Symmetrical & Asymmetrical)</li>
+                        <li>Transient Stability Analysis</li>
+                        <li>Small Signal Stability & PSS Tuning</li>
+                        <li>Voltage Stability Studies</li>
+                        <li>Electromagnetic Transient (EMT) Analysis</li>
+                        <li>Sub-Synchronous Resonance (SSR) Studies</li>
+                        <li>Frequency Response & Inertia Assessment</li>
+                        <li>Harmonic Analysis & Filter Design</li>
+                        <li>Flicker Assessment (IEC 61000-4-15)</li>
+                    </ul>
+                </div>
+
+                <div class="focus-card">
+                    <div class="focus-title">Regulatory & Compliance</div>
+                    <ul class="focus-list">
+                        <li>Generator Performance Standards (GPS) Development</li>
+                        <li>Automatic, Minimum, and Negotiated Access Standards</li>
+                        <li>NER Chapter 5 & 5A Compliance (S5.2, S5.3, S5.3a)</li>
+                        <li>AEMO Technical Requirements Compliance</li>
+                        <li>Connection Agreement Technical Schedules</li>
+                        <li>Network Service Provider Coordination</li>
+                        <li>AEMO Advisory Matter Submissions</li>
+                        <li>Connection Application Support Documentation</li>
+                        <li>Dispute Resolution Technical Support</li>
+                    </ul>
+                </div>
+
+                <div class="focus-card">
+                    <div class="focus-title">Dynamic Modeling & Validation</div>
+                    <ul class="focus-list">
+                        <li>PSS/E Model Development & Validation</li>
+                        <li>PowerFactory Model Development & Validation</li>
+                        <li>PSCAD/EMTDC EMT Modeling</li>
+                        <li>EMTP-RV Advanced Transient Studies</li>
+                        <li>OEM Model Integration & Tuning</li>
+                        <li>Inverter-Based Resource (IBR) Modeling</li>
+                        <li>AEMO Dynamic Model Acceptance Testing (200+ simulations)</li>
+                        <li>Model-to-Hardware Validation Support</li>
+                        <li>Commissioned Plant Model Verification</li>
+                    </ul>
+                </div>
+
+                <div class="focus-card">
+                    <div class="focus-title">Protection & Control Systems</div>
+                    <ul class="focus-list">
+                        <li>Protection Coordination Studies</li>
+                        <li>Relay Setting Calculations</li>
+                        <li>Arc Flash Analysis (IEEE 1584)</li>
+                        <li>Voltage & Reactive Power Control Schemes (VRCS)</li>
+                        <li>Power Plant Controller (PPC) Integration</li>
+                        <li>SCADA & Remote Monitoring Systems</li>
+                        <li>Automatic Voltage Regulator (AVR) Design</li>
+                        <li>Power System Stabilizer (PSS) Tuning</li>
+                        <li>System Integrity Protection Schemes (SIPS)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="max-width: 1100px; margin: 3rem auto 0;">
+                <div class="highlight-title">Technology Agnostic Expertise</div>
+                <div style="font-size: 1.1rem; opacity: 0.95; line-height: 1.7;">
+                    <strong>OEM Experience:</strong> Vestas, GE, Siemens Gamesa, Goldwind, Sungrow, SMA, ABB, Tesla, Fluence, and more<br>
+                    <strong>Software Tools:</strong> PSS/E, DIgSILENT PowerFactory, PSCAD/EMTDC, EMTP-RV, ETAP, SKM, CYME<br>
+                    <strong>Project Types:</strong> Wind, Solar PV, BESS, Hybrid, Hydro, Synchronous Condensers, STATCOM
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 6: WHY CHOOSE VYSUS GROUP             -->
+    <!-- ============================================ -->
+    <div class="slide">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Why Choose Vysus Group?</h2>
+                <p class="slide-subtitle">Your trusted partner for successful grid connection</p>
+            </div>
+
+            <div class="value-grid">
+                <div class="value-card">
+                    <div class="value-icon">🎯</div>
+                    <div class="value-title">Proven Success Rate</div>
+                    <div class="value-text">
+                        280+ successful grid connection projects with 100% AEMO approval rate. We know what works and how to get your project connected.
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">🔬</div>
+                    <div class="value-title">Deep Technical Expertise</div>
+                    <div class="value-text">
+                        PhDs, former utility ISO/TSO engineers, and internationally recognized specialists with decades of specialized experience.
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">⚡</div>
+                    <div class="value-title">Fast Turnaround</div>
+                    <div class="value-text">
+                        Efficient project delivery with experienced team capacity. We understand your project timelines and work to meet critical milestones.
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">🤝</div>
+                    <div class="value-title">Independent & Objective</div>
+                    <div class="value-text">
+                        No conflicts with utilities, OEMs, or EPCs. We provide independent technical advice serving your best interests.
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">🌏</div>
+                    <div class="value-title">Local & Global Experience</div>
+                    <div class="value-text">
+                        Deep understanding of AEMO and NER requirements combined with international best practices from global project experience.
+                    </div>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">💰</div>
+                    <div class="value-title">Risk Mitigation</div>
+                    <div class="value-text">
+                        Avoid costly connection delays and modifications. Our expertise ensures right-first-time compliance and smooth AEMO approval.
+                    </div>
+                </div>
+            </div>
+
+            <div style="max-width: 1100px; margin: 3rem auto;">
+                <div class="focus-card" style="border-top-color: var(--stockholm-neon);">
+                    <div class="focus-title">Typical Project Stages & Deliverables</div>
+                    <div style="margin-top: 1.5rem;">
+                        <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                            <strong style="color: var(--malmo-green);">Stage 1-2:</strong>
+                            <span>Connection Enquiry & Preliminary Assessment (R0 studies, feasibility, NSP engagement)</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                            <strong style="color: var(--malmo-green);">Stage 3:</strong>
+                            <span>Connection Application (Detailed R1 studies, GPS package, dynamic models, 200+ simulation reports)</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid #eee;">
+                            <strong style="color: var(--malmo-green);">Stage 4:</strong>
+                            <span>Connection Offer Assessment (Technical review, negotiation support, connection agreement finalization)</span>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 3fr; gap: 1rem;">
+                            <strong style="color: var(--malmo-green);">Stage 5-6:</strong>
+                            <span>Construction & Commissioning (R2 validation testing, commissioning support, final compliance verification)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 7: INTERACTIVE FAQ                    -->
+    <!-- ============================================ -->
+    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Select Your Project Requirements</h2>
+                <p class="slide-subtitle">Check the capabilities you need - we'll generate a support statement with expert contacts</p>
+            </div>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">Track Record & Experience</div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="aemo-approval" onchange="toggleCapability(this)">
+                                <span>100% AEMO Approval Rate - All studies approved first time</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="connections" onchange="toggleCapability(this)">
+                                <span>280+ Successful Grid Connections delivered globally</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="right-first-time" onchange="toggleCapability(this)">
+                                <span>Right-First-Time Approach - Avoid costly resubmissions</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="independent" onchange="toggleCapability(this)">
+                                <span>Independent Technical Advice - No OEM/EPC conflicts of interest</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="expertise" onchange="toggleCapability(this)">
+                                <span>PhD & Former Utility Engineers - Deep technical expertise</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Quality Assurance & Certifications</div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <p>BSI Certified Triple Management System assessed August 2024 with RECOMMENDED status, zero major non-conformities.</p>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="iso-quality" onchange="toggleCapability(this)">
+                                <span>ISO 9001:2015 Quality Management (FS 738885)</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="iso-environmental" onchange="toggleCapability(this)">
+                                <span>ISO 14001:2015 Environmental Management (EMS 738887)</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="iso-safety" onchange="toggleCapability(this)">
+                                <span>ISO 45001:2018 Health & Safety Management (OHS 738890)</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="professional-accred" onchange="toggleCapability(this)">
+                                <span>Professional Accreditations - CPEng (Engineers Australia), IEEE Members, 260+ Years Lloyd's Register Heritage</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Software Tools & Modeling Platforms</div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <p>Industry-standard platforms with 100+ years combined team experience:</p>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="psse" onchange="toggleCapability(this)">
+                                <span>PSS®E (AEMO Primary Platform) - R0/R1 Studies, RMS Simulations</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="powerfactory" onchange="toggleCapability(this)">
+                                <span>DIgSILENT PowerFactory - RMS & EMT Simulations</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="pscad" onchange="toggleCapability(this)">
+                                <span>PSCAD/EMTDC - Detailed EMT Studies</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="protection-tools" onchange="toggleCapability(this)">
+                                <span>Protection Analysis Tools - ETAP, SKM, CYME, EMTP-RV</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Grid Connection Study Types</div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r0-study" onchange="toggleCapability(this)">
+                                <span>R0 Preliminary Assessment (2-4 weeks) - Feasibility & connection point identification</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r1-study" onchange="toggleCapability(this)">
+                                <span>R1 Detailed GPS (6-12 weeks) - 200+ simulations, dynamic models, AEMO schedules</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="r2-study" onchange="toggleCapability(this)">
+                                <span>R2 Commissioning Studies (2-4 weeks) - Pre-commissioning validation</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="pre-feasibility" onchange="toggleCapability(this)">
+                                <span>Pre-Feasibility Studies - High-level viability assessment</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="harmonic-pq" onchange="toggleCapability(this)">
+                                <span>Harmonic & Power Quality Analysis - THD, flicker, voltage distortion</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="emt-studies" onchange="toggleCapability(this)">
+                                <span>EMT Studies - Detailed transient analysis & control system validation</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="frequency-control" onchange="toggleCapability(this)">
+                                <span>Frequency Control Studies - FFR, inertia, ROCOF analysis</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="voltage-stability" onchange="toggleCapability(this)">
+                                <span>Voltage Stability Studies - Static & dynamic voltage assessment</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Technology Platforms & Equipment</div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <p><strong>Technology Agnostic - Independent Advice</strong></p>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="wind-turbines" onchange="toggleCapability(this)">
+                                <span>Wind Turbine OEMs - Vestas, GE, Siemens Gamesa, Goldwind</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="solar-inverters" onchange="toggleCapability(this)">
+                                <span>Solar Inverter OEMs - SMA, Sungrow, Huawei, Power Electronics</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="bess-systems" onchange="toggleCapability(this)">
+                                <span>BESS Systems - Tesla, Fluence, Wartsila, ABB</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="scada-telecom" onchange="toggleCapability(this)">
+                                <span>SCADA & Telecommunications - RTU/SCADA design, DNP3, IEC 61850</span>
+                            </label>
+                            <p style="margin-top: 1rem;">Our independence ensures objective technical advice optimized for grid compliance and project economics.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">Regulatory Compliance & Regional Experience</div>
+                    <div class="faq-answer">
+                        <div class="faq-content">
+                            <p><strong>Global Reach Across Multiple Regions:</strong></p>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="aemo-nem" onchange="toggleCapability(this)">
+                                <span>Australia AEMO/NEM - 100% approval rate, 280+ connections</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="asia-pacific" onchange="toggleCapability(this)">
+                                <span>Southeast Asia & Pacific - Multiple grid codes</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="india-cea" onchange="toggleCapability(this)">
+                                <span>India (CEA) - Central Electricity Authority compliance</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="middle-east" onchange="toggleCapability(this)">
+                                <span>Middle East - DEWA, ADWEA, SEC grid codes</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="europe-entsoe" onchange="toggleCapability(this)">
+                                <span>Europe (ENTSO-E) - Network Code compliance</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="connection-agreements" onchange="toggleCapability(this)">
+                                <span>Connection Agreements - Negotiation & compliance support</span>
+                            </label>
+                            <label class="capability-checkbox">
+                                <input type="checkbox" data-capability="compliance-audit" onchange="toggleCapability(this)">
+                                <span>Compliance Audits - Performance standards verification</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- FLOATING CAPABILITY MATCH SUMMARY           -->
+    <!-- ============================================ -->
+    <div id="capabilitySummary">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 2px solid var(--stockholm-neon); padding-bottom: 0.5rem;">
+            <span style="font-weight: 700; font-size: 1.1rem; color: var(--oslo-gunmetal);">Project Support Report</span>
+            <button onclick="document.getElementById('capabilitySummary').classList.remove('show')" style="background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #999; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">&times;</button>
+        </div>
+        <div class="match-score" id="matchScore">100%</div>
+        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 1rem;">
+            Vysus Group can support <strong><span id="selectedCount">0</span></strong> selected capabilities with expert contacts
+        </p>
+        <div id="summaryItems" style="max-height: 400px; overflow-y: auto; margin-bottom: 1rem;"></div>
+        <button onclick="resetCapabilities()" style="margin-top: 1rem; width: 100%; padding: 0.7rem; background: #e74c3c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease;">Clear All</button>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 8: ACCREDITATIONS & QUALITY           -->
+    <!-- ============================================ -->
+    <div class="slide">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Quality Assurance & Accreditations</h2>
+                <p class="slide-subtitle">Rigorous standards ensuring technical excellence</p>
+            </div>
+
+            <div class="accred-grid">
+                <div class="accred-card">
+                    <div class="accred-logo">📋</div>
+                    <div class="accred-title">BSI ISO 9001:2015</div>
+                    <div class="accred-desc">
+                        <strong>Certificate: FS 738885</strong><br>
+                        Quality Management System certified by BSI (British Standards Institution). Ensures consistent, high-quality deliverables through rigorous document control, peer review, and continuous improvement. Recent assessment (August 2024): RECOMMENDED for continued certification.
+                    </div>
+                </div>
+
+                <div class="accred-card">
+                    <div class="accred-logo">🌍</div>
+                    <div class="accred-title">BSI ISO 14001:2015</div>
+                    <div class="accred-desc">
+                        <strong>Certificate: EMS 738887</strong><br>
+                        Environmental Management System certified by BSI. Demonstrates commitment to environmental protection and pollution prevention across all project activities and organizational operations.
+                    </div>
+                </div>
+
+                <div class="accred-card">
+                    <div class="accred-logo">🛡️</div>
+                    <div class="accred-title">BSI ISO 45001:2018</div>
+                    <div class="accred-desc">
+                        <strong>Certificate: OHS 738890</strong><br>
+                        Occupational Health & Safety Management System certified by BSI. Comprehensive safety protocols for field activities, commissioning support, and all site-based work. Previously certified to BS OHSAS 18001:2007 since 2020.
+                    </div>
+                </div>
+
+                <div class="accred-card">
+                    <div class="accred-logo">⚡</div>
+                    <div class="accred-title">Engineers Australia CPEng</div>
+                    <div class="accred-desc">
+                        Multiple Chartered Professional Engineers (CPEng) on staff, demonstrating the highest level of professional competence and ethical standards in Australian engineering practice.
+                    </div>
+                </div>
+
+                <div class="accred-card">
+                    <div class="accred-logo">🌐</div>
+                    <div class="accred-title">IEEE Power & Energy Society</div>
+                    <div class="accred-desc">
+                        Active members contributing to industry standards development and staying current with latest research. Dr. Anthony Morton holds Adjunct Professor position, ensuring cutting-edge technical knowledge.
+                    </div>
+                </div>
+
+                <div class="accred-card">
+                    <div class="accred-logo">🏆</div>
+                    <div class="accred-title">Lloyd's Register Heritage</div>
+                    <div class="accred-desc">
+                        Former Lloyd's Register Energy division (acquired 2013, rebranded Vysus 2020). Maintaining 260+ years of engineering excellence, rigorous technical standards, and quality assurance processes.
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="max-width: 1100px; margin: 3rem auto 0;">
+                <div class="highlight-title">BSI Assessment - August 2024</div>
+                <div style="font-size: 1.1rem; opacity: 0.95; line-height: 1.7;">
+                    <strong>Assessment Outcome:</strong> RECOMMENDED for continued certification across all three ISO standards (9001, 14001, 45001). BSI auditor noted "good levels of risk management," "well documented processes," and "good compliance with standards." Zero major non-conformities identified.<br><br>
+                    <strong>Melbourne Office Scope:</strong> "The provision of Project Management, Engineering Consultancy and Management Consultancy Services" covering 13 employees and 280+ delivered projects representing 20GW+ connected capacity.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 9: TECHNICAL CHALLENGES & EXPERTS     -->
+    <!-- ============================================ -->
+    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">Overcoming Your Grid Connection Challenges</h2>
+                <p class="slide-subtitle">How our specialized experts solve the industry's toughest problems</p>
+            </div>
+
+            <div style="max-width: 1200px; margin: 0 auto;">
+                <div class="challenge-card pulse">
+                    <div class="challenge-title">
+                        <span>CLIENT CHALLENGE: IBR Stability & Control System Interactions</span>
+                        <span class="challenge-level pulse">EXTREME</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+                        <strong style="color: var(--malmo-green);">The Problem:</strong> Inverter control systems interact with network impedance causing oscillations and voltage instability that can delay commissioning for months.<br><br>
+                        <strong style="color: var(--malmo-green);">Our Solution:</strong> Deep understanding of converter controls, PLL dynamics, and EMT-level modeling to predict and prevent instabilities before commissioning.
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--malmo-green);">Your Experts:</strong><br>
+                        <span class="expert-tag">Dr. Anthony Morton - 20+ years power systems, IBR specialist</span>
+                        <span class="expert-tag">Naveen Rajagopal - PSCAD/EMT expert, IBR modeling</span>
+                        <span class="expert-tag">Dr. Ajith Tennakoon - Protection & control, 30+ years</span>
+                    </div>
+                </div>
+
+                <div class="challenge-card pulse">
+                    <div class="challenge-title">
+                        <span>CLIENT CHALLENGE: Sub-Synchronous Resonance & Equipment Damage Risk</span>
+                        <span class="challenge-level pulse">EXTREME</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+                        <strong style="color: var(--malmo-green);">The Problem:</strong> Series compensation can excite mechanical shaft oscillations causing catastrophic turbine damage and voiding warranties.<br><br>
+                        <strong style="color: var(--malmo-green);">Our Solution:</strong> Specialized EMT modeling and mechanical system analysis to identify risks early and design mitigation strategies that preserve warranties.
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--malmo-green);">Your Experts:</strong><br>
+                        <span class="expert-tag">Dr. Anthony Morton - SSR analysis specialist</span>
+                        <span class="expert-tag">Naveen Rajagopal - PSCAD/EMTP-RV expert, TI studies</span>
+                        <span class="expert-tag">Dr. Faraz Khan - Wind turbine mechanical systems</span>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-title">
+                        <span>CLIENT CHALLENGE: Weak Grid Connections & Voltage Stability</span>
+                        <span class="challenge-level">VERY HIGH</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+                        High X/R ratios and low short circuit ratios (SCR < 3) create voltage stability challenges, reactive power oscillations, and protection coordination issues. Requires sophisticated VRCS design, dynamic reactive compensation, and detailed stability analysis.
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--malmo-green);">Our Experts:</strong><br>
+                        <span class="expert-tag">Chris Marinelli - VRCS design, weak grid specialist</span>
+                        <span class="expert-tag">Eduardo Jr Cruz Laygo - TSO experience, voltage control</span>
+                        <span class="expert-tag">Ir. Amani Razif - Reactive power optimization</span>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-title">
+                        <span>Protection Coordination in Changing Fault Levels</span>
+                        <span class="challenge-level">VERY HIGH</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+                        IBR fault current contribution varies with operating conditions, creating protection blind spots. Traditional overcurrent protection fails with low fault currents from inverters. Requires advanced protection schemes, adaptive settings, and comprehensive coordination studies.
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--malmo-green);">Our Experts:</strong><br>
+                        <span class="expert-tag">Dr. Ajith Tennakoon - Former utility protection engineer</span>
+                        <span class="expert-tag">Eduardo Jr Cruz Laygo - Network protection specialist</span>
+                        <span class="expert-tag">Dr. Faraz Khan - Protection & control systems</span>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-title">
+                        <span>Dynamic Model Development & AEMO Validation (200+ Simulations)</span>
+                        <span class="challenge-level">HIGH</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+                        AEMO's Dynamic Model Acceptance Test Guideline requires 200+ simulations covering all operating conditions, fault types, and control modes. Models must match manufacturer data and pass all acceptance criteria. Time-consuming and technically demanding process requiring expert knowledge of PSS/E and PowerFactory.
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--malmo-green);">Our Experts:</strong><br>
+                        <span class="expert-tag">Dr. Anthony Morton - AEMO model validation expert</span>
+                        <span class="expert-tag">Naveen Rajagopal - PSS/E & PowerFactory specialist</span>
+                        <span class="expert-tag">Ir. Amani Razif - Model development & validation</span>
+                    </div>
+                </div>
+
+                <div class="challenge-card">
+                    <div class="challenge-title">
+                        <span>Harmonic Resonance & Power Quality in Weak Grids</span>
+                        <span class="challenge-level">HIGH</span>
+                    </div>
+                    <div style="color: #666; font-size: 0.95rem; line-height: 1.7; margin-bottom: 1rem;">
+                        Inverter switching harmonics interact with network resonances creating voltage distortion exceeding IEC 61000 limits. Filter design must avoid creating new resonances while mitigating existing harmonics. Requires detailed frequency scan analysis and filter optimization.
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <strong style="color: var(--malmo-green);">Our Experts:</strong><br>
+                        <span class="expert-tag">Naveen Rajagopal - Power quality specialist</span>
+                        <span class="expert-tag">Dr. Faraz Khan - Harmonic filter design</span>
+                        <span class="expert-tag">Ir. Amani Razif - IEC 61000 compliance</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="highlight-box" style="max-width: 1100px; margin: 3rem auto 0;">
+                <div class="highlight-title">Deep Expertise Where It Matters Most</div>
+                <div style="font-size: 1.1rem; opacity: 0.95; line-height: 1.7;">
+                    Grid connection is not a commodity service. The hardest technical challenges require senior engineers with decades of specialized experience, former utility operational knowledge, and cutting-edge research capabilities. Our team has solved these problems hundreds of times.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 10: CALL TO ACTION                    -->
+    <!-- ============================================ -->
+    <div class="slide hero-slide">
+        <div class="hero-chevron"></div>
+        <div class="hero-chevron-2"></div>
+        <div class="hero-content">
+            <h2 class="hero-title">Let's Connect Your Project to the Grid</h2>
+            <p class="hero-subtitle" style="max-width: 800px; margin: 0 auto;">
+                Whether you're at preliminary feasibility stage or ready for detailed connection studies,
+                our expert team is ready to support your grid connection journey.
+            </p>
+
+            <div style="margin-top: 3rem; padding: 2rem; background: rgba(255,255,255,0.1); border-radius: 8px; backdrop-filter: blur(10px);">
+                <div style="font-size: 1.5rem; font-weight: 300; margin-bottom: 1.5rem;">What We Can Help With:</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: left; max-width: 800px; margin: 0 auto;">
+                    <div>✓ R0 Preliminary Feasibility Studies</div>
+                    <div>✓ R1 Detailed Connection Applications</div>
+                    <div>✓ R2 Commissioning & Validation</div>
+                    <div>✓ Generator Performance Standards</div>
+                    <div>✓ NSPS Negotiation Support</div>
+                    <div>✓ Dynamic Model Development</div>
+                    <div>✓ Protection & Control Design</div>
+                    <div>✓ Owner's Engineer Services</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.3);">
+                <div style="font-size: 1.3rem; font-weight: 300; margin-bottom: 0.5rem;">Ready to discuss your project?</div>
+                <div style="font-size: 2.5rem; font-weight: 400; margin-top: 1rem;">Contact Us Today</div>
+                <div style="font-size: 1.2rem; opacity: 0.9; margin-top: 1rem;">Chris Marinelli - Vice President, Power & Energy Systems</div>
+                <div style="font-size: 1.1rem; opacity: 0.95; margin-top: 0.8rem;">
+                    <div style="margin-bottom: 0.3rem;">📧 chris.marinelli@vysusgroup.com</div>
+                    <div>📱 0417 035 368</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- FOOTER                                       -->
+    <!-- ============================================ -->
+    <div style="background: var(--malmo-green); color: white; padding: 3rem 2rem; text-align: center;">
+        <div style="font-size: 2.5rem; font-weight: 300; margin-bottom: 1rem;">
+            <span style="color: var(--stockholm-neon);">V</span> Vysus Group
+        </div>
+        <div style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 0.5rem;">
+            Power and Energy Systems Division
+        </div>
+        <div style="margin-top: 2rem; opacity: 0.7; font-size: 0.95rem;">
+            280+ Delivered Projects | 20GW+ Connected Capacity | 24 Technical Experts<br>
+            Your Partner for Successful Grid Connection
+        </div>
+        <div style="margin-top: 2rem; font-style: italic; opacity: 0.8;">
+            Ingenuity. Imagination. Insight.
+        </div>
+    </div>
+
+</body>
+</html>

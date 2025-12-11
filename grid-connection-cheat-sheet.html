@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Connection Conversations - Quick Cheat Sheet</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+            color: #1d1d1b;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .flow-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .flow-table td {
+            padding: 0.75rem 0.5rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .flow-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .step-label {
+            font-weight: 700;
+            width: 100px;
+            font-size: 0.9rem;
+        }
+
+        .step-1 { color: #00E3A9; }
+        .step-2 { color: #4b81ef; }
+        .step-3 { color: #f188f4; }
+        .step-4 { color: #005454; }
+
+        .questions-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .questions-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.95rem;
+        }
+
+        .questions-list li:last-child {
+            border-bottom: none;
+        }
+
+        .questions-list li::before {
+            content: "→ ";
+            color: #4b81ef;
+            font-weight: bold;
+        }
+
+        .template-section {
+            margin-bottom: 1rem;
+        }
+
+        .template-label {
+            font-size: 0.8rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .template-box {
+            background: #f8f8f8;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .template-box:hover {
+            background: #f0f0f0;
+            border-color: #00E3A9;
+        }
+
+        .template-box:active {
+            background: #e8f8f4;
+        }
+
+        .copy-btn {
+            background: #00E3A9;
+            color: white;
+            border: none;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: #00c896;
+        }
+
+        .remember-box {
+            background: linear-gradient(135deg, #005454 0%, #00E3A9 100%);
+            color: white;
+            text-align: center;
+            padding: 1.25rem;
+        }
+
+        .remember-box h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .remember-box p {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 700px) {
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0.5rem;
+            }
+            .card {
+                box-shadow: none;
+                border: 1px solid #ddd;
+                break-inside: avoid;
+            }
+            .header {
+                color: #005454;
+            }
+            .copy-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Grid Connection Conversations</h1>
+            <p>Keep this open during calls - you've got this!</p>
+        </div>
+
+        <!-- The Flow -->
+        <div class="card">
+            <h2 style="color: #005454;">THE FLOW</h2>
+            <table class="flow-table">
+                <tr>
+                    <td class="step-label step-1">1. OPEN</td>
+                    <td>"Hey! How's things? What are you up to these days?"</td>
+                </tr>
+                <tr>
+                    <td class="step-label step-2">2. ASK</td>
+                    <td>"Anything interesting in the pipeline?"</td>
+                </tr>
+                <tr>
+                    <td class="step-label step-3">3. OFFER</td>
+                    <td>"If you need a hand with grid connection stuff, let me know."</td>
+                </tr>
+                <tr>
+                    <td class="step-label step-4">4. SEND</td>
+                    <td>"I'll send you a quick overview of what we do."</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="two-col">
+            <!-- Questions -->
+            <div class="card">
+                <h2 style="color: #4b81ef;">QUESTIONS THAT WORK</h2>
+                <ul class="questions-list">
+                    <li>"What stage is that project at?"</li>
+                    <li>"Are you managing the grid connection in-house?"</li>
+                    <li>"What's your timeline for connection?"</li>
+                    <li>"Who's handling your technical studies?"</li>
+                    <li>"Any challenges with the connection process?"</li>
+                </ul>
+            </div>
+
+            <!-- Opening Lines -->
+            <div class="card">
+                <h2 style="color: #00E3A9;">OPENING LINES</h2>
+                <ul class="questions-list">
+                    <li style="border:none; padding: 0.4rem 0;">"Hey [Name], it's been ages! How's things?"</li>
+                    <li style="border:none; padding: 0.4rem 0;">"Saw you're at [Company] now - how's that?"</li>
+                    <li style="border:none; padding: 0.4rem 0;">"Long time! What are you working on?"</li>
+                    <li style="border:none; padding: 0.4rem 0;">"The market's busy - are you seeing the same?"</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Copy-Paste Templates -->
+        <div class="card">
+            <h2 style="color: #f188f4;">COPY-PASTE TEMPLATES</h2>
+
+            <!-- Reconnecting Email -->
+            <div class="template-section">
+                <div class="template-label">
+                    <span>RECONNECTING EMAIL</span>
+                    <button class="copy-btn" onclick="copyText('email-reconnect')">Copy</button>
+                </div>
+                <div class="template-box" id="email-reconnect" onclick="copyText('email-reconnect')" style="white-space: pre-line;">Subject: Catching up
+
+Hi [Name],
+
+I hope this finds you well. It's been a while since we last connected at [previous company / project / event].
+
+I noticed you're now at [Company] - it looks like you're doing some great work in the renewables space.
+
+I'm currently with Vysus Group, where we specialise in grid connection studies and power systems engineering. If you or your team ever need additional support with connection applications, compliance studies, or power systems modelling, I'd be happy to have a conversation.
+
+No pressure at all - I just wanted to reach out and say hello.
+
+Best regards,
+[Your name]
+[Your title]
+Vysus Group</div>
+            </div>
+
+            <!-- New Project Email -->
+            <div class="template-section">
+                <div class="template-label">
+                    <span>SAW YOUR PROJECT EMAIL</span>
+                    <button class="copy-btn" onclick="copyText('email-project')">Copy</button>
+                </div>
+                <div class="template-box" id="email-project" onclick="copyText('email-project')" style="white-space: pre-line;">Subject: Congratulations on [Project Name]
+
+Hi [Name],
+
+I saw the recent announcement about [Project Name] - congratulations on the progress. That's an impressive [MW capacity / milestone / achievement].
+
+I'm with Vysus Group, and we've supported a number of similar projects with their grid connection requirements. If you ever need additional capacity for connection studies, generator performance compliance, or power systems analysis, we'd welcome the opportunity to discuss how we might be able to help.
+
+Either way, best of luck with the project.
+
+Kind regards,
+[Your name]
+[Your title]
+Vysus Group</div>
+            </div>
+
+            <!-- Introduction via Mutual Contact -->
+            <div class="template-section">
+                <div class="template-label">
+                    <span>MUTUAL CONNECTION EMAIL</span>
+                    <button class="copy-btn" onclick="copyText('email-mutual')">Copy</button>
+                </div>
+                <div class="template-box" id="email-mutual" onclick="copyText('email-mutual')" style="white-space: pre-line;">Subject: Introduction via [Mutual Contact]
+
+Hi [Name],
+
+[Mutual Contact] suggested I reach out to you. I understand [Company] has some exciting projects in the pipeline.
+
+I'm with Vysus Group - we're an independent consultancy specialising in grid connection studies for renewable energy and battery storage projects. Our team provides technical support across the full connection process, from feasibility through to commissioning.
+
+I'd welcome the opportunity to introduce our services and learn more about your upcoming projects. Would you be open to a brief call in the coming weeks?
+
+Best regards,
+[Your name]
+[Your title]
+Vysus Group</div>
+            </div>
+
+            <!-- LinkedIn Message -->
+            <div class="template-section">
+                <div class="template-label">
+                    <span>LINKEDIN MESSAGE</span>
+                    <button class="copy-btn" onclick="copyText('linkedin-template')">Copy</button>
+                </div>
+                <div class="template-box" id="linkedin-template" onclick="copyText('linkedin-template')" style="white-space: pre-line;">Hi [Name],
+
+I noticed you're working on some interesting projects at [Company]. I'm with Vysus Group - we specialise in grid connection studies and power systems engineering for renewable energy projects.
+
+If you ever need additional support with connection applications or technical studies, I'd be happy to chat.
+
+Best regards,
+[Your name]</div>
+            </div>
+
+            <!-- Follow-up After Call -->
+            <div class="template-section">
+                <div class="template-label">
+                    <span>FOLLOW-UP AFTER CALL</span>
+                    <button class="copy-btn" onclick="copyText('email-followup')">Copy</button>
+                </div>
+                <div class="template-box" id="email-followup" onclick="copyText('email-followup')" style="white-space: pre-line;">Subject: Great speaking with you
+
+Hi [Name],
+
+Thanks for taking the time to chat today. It was great to hear about [what they're working on].
+
+As discussed, I've attached our capability overview - it's interactive, so you can select the services most relevant to your projects and it will generate an enquiry for our team.
+
+Please don't hesitate to reach out if you have any questions. I'd be happy to set up a more detailed discussion with our technical team when the timing is right.
+
+Best regards,
+[Your name]
+[Your title]
+Vysus Group</div>
+            </div>
+        </div>
+
+        <!-- Remember -->
+        <div class="card remember-box">
+            <h3>You're just catching up.</h3>
+            <p>The flyer does the selling. You just open the door.</p>
+        </div>
+    </div>
+
+    <script>
+        function copyText(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text).then(function() {
+                const btn = document.getElementById(elementId).parentElement.querySelector('.copy-btn');
+                if (btn) {
+                    const original = btn.textContent;
+                    btn.textContent = 'Copied!';
+                    btn.style.background = '#005454';
+                    setTimeout(() => {
+                        btn.textContent = original;
+                        btn.style.background = '';
+                    }, 1500);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
