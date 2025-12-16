@@ -487,16 +487,85 @@
             line-height: 1.7;
         }
 
+        /* Services link styles */
+        .services-link {
+            transition: all 0.3s ease;
+            display: inline-flex !important;
+        }
+
+        .services-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(0, 84, 84, 0.3) !important;
+        }
+
+        .services-link:hover .demo-text {
+            color: var(--stockholm-neon);
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
         @media (max-width: 968px) {
             .two-col { grid-template-columns: 1fr; }
             .team-grid, .focus-grid { grid-template-columns: 1fr; }
             .hero-title { font-size: 2.5rem; }
             .logo-v { width: 60px; height: 60px; }
             .logo-text { font-size: 2.5rem; }
+            .stats-row { gap: 2rem; }
+            .stat-number { font-size: 3rem; }
         }
 
         @media (max-width: 768px) {
             .slide-title { font-size: 2rem; }
+            .slide { padding: 2rem 1rem; }
+            .hero-title { font-size: 2rem; }
+            .hero-subtitle { font-size: 1.3rem; }
+            .tagline { font-size: 1.3rem; }
+            .stats-row {
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1.5rem 0;
+            }
+            .stat-item { text-align: center; }
+            .stat-number { font-size: 2.5rem; }
+            .stat-label { font-size: 1rem; }
+            .faq-item { padding: 1.5rem; }
+            .faq-question { font-size: 1.3rem; }
+            .focus-grid { grid-template-columns: 1fr; }
+            .focus-card { padding: 1.5rem; }
+            .focus-title { font-size: 1.4rem; }
+            .capability-checkbox { padding: 0.8rem 1rem; }
+            .capability-checkbox span { font-size: 0.95rem; }
+            .study-description {
+                padding-left: 2rem;
+                font-size: 0.8rem;
+            }
+            .checkbox-demo {
+                flex-direction: column;
+                gap: 0.5rem;
+                padding: 1rem 1.5rem;
+                text-align: center;
+            }
+            .demo-text { font-size: 1rem; }
+            .value-grid { grid-template-columns: 1fr; }
+            .accred-grid { grid-template-columns: 1fr; }
+            .highlight-box { padding: 1.5rem; }
+            .highlight-title { font-size: 1.5rem; }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title { font-size: 1.6rem; }
+            .hero-subtitle { font-size: 1.1rem; }
+            .logo-v { width: 50px; height: 50px; }
+            .logo-text { font-size: 2rem; }
+            .stat-number { font-size: 2rem; }
+            .slide-title { font-size: 1.6rem; }
+            .faq-question { font-size: 1.1rem; }
+            .focus-title { font-size: 1.2rem; }
+            .team-card { padding: 1.2rem; }
+            .team-name { font-size: 1.2rem; }
         }
 
         @media print {
@@ -1215,13 +1284,13 @@
 
                 <!-- Interactive Demo - Below Stats -->
                 <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 16px; padding: 1.2rem 2rem; margin: 2rem auto 0; max-width: 520px; border: 1px solid rgba(255,255,255,0.25);">
-                    <div class="checkbox-demo" style="background: rgba(255,255,255,0.95);">
+                    <a href="#services-selection" class="checkbox-demo services-link" style="background: rgba(255,255,255,0.95); text-decoration: none; cursor: pointer;">
                         <div class="demo-checkbox-wrapper">
                             <div class="demo-checkbox" id="demoCheckbox"></div>
                             <span class="demo-finger">👆</span>
                         </div>
                         <span class="demo-text">Select services to tailor your enquiry</span>
-                    </div>
+                    </a>
                 </div>
 
                 <p class="tagline" style="margin-top: 1.5rem;">Ingenuity. Imagination. Insight.</p>
@@ -1768,7 +1837,7 @@
                 </div>
 
                 <!-- Grid Connection Study Types - CLICKABLE (ordered by project lifecycle) -->
-                <div class="faq-item">
+                <div class="faq-item" id="services-selection">
                     <div class="faq-question">Grid Connection Study Types</div>
                     <div class="faq-answer">
                         <div class="faq-content">
