@@ -579,6 +579,223 @@
 
         @media print {
             .slide { page-break-after: always; }
+            .floating-nav, .back-to-top { display: none !important; }
+        }
+
+        /* ========================================== */
+        /* FLOATING NAVIGATION                        */
+        /* ========================================== */
+        .floating-nav {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: rgba(0, 84, 84, 0.3);
+            border: 2px solid var(--malmo-green);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-dot:hover, .nav-dot.active {
+            background: var(--stockholm-neon);
+            transform: scale(1.3);
+        }
+
+        .nav-dot::after {
+            content: attr(data-label);
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--malmo-green);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-dot:hover::after {
+            opacity: 1;
+        }
+
+        /* Mobile Navigation Toggle */
+        .mobile-nav-toggle {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 20px rgba(0, 84, 84, 0.4);
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-toggle:hover {
+            transform: scale(1.1);
+        }
+
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            padding: 16px;
+            z-index: 1000;
+            max-height: 70vh;
+            overflow-y: auto;
+            min-width: 200px;
+        }
+
+        .mobile-nav.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .mobile-nav a {
+            display: block;
+            padding: 12px 16px;
+            color: var(--malmo-green);
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .mobile-nav a:hover, .mobile-nav a.active {
+            background: rgba(0, 227, 169, 0.15);
+            border-left-color: var(--stockholm-neon);
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--malmo-green);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 15px rgba(0, 84, 84, 0.3);
+            font-size: 1.3rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background: var(--stockholm-neon);
+            transform: translateY(-3px);
+        }
+
+        /* Section Navigation Buttons */
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .section-nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            background: white;
+            color: var(--malmo-green);
+            border: 2px solid var(--stockholm-neon);
+            border-radius: 25px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .section-nav-btn:hover {
+            background: var(--stockholm-neon);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 227, 169, 0.4);
+        }
+
+        .section-nav-btn.primary {
+            background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .section-nav-btn.primary:hover {
+            box-shadow: 0 6px 20px rgba(0, 84, 84, 0.4);
+        }
+
+        /* Mobile responsiveness for navigation */
+        @media (max-width: 768px) {
+            .floating-nav {
+                display: none;
+            }
+
+            .mobile-nav-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .back-to-top {
+                left: auto;
+                right: 90px;
+            }
+
+            .section-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .section-nav-btn {
+                width: 100%;
+                max-width: 280px;
+                justify-content: center;
+            }
         }
 
         /* LOZENGE FAQ STYLES - Always Visible */
@@ -1253,9 +1470,49 @@
     </script>
 
     <!-- ============================================ -->
+    <!-- FLOATING NAVIGATION                          -->
+    <!-- ============================================ -->
+
+    <!-- Desktop Dot Navigation -->
+    <nav class="floating-nav" aria-label="Page navigation">
+        <a href="#hero" class="nav-dot active" data-label="Home" data-section="hero"></a>
+        <a href="#aemo-process" class="nav-dot" data-label="AEMO Process" data-section="aemo-process"></a>
+        <a href="#team" class="nav-dot" data-label="Our Team" data-section="team"></a>
+        <a href="#track-record" class="nav-dot" data-label="Track Record" data-section="track-record"></a>
+        <a href="#services" class="nav-dot" data-label="Services" data-section="services"></a>
+        <a href="#why-choose" class="nav-dot" data-label="Why Vysus" data-section="why-choose"></a>
+        <a href="#select-services" class="nav-dot" data-label="Select Services" data-section="select-services"></a>
+        <a href="#quality" class="nav-dot" data-label="Quality" data-section="quality"></a>
+        <a href="#contact" class="nav-dot" data-label="Contact" data-section="contact"></a>
+    </nav>
+
+    <!-- Mobile Navigation Toggle -->
+    <button class="mobile-nav-toggle" onclick="toggleMobileNav()" aria-label="Toggle navigation menu">
+        <span id="navIcon">☰</span>
+    </button>
+
+    <!-- Mobile Navigation Menu -->
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="#hero" onclick="closeMobileNav()">Home</a>
+        <a href="#aemo-process" onclick="closeMobileNav()">AEMO Process</a>
+        <a href="#team" onclick="closeMobileNav()">Our Team</a>
+        <a href="#track-record" onclick="closeMobileNav()">Track Record</a>
+        <a href="#services" onclick="closeMobileNav()">Services</a>
+        <a href="#why-choose" onclick="closeMobileNav()">Why Vysus</a>
+        <a href="#select-services" onclick="closeMobileNav()">Select Services</a>
+        <a href="#quality" onclick="closeMobileNav()">Quality</a>
+        <a href="#contact" onclick="closeMobileNav()">Contact Us</a>
+    </nav>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()" aria-label="Back to top">
+        ↑
+    </button>
+
+    <!-- ============================================ -->
     <!-- SLIDE 1: TITLE / HERO                        -->
     <!-- ============================================ -->
-    <div class="slide hero-slide">
+    <div id="hero" class="slide hero-slide">
         <div class="hero-chevron"></div>
         <div class="hero-chevron-2"></div>
         <div class="hero-content">
@@ -1310,7 +1567,7 @@
     <!-- ============================================ -->
     <!-- SLIDE 2: AEMO CONNECTION PROCESS            -->
     <!-- ============================================ -->
-    <div class="slide">
+    <div id="aemo-process" class="slide">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">AEMO Grid Connection Process Expertise</h2>
@@ -1382,13 +1639,20 @@
                     ensuring compliance with all NER S5.2 and S5.3 technical requirements and minimizing risk of connection delays.
                 </div>
             </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav">
+                <a href="#team" class="section-nav-btn">Meet Our Team →</a>
+                <a href="#select-services" class="section-nav-btn primary">Select Your Services</a>
+                <a href="#hero" class="section-nav-btn">↑ Back to Top</a>
+            </div>
         </div>
     </div>
 
     <!-- ============================================ -->
     <!-- SLIDE 3: TECHNICAL TEAM                     -->
     <!-- ============================================ -->
-    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+    <div id="team" class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Expert Power Systems Team</h2>
@@ -1481,13 +1745,20 @@
                 <strong style="font-size: 1.3rem;">Team Credentials:</strong><br>
                 3 PhDs | Former ISO/TSO Operations | 20GW+ Connected Capacity | PSS/E, PowerFactory, PSCAD, EMTP-RV Experts
             </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav">
+                <a href="#track-record" class="section-nav-btn">Our Track Record →</a>
+                <a href="#select-services" class="section-nav-btn primary">Select Your Services</a>
+                <a href="#hero" class="section-nav-btn">↑ Back to Top</a>
+            </div>
         </div>
     </div>
 
     <!-- ============================================ -->
     <!-- SLIDE 4: PROVEN PROJECT EXPERIENCE          -->
     <!-- ============================================ -->
-    <div class="slide">
+    <div id="track-record" class="slide">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Proven Track Record</h2>
@@ -1565,7 +1836,7 @@
     <!-- ============================================ -->
     <!-- SLIDE 5: COMPREHENSIVE SERVICE OFFERING     -->
     <!-- ============================================ -->
-    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+    <div id="services" class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Comprehensive Grid Connection Services</h2>
@@ -1694,13 +1965,20 @@
                     Facing a tight connection timeline? Our team has capacity for immediate project starts.
                 </p>
             </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav">
+                <a href="#why-choose" class="section-nav-btn">Why Choose Vysus →</a>
+                <a href="#select-services" class="section-nav-btn primary">Select Your Services</a>
+                <a href="#hero" class="section-nav-btn">↑ Back to Top</a>
+            </div>
         </div>
     </div>
 
     <!-- ============================================ -->
     <!-- SLIDE 6: WHY CHOOSE VYSUS GROUP             -->
     <!-- ============================================ -->
-    <div class="slide">
+    <div id="why-choose" class="slide">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Why Choose Vysus Group?</h2>
@@ -1788,13 +2066,20 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav">
+                <a href="#select-services" class="section-nav-btn primary">Select Your Services →</a>
+                <a href="#contact" class="section-nav-btn">Contact Us</a>
+                <a href="#hero" class="section-nav-btn">↑ Back to Top</a>
+            </div>
         </div>
     </div>
 
     <!-- ============================================ -->
     <!-- SLIDE 7: INTERACTIVE FAQ                    -->
     <!-- ============================================ -->
-    <div class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
+    <div id="select-services" class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.05) 0%, rgba(0, 84, 84, 0.05) 100%);">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Select Your Project Requirements</h2>
@@ -2040,7 +2325,7 @@
     <!-- ============================================ -->
     <!-- SLIDE 8: ACCREDITATIONS & QUALITY           -->
     <!-- ============================================ -->
-    <div class="slide">
+    <div id="quality" class="slide">
         <div class="content-slide">
             <div class="slide-header">
                 <h2 class="slide-title">Quality Assurance & Accreditations</h2>
@@ -2115,13 +2400,20 @@
                     <strong>Melbourne Office Scope:</strong> "The provision of Project Management, Engineering Consultancy and Management Consultancy Services" covering 13 employees and 280+ delivered projects representing 20GW+ connected capacity.
                 </div>
             </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav">
+                <a href="#contact" class="section-nav-btn primary">Contact Us →</a>
+                <a href="#select-services" class="section-nav-btn">Select Services</a>
+                <a href="#hero" class="section-nav-btn">↑ Back to Top</a>
+            </div>
         </div>
     </div>
 
     <!-- ============================================ -->
     <!-- SLIDE 9: CALL TO ACTION                     -->
     <!-- ============================================ -->
-    <div class="slide hero-slide">
+    <div id="contact" class="slide hero-slide">
         <div class="hero-chevron"></div>
         <div class="hero-chevron-2"></div>
         <div class="hero-content">
@@ -2180,6 +2472,102 @@
             Ingenuity. Imagination. Insight.
         </div>
     </div>
+
+    <!-- ============================================ -->
+    <!-- NAVIGATION JAVASCRIPT                        -->
+    <!-- ============================================ -->
+    <script>
+        // Mobile Navigation Toggle
+        function toggleMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            const navIcon = document.getElementById('navIcon');
+            mobileNav.classList.toggle('show');
+            navIcon.textContent = mobileNav.classList.contains('show') ? '✕' : '☰';
+        }
+
+        function closeMobileNav() {
+            const mobileNav = document.getElementById('mobileNav');
+            const navIcon = document.getElementById('navIcon');
+            mobileNav.classList.remove('show');
+            navIcon.textContent = '☰';
+        }
+
+        // Back to Top
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show/hide back-to-top button based on scroll position
+        window.addEventListener('scroll', function() {
+            const backToTop = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+
+            // Update active nav dot based on scroll position
+            updateActiveNavDot();
+        });
+
+        // Update active navigation dot based on current section in view
+        function updateActiveNavDot() {
+            const sections = ['hero', 'aemo-process', 'team', 'track-record', 'services', 'why-choose', 'select-services', 'quality', 'contact'];
+            const navDots = document.querySelectorAll('.nav-dot');
+            const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
+
+            let currentSection = 'hero';
+            const scrollPosition = window.scrollY + (window.innerHeight / 3);
+
+            sections.forEach(sectionId => {
+                const section = document.getElementById(sectionId);
+                if (section) {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.offsetHeight;
+
+                    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                        currentSection = sectionId;
+                    }
+                }
+            });
+
+            // Update desktop nav dots
+            navDots.forEach(dot => {
+                dot.classList.remove('active');
+                if (dot.getAttribute('data-section') === currentSection) {
+                    dot.classList.add('active');
+                }
+            });
+
+            // Update mobile nav links
+            mobileNavLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Close mobile nav when clicking outside
+        document.addEventListener('click', function(e) {
+            const mobileNav = document.getElementById('mobileNav');
+            const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
+
+            if (!mobileNav.contains(e.target) && !mobileNavToggle.contains(e.target)) {
+                closeMobileNav();
+            }
+        });
+
+        // Close mobile nav on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMobileNav();
+            }
+        });
+
+        // Initial call to set active state
+        updateActiveNavDot();
+    </script>
 
 </body>
 </html>
