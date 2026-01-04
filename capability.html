@@ -1476,6 +1476,8 @@
     <!-- Desktop Dot Navigation -->
     <nav class="floating-nav" aria-label="Page navigation">
         <a href="#hero" class="nav-dot active" data-label="Home" data-section="hero"></a>
+        <a href="#about" class="nav-dot" data-label="About Vysus" data-section="about"></a>
+        <a href="#client-interface" class="nav-dot" data-label="Contact Team" data-section="client-interface"></a>
         <a href="#aemo-process" class="nav-dot" data-label="AEMO Process" data-section="aemo-process"></a>
         <a href="#team" class="nav-dot" data-label="Our Team" data-section="team"></a>
         <a href="#track-record" class="nav-dot" data-label="Track Record" data-section="track-record"></a>
@@ -1494,6 +1496,8 @@
     <!-- Mobile Navigation Menu -->
     <nav class="mobile-nav" id="mobileNav">
         <a href="#hero" onclick="closeMobileNav()">Home</a>
+        <a href="#about" onclick="closeMobileNav()">About Vysus</a>
+        <a href="#client-interface" onclick="closeMobileNav()">Contact Team</a>
         <a href="#aemo-process" onclick="closeMobileNav()">AEMO Process</a>
         <a href="#team" onclick="closeMobileNav()">Our Team</a>
         <a href="#track-record" onclick="closeMobileNav()">Track Record</a>
@@ -1563,6 +1567,183 @@
             </div>
         </div>
     </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 1B: ABOUT VYSUS GROUP                 -->
+    <!-- ============================================ -->
+    <div id="about" class="slide" style="background: linear-gradient(135deg, rgba(0, 227, 169, 0.03) 0%, rgba(0, 84, 84, 0.03) 100%);">
+        <div class="content-slide">
+            <div class="slide-header">
+                <h2 class="slide-title">About Vysus Group</h2>
+                <p class="slide-subtitle">Engineering excellence with a heritage of innovation</p>
+            </div>
+
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <div class="focus-card" style="border-top: 4px solid var(--stockholm-neon);">
+                    <div class="faq-content" style="font-size: 1.05rem; line-height: 1.8; color: #444;">
+                        <p style="margin-bottom: 1.5rem;">
+                            Following a carve-out from the Lloyd's Register (LR) Group, LR's Energy business is now <strong style="color: var(--malmo-green);">Vysus Group</strong>, a standalone engineering and technical consultancy, offering specialist asset performance, risk management and project management expertise across complex industrial assets, energy assets (renewables and conventional sources), the energy transition and rail infrastructure.
+                        </p>
+
+                        <p style="margin-bottom: 1.5rem;">
+                            Vysus Group retains LR Energy's entire capability and continues to offer its full suite of technical, regulatory and operational expertise globally, with all <strong>650+ of our global experts</strong> transitioning. Driven by our purpose to help clients manage risk and maximise performance, blending deep technical knowledge and data-driven insights with hands on expertise.
+                        </p>
+
+                        <p style="margin-bottom: 1.5rem;">
+                            LR's Energy business was founded in the 1930s following LR's diversification from marine assets into the oil and gas industry. LR Energy has subsequently supported the transformation of global energy infrastructure, working on complex and large-scale energy projects around the world, becoming one of the leading engineering consultancy partners of choice.
+                        </p>
+
+                        <p>
+                            <strong style="color: var(--malmo-green);">Vysus Group's Power Engineering team</strong> dates back to 2003 beginning as one of the world's first renewable energy-focused grid consultancies: <strong>Econnect</strong>. Econnect was acquired by Senergy in 2009, which was in turn acquired by LR in 2013. Since 2005, Vysus Group's Power Engineering team has been supporting the grid connection of renewables in Australia and beyond.
+                        </p>
+                    </div>
+
+                    <div style="margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+                        <div style="background: linear-gradient(135deg, var(--stockholm-neon) 0%, #00b888 100%); color: white; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; font-size: 0.9rem;">650+ Global Experts</div>
+                        <div style="background: linear-gradient(135deg, var(--stockholm-neon) 0%, #00b888 100%); color: white; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; font-size: 0.9rem;">Since 2003</div>
+                        <div style="background: linear-gradient(135deg, var(--stockholm-neon) 0%, #00b888 100%); color: white; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; font-size: 0.9rem;">Lloyd's Register Heritage</div>
+                        <div style="background: linear-gradient(135deg, var(--stockholm-neon) 0%, #00b888 100%); color: white; padding: 0.6rem 1.2rem; border-radius: 25px; font-weight: 600; font-size: 0.9rem;">Renewable Energy Pioneers</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav">
+                <a href="#client-interface" class="section-nav-btn primary">Contact Our Team →</a>
+                <a href="#aemo-process" class="section-nav-btn">AEMO Process</a>
+                <a href="#hero" class="section-nav-btn">↑ Back to Top</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- SLIDE 1C: TECHNICAL CLIENT INTERFACE        -->
+    <!-- ============================================ -->
+    <div id="client-interface" class="slide" style="background: linear-gradient(135deg, var(--malmo-green) 0%, #007a7a 100%);">
+        <div class="content-slide">
+            <div class="slide-header" style="color: white;">
+                <h2 class="slide-title" style="color: white;">Contact Our Technical Team</h2>
+                <p class="slide-subtitle" style="color: rgba(255,255,255,0.9);">Select what you'd like to discuss, then choose who to contact</p>
+            </div>
+
+            <!-- STEP 1: Topic Selection (single set of checkboxes) -->
+            <div style="background: white; border-radius: 16px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+                <div style="font-size: 1.2rem; font-weight: 600; color: var(--malmo-green); margin-bottom: 1rem;">What would you like to discuss?</div>
+                <div id="globalTopics" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem;">
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.95rem; color: #444; background: #f8f9fa; border-radius: 8px; transition: all 0.2s;">
+                        <input type="checkbox" data-topic="New project scoping" style="accent-color: var(--stockholm-neon); width: 18px; height: 18px;"> New project scoping
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.95rem; color: #444; background: #f8f9fa; border-radius: 8px; transition: all 0.2s;">
+                        <input type="checkbox" data-topic="Grid connection studies" style="accent-color: var(--stockholm-neon); width: 18px; height: 18px;"> Grid connection studies
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.95rem; color: #444; background: #f8f9fa; border-radius: 8px; transition: all 0.2s;">
+                        <input type="checkbox" data-topic="Technical due diligence" style="accent-color: var(--stockholm-neon); width: 18px; height: 18px;"> Technical due diligence
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.95rem; color: #444; background: #f8f9fa; border-radius: 8px; transition: all 0.2s;">
+                        <input type="checkbox" data-topic="AEMO/NSP coordination" style="accent-color: var(--stockholm-neon); width: 18px; height: 18px;"> AEMO/NSP coordination
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.95rem; color: #444; background: #f8f9fa; border-radius: 8px; transition: all 0.2s;">
+                        <input type="checkbox" data-topic="Proposal or quote" style="accent-color: var(--stockholm-neon); width: 18px; height: 18px;"> Proposal or quote
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.95rem; color: #444; background: #f8f9fa; border-radius: 8px; transition: all 0.2s;">
+                        <input type="checkbox" data-topic="Other enquiry" style="accent-color: var(--stockholm-neon); width: 18px; height: 18px;"> Other enquiry
+                    </label>
+                </div>
+            </div>
+
+            <!-- STEP 2: Choose Who to Contact -->
+            <div style="text-align: center; color: white; margin-bottom: 1.5rem;">
+                <div style="font-size: 1.1rem; font-weight: 500;">Then choose who to contact:</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+                <!-- Anthony Morton Card -->
+                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); text-align: center;">
+                    <div style="font-size: 1.4rem; font-weight: 600; color: var(--malmo-green); margin-bottom: 0.3rem;">Dr. Anthony Morton</div>
+                    <div style="font-size: 0.95rem; color: var(--stockholm-neon); font-weight: 500; margin-bottom: 0.75rem;">Global Technical Head</div>
+                    <div style="font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 1rem;">
+                        20+ years in power systems. Internationally recognized expert.
+                    </div>
+                    <button onclick="sendContactEmail('Tony', 'tony.morton@vysusgroup.com')" style="width: 100%; padding: 0.8rem; background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; margin-bottom: 0.5rem;">
+                        Email Tony →
+                    </button>
+                    <a href="mailto:tony.morton@vysusgroup.com" style="font-size: 0.8rem; color: var(--stockholm-neon);">tony.morton@vysusgroup.com</a>
+                </div>
+
+                <!-- Naveen Rajagopal Card -->
+                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); text-align: center;">
+                    <div style="font-size: 1.4rem; font-weight: 600; color: var(--malmo-green); margin-bottom: 0.3rem;">Naveen Rajagopal</div>
+                    <div style="font-size: 0.95rem; color: var(--stockholm-neon); font-weight: 500; margin-bottom: 0.75rem;">Principal Engineer</div>
+                    <div style="font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 1rem;">
+                        Nearly 10 years expertise. HVDC and renewable integration specialist.
+                    </div>
+                    <button onclick="sendContactEmail('Naveen', 'Naveenkumar.Rajagopal@vysusgroup.com')" style="width: 100%; padding: 0.8rem; background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; margin-bottom: 0.5rem;">
+                        Email Naveen →
+                    </button>
+                    <a href="mailto:Naveenkumar.Rajagopal@vysusgroup.com" style="font-size: 0.8rem; color: var(--stockholm-neon);">Naveenkumar.Rajagopal@vysusgroup.com</a>
+                </div>
+
+                <!-- Momtaz Rahman Card -->
+                <div style="background: white; padding: 1.5rem; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15); text-align: center;">
+                    <div style="font-size: 1.4rem; font-weight: 600; color: var(--malmo-green); margin-bottom: 0.3rem;">Momtaz Rahman, PhD</div>
+                    <div style="font-size: 0.95rem; color: var(--stockholm-neon); font-weight: 500; margin-bottom: 0.75rem;">Senior Engineer</div>
+                    <div style="font-size: 0.85rem; color: #666; line-height: 1.5; margin-bottom: 1rem;">
+                        15+ years consultancy. Dynamic modelling and micro-grid specialist.
+                    </div>
+                    <button onclick="sendContactEmail('Momtaz', 'md.momtazur.rahman@vysusgroup.com')" style="width: 100%; padding: 0.8rem; background: linear-gradient(135deg, var(--stockholm-neon) 0%, var(--malmo-green) 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; margin-bottom: 0.5rem;">
+                        Email Momtaz →
+                    </button>
+                    <a href="mailto:md.momtazur.rahman@vysusgroup.com" style="font-size: 0.8rem; color: var(--stockholm-neon);">md.momtazur.rahman@vysusgroup.com</a>
+                </div>
+            </div>
+
+            <!-- Section Navigation -->
+            <div class="section-nav" style="margin-top: 2rem;">
+                <a href="#aemo-process" class="section-nav-btn" style="background: white; color: var(--malmo-green);">AEMO Process →</a>
+                <a href="#team" class="section-nav-btn" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.5);">Our Leads</a>
+                <a href="#hero" class="section-nav-btn" style="background: rgba(255,255,255,0.2); color: white; border-color: rgba(255,255,255,0.5);">↑ Back to Top</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Contact Email Function - reads from global topic checkboxes
+        function sendContactEmail(name, email) {
+            const checkboxes = document.querySelectorAll('#globalTopics input[type="checkbox"]:checked');
+
+            let topics = [];
+            checkboxes.forEach(cb => {
+                topics.push(cb.getAttribute('data-topic'));
+            });
+
+            let body = `Hello ${name},\n\n`;
+            body += `I found your details on the Vysus Group Grid Connection Capability Statement and would like to discuss the following:\n\n`;
+
+            if (topics.length > 0) {
+                topics.forEach(topic => {
+                    body += `• ${topic}\n`;
+                });
+                body += '\n';
+            }
+
+            body += `Project Details:\n`;
+            body += `• Project Name: [Please add]\n`;
+            body += `• Location: [Please add]\n`;
+            body += `• Technology Type: [Wind / Solar / BESS / Hybrid]\n`;
+            body += `• Capacity (MW): [Please add]\n\n`;
+            body += `I look forward to hearing from you.\n\n`;
+            body += `Best regards,\n`;
+            body += `[Your Name]\n`;
+            body += `[Your Company]\n`;
+            body += `[Your Phone Number]`;
+
+            const subject = `Grid Connection Enquiry - Vysus Group`;
+            const mailtoLink = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+            window.location.href = mailtoLink;
+        }
+    </script>
 
     <!-- ============================================ -->
     <!-- SLIDE 2: AEMO CONNECTION PROCESS            -->
@@ -1669,22 +1850,6 @@
                 </div>
 
                 <div class="team-card">
-                    <div class="team-name">Dr. Anthony Morton</div>
-                    <div class="team-title">Global Technical Head | Adjunct Professor</div>
-                    <div class="team-bio">
-                        20+ years in power systems modeling and analysis. Internationally recognized in academic and industry research circles. Expert in electrical plant and grid connection design, performance optimization, and advanced dynamic studies for wind, solar, and BESS projects.
-                    </div>
-                </div>
-
-                <div class="team-card">
-                    <div class="team-name">Naveen Rajagopal</div>
-                    <div class="team-title">Principal Power Systems Engineer</div>
-                    <div class="team-bio">
-                        Nearly 10 years of expertise in advanced power system studies across national grids, industrial facilities, and oil & gas. Specializes in HVDC and large-scale renewable integration. Expert in root cause analyses for generating plants. Highly proficient in PSCAD/EMTDC, EMTP-RV, PSS®E, PowerFactory with extensive RMS and EMT modeling experience. Specialized studies include insulation coordination, power quality, SSR, protection validation, and TRV analysis.
-                    </div>
-                </div>
-
-                <div class="team-card">
                     <div class="team-name">Ir. Amani Razif</div>
                     <div class="team-title">Team Lead - Malaysia | Power and Energy Systems</div>
                     <div class="team-bio">
@@ -1732,13 +1897,6 @@
                     </div>
                 </div>
 
-                <div class="team-card">
-                    <div class="team-name">Momtaz Rahman, PhD</div>
-                    <div class="team-title">Lead Engineer - Power & Energy Systems</div>
-                    <div class="team-bio">
-                        Passionate about reducing carbon footprint through renewable energy deployment. Over 15 years experience in power systems consultancy, power station operation, and renewable energy solutions across Australia, Bangladesh, Germany, and Qatar. Expertise in power system dynamic modelling and micro-grid connection studies using PSS/E, PSCAD, and DIgSILENT PowerFactory. Senior-level experience in development and delivery of on-grid and off-grid renewable energy projects. Skilled in power system operations and utility substation studies including optimal power flow management in interconnected systems and short-term outage planning for network reliability. Holds Bachelor's, Master's (Energy Technology) and PhD (Renewable Energy) degrees in Electrical Engineering. Currently undertaking connection studies for Australian projects following AEMO guidelines, providing hold point testing support, and preparing R2 model validation reports.
-                    </div>
-                </div>
             </div>
 
             <div class="highlight-box" style="max-width: 900px; margin: 3rem auto 0;">
@@ -2512,7 +2670,7 @@
 
         // Update active navigation dot based on current section in view
         function updateActiveNavDot() {
-            const sections = ['hero', 'aemo-process', 'team', 'track-record', 'services', 'why-choose', 'select-services', 'quality', 'contact'];
+            const sections = ['hero', 'about', 'client-interface', 'aemo-process', 'team', 'track-record', 'services', 'why-choose', 'select-services', 'quality', 'contact'];
             const navDots = document.querySelectorAll('.nav-dot');
             const mobileNavLinks = document.querySelectorAll('.mobile-nav a');
 
