@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vysus Capability Email Lozenge</title>
+    <style>
+        :root {
+            --vysus-stockholm-neon: #00E3A9;
+            --vysus-malmo-green: #005454;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: var(--vysus-malmo-green);
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: var(--vysus-malmo-green);
+            margin: 40px 0 20px;
+            font-size: 20px;
+        }
+
+        p {
+            color: #485559;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .preview-section {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            margin: 30px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .preview-label {
+            font-size: 12px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* The Lozenge */
+        .vysus-lozenge {
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(135deg, var(--vysus-malmo-green) 0%, #006b6b 50%, var(--vysus-malmo-green) 100%);
+            color: white;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 50px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 84, 84, 0.3);
+        }
+
+        .vysus-lozenge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(0, 227, 169, 0.4) 50%,
+                transparent 100%
+            );
+            animation: shimmer 2.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .lozenge-text {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lozenge-icon {
+            width: 18px;
+            height: 20px;
+        }
+
+        /* Neon variant */
+        .vysus-lozenge.neon {
+            background: linear-gradient(135deg, var(--vysus-stockholm-neon) 0%, #00b88a 50%, var(--vysus-stockholm-neon) 100%);
+            color: var(--vysus-malmo-green);
+            box-shadow: 0 4px 15px rgba(0, 227, 169, 0.3);
+        }
+
+        .vysus-lozenge.neon::before {
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(255, 255, 255, 0.5) 50%,
+                transparent 100%
+            );
+        }
+
+        .variants {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .variant-item {
+            text-align: center;
+        }
+
+        .variant-label {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+        }
+
+        .instructions {
+            background: #e8f5e9;
+            border-left: 4px solid var(--vysus-stockholm-neon);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #333;
+        }
+
+        .instructions li {
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: var(--vysus-malmo-green);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            font-size: 13px;
+            margin-right: 10px;
+        }
+
+        .steps {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .steps li {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .steps li p {
+            margin: 0;
+        }
+
+        code {
+            background: #f0f0f0;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            font-size: 13px;
+        }
+
+        .download-link {
+            display: inline-block;
+            background: var(--vysus-stockholm-neon);
+            color: var(--vysus-malmo-green);
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .download-link:hover {
+            background: #00c896;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vysus Capability Email Lozenge</h1>
+        <p>Create an animated GIF button for Outlook Desktop email signatures.</p>
+
+        <div class="preview-section">
+            <div class="preview-label">Choose Your Variant</div>
+
+            <div class="variants">
+                <div class="variant-item">
+                    <a href="https://vysus-capability.netlify.app/" class="vysus-lozenge" target="_blank">
+                        <span class="lozenge-text">
+                            <svg class="lozenge-icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="currentColor"/>
+                                <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
+                            </svg>
+                            Vysus Capability
+                        </span>
+                    </a>
+                    <div class="variant-label">Malmö Green</div>
+                </div>
+
+                <div class="variant-item">
+                    <a href="https://vysus-capability.netlify.app/" class="vysus-lozenge neon" target="_blank">
+                        <span class="lozenge-text">
+                            <svg class="lozenge-icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="currentColor"/>
+                                <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
+                            </svg>
+                            Vysus Capability
+                        </span>
+                    </a>
+                    <div class="variant-label">Stockholm Neon</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>How to Create the Animated GIF</h2>
+
+        <div class="instructions">
+            <ul class="steps">
+                <li>
+                    <span class="step-number">1</span>
+                    <p><strong>Download ScreenToGif</strong><br>
+                    Free tool from <a href="https://www.screentogif.com/" target="_blank">screentogif.com</a> — install and open it.</p>
+                </li>
+                <li>
+                    <span class="step-number">2</span>
+                    <p><strong>Click "Recorder"</strong><br>
+                    A transparent frame will appear. Resize it to fit snugly around your chosen lozenge above.</p>
+                </li>
+                <li>
+                    <span class="step-number">3</span>
+                    <p><strong>Record for 2.5 seconds</strong><br>
+                    Click the red Record button, wait for one full shimmer cycle, then click Stop.</p>
+                </li>
+                <li>
+                    <span class="step-number">4</span>
+                    <p><strong>Save as GIF</strong><br>
+                    In the editor, go to <strong>File → Save As</strong> and save as <code>.gif</code> format.</p>
+                </li>
+            </ul>
+        </div>
+
+        <h2>Add to Outlook Desktop Signature</h2>
+
+        <div class="instructions">
+            <ul class="steps">
+                <li>
+                    <span class="step-number">1</span>
+                    <p><strong>Open Signature Settings</strong><br>
+                    In Outlook: <strong>File → Options → Mail → Signatures</strong></p>
+                </li>
+                <li>
+                    <span class="step-number">2</span>
+                    <p><strong>Create or Edit a Signature</strong><br>
+                    Click <strong>New</strong> or select an existing signature to edit.</p>
+                </li>
+                <li>
+                    <span class="step-number">3</span>
+                    <p><strong>Insert the GIF</strong><br>
+                    Click the <strong>Image icon</strong> in the editor toolbar and select your saved GIF file.</p>
+                </li>
+                <li>
+                    <span class="step-number">4</span>
+                    <p><strong>Add the Link</strong><br>
+                    Select the GIF image, then click the <strong>Hyperlink icon</strong> and enter:<br>
+                    <code>https://vysus-capability.netlify.app/capability.html</code></p>
+                </li>
+                <li>
+                    <span class="step-number">5</span>
+                    <p><strong>Save</strong><br>
+                    Click OK to save your signature. The animated lozenge will now appear in your emails!</p>
+                </li>
+            </ul>
+        </div>
+
+        <p style="margin-top: 40px; color: #888; font-size: 13px;">
+            <strong>Note:</strong> The shimmer animation will play in most email clients. Some older clients may show a static image, which still looks great.
+        </p>
+    </div>
+</body>
+</html>
