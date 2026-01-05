@@ -13,7 +13,7 @@ async function generateGif(variant = 'green') {
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
-    await page.setViewport({ width: 500, height: 150, deviceScaleFactor: 2 });
+    await page.setViewport({ width: 400, height: 150, deviceScaleFactor: 2 });
 
     const isNeon = variant === 'neon';
     const bgColor = isNeon ? '#00E3A9' : '#005454';
@@ -34,11 +34,6 @@ async function generateGif(variant = 'green') {
                 justify-content: center;
                 height: 100vh;
                 padding: 20px;
-            }
-            .container {
-                display: flex;
-                align-items: center;
-                gap: 8px;
             }
             .lozenge {
                 display: inline-flex;
@@ -74,33 +69,15 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 z-index: 1;
             }
-            .hand {
-                font-size: 24px;
-                position: relative;
-                z-index: 2;
-                transform: translateX(var(--hand-x, 0px)) translateY(var(--hand-y, 0px));
-                filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
-            }
-            .subtext {
-                font-family: Arial, sans-serif;
-                font-size: 11px;
-                color: #666;
-                margin-left: 8px;
-                white-space: nowrap;
-            }
         </style>
     </head>
     <body>
-        <div class="container">
-            <div class="lozenge" id="lozenge">
-                <svg class="icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="currentColor"/>
-                    <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
-                </svg>
-                <span class="text">Vysus Capability</span>
-            </div>
-            <span class="hand" id="hand">👆</span>
-            <span class="subtext">Click to view</span>
+        <div class="lozenge" id="lozenge">
+            <svg class="icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="currentColor"/>
+                <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
+            </svg>
+            <span class="text">Vysus Capability</span>
         </div>
     </body>
     </html>`;
@@ -108,9 +85,9 @@ async function generateGif(variant = 'green') {
     await page.setContent(html);
     await page.waitForSelector('.lozenge');
 
-    // Get container bounding box
-    const container = await page.$('.container');
-    const box = await container.boundingBox();
+    // Get lozenge bounding box
+    const lozenge = await page.$('.lozenge');
+    const box = await lozenge.boundingBox();
 
     // Add some padding
     const padding = 10;
@@ -128,17 +105,9 @@ async function generateGif(variant = 'green') {
         // Shimmer animation (full cycle)
         const shimmerProgress = (i / frames) * 200 - 100; // -100% to 100%
 
-        // Hand bobbing animation (up and down)
-        const handBob = Math.sin((i / frames) * Math.PI * 4) * 3;
-
-        // Hand horizontal movement (slight pulse toward button)
-        const handPulse = Math.sin((i / frames) * Math.PI * 2) * 2 - 2;
-
-        await page.evaluate((shimmerPos, handY, handX) => {
+        await page.evaluate((shimmerPos) => {
             document.querySelector('.lozenge').style.setProperty('--shimmer-pos', shimmerPos + '%');
-            document.querySelector('.hand').style.setProperty('--hand-y', handY + 'px');
-            document.querySelector('.hand').style.setProperty('--hand-x', handX + 'px');
-        }, shimmerProgress, handBob, handPulse);
+        }, shimmerProgress);
 
         const screenshot = await page.screenshot({
             type: 'png',
