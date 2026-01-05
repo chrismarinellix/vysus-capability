@@ -74,14 +74,6 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 z-index: 1;
             }
-            .hand {
-                font-size: 28px;
-                position: relative;
-                z-index: 2;
-                transform: translateY(var(--hand-y, 0px));
-                filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
-                margin-left: 4px;
-            }
         </style>
     </head>
     <body>
@@ -93,7 +85,6 @@ async function generateGif(variant = 'green') {
                 </svg>
                 <span class="text">Vysus Capability</span>
             </div>
-            <span class="hand" id="hand">👆</span>
         </div>
     </body>
     </html>`;
@@ -119,26 +110,9 @@ async function generateGif(variant = 'green') {
         // Shimmer sweeps across the lozenge
         const shimmerProgress = (i / frames) * 200 - 100;
 
-        // Hand taps twice during the animation
-        let handY = 0;
-
-        // First tap at frame 15-22
-        if (i >= 15 && i < 18) {
-            handY = 3;
-        } else if (i >= 18 && i < 22) {
-            handY = -1;
-        }
-        // Second tap at frame 40-47
-        else if (i >= 40 && i < 43) {
-            handY = 3;
-        } else if (i >= 43 && i < 47) {
-            handY = -1;
-        }
-
-        await page.evaluate((shimmerPos, hY) => {
+        await page.evaluate((shimmerPos) => {
             document.querySelector('.lozenge').style.setProperty('--shimmer-pos', shimmerPos + '%');
-            document.querySelector('.hand').style.setProperty('--hand-y', hY + 'px');
-        }, shimmerProgress, handY);
+        }, shimmerProgress);
 
         const screenshot = await page.screenshot({
             type: 'png',
