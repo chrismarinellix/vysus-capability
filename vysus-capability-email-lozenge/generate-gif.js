@@ -37,9 +37,8 @@ async function generateGif(variant = 'green') {
             }
             .container {
                 display: flex;
-                flex-direction: column;
                 align-items: center;
-                position: relative;
+                gap: 8px;
             }
             .lozenge {
                 display: inline-flex;
@@ -55,8 +54,15 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 overflow: hidden;
                 box-shadow: 0 4px 15px rgba(0, 84, 84, 0.3);
-                transform: scale(var(--scale, 1));
-                transition: transform 0.05s ease-out;
+            }
+            .lozenge::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: var(--shimmer-pos, -100%);
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent 0%, ${shimmerColor} 50%, transparent 100%);
             }
             .icon {
                 width: 16px;
@@ -68,14 +74,12 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 z-index: 1;
             }
-            .cursor {
-                position: absolute;
-                bottom: var(--cursor-y, -50px);
-                left: 50%;
-                transform: translateX(-50%) rotate(-15deg);
-                font-size: 28px;
-                opacity: var(--cursor-opacity, 0);
-                filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.25));
+            .hand {
+                font-size: 24px;
+                position: relative;
+                z-index: 2;
+                transform: translateX(var(--hand-x, 0px)) translateY(var(--hand-y, 0px));
+                filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
             }
         </style>
     </head>
@@ -88,7 +92,7 @@ async function generateGif(variant = 'green') {
                 </svg>
                 <span class="text">Vysus Capability</span>
             </div>
-            <span class="cursor" id="cursor">👆</span>
+            <span class="hand" id="hand">👆</span>
         </div>
     </body>
     </html>`;
@@ -111,46 +115,25 @@ async function generateGif(variant = 'green') {
     encoder.start();
 
     for (let i = 0; i < frames; i++) {
-        // Hand animation - rises from bottom, clicks, descends
-        let cursorY = -50;
-        let cursorOpacity = 0;
-        let scale = 1;
+        // Shimmer sweeps across the lozenge
+        const shimmerProgress = (i / frames) * 200 - 100;
 
-        if (i >= 5 && i < 20) {
-            // Smooth rise with easing
-            const t = (i - 5) / 15;
-            const eased = 1 - Math.pow(1 - t, 3);
-            cursorY = -50 + (eased * 45);
-            cursorOpacity = Math.min(1, t * 2);
-        } else if (i >= 20 && i < 25) {
-            cursorY = -5;
-            cursorOpacity = 1;
-        } else if (i >= 25 && i < 30) {
-            cursorY = -5;
-            cursorOpacity = 1;
-            if (i === 26 || i === 27) {
-                cursorY = -2;
-                scale = 0.96;
-            } else if (i === 28 || i === 29) {
-                cursorY = -5;
-                scale = 1.02;
-            }
-        } else if (i >= 30 && i < 35) {
-            cursorY = -5;
-            cursorOpacity = 1;
-            scale = 1;
-        } else if (i >= 35 && i < 50) {
-            const t = (i - 35) / 15;
-            const eased = t * t;
-            cursorY = -5 - (eased * 45);
-            cursorOpacity = Math.max(0, 1 - t * 1.5);
+        // Hand has a subtle bounce/click animation
+        let handX = 0;
+        let handY = 0;
+
+        // Click animation around frame 30
+        if (i >= 28 && i < 32) {
+            handY = 2; // hand presses down
+        } else if (i >= 32 && i < 36) {
+            handY = -1; // slight bounce back
         }
 
-        await page.evaluate((cY, cO, s) => {
-            document.querySelector('.lozenge').style.setProperty('--scale', s);
-            document.querySelector('.cursor').style.setProperty('--cursor-y', cY + 'px');
-            document.querySelector('.cursor').style.setProperty('--cursor-opacity', cO);
-        }, cursorY, cursorOpacity, scale);
+        await page.evaluate((shimmerPos, hX, hY) => {
+            document.querySelector('.lozenge').style.setProperty('--shimmer-pos', shimmerPos + '%');
+            document.querySelector('.hand').style.setProperty('--hand-x', hX + 'px');
+            document.querySelector('.hand').style.setProperty('--hand-y', hY + 'px');
+        }, shimmerProgress, handX, handY);
 
         const screenshot = await page.screenshot({
             type: 'png',
