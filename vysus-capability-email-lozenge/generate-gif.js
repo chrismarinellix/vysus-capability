@@ -48,7 +48,7 @@ async function generateGif(variant = 'green') {
                 font-family: Arial, sans-serif;
                 font-size: 14px;
                 font-weight: bold;
-                padding: 12px 24px;
+                padding: 12px 34px 12px 24px;
                 border-radius: 50px;
                 position: relative;
                 overflow: hidden;
@@ -84,16 +84,16 @@ async function generateGif(variant = 'green') {
             }
             .hand {
                 position: absolute;
-                font-size: 24px;
-                right: 15px;
+                font-size: 14px;
+                right: 6px;
                 top: 50%;
                 transform: translateY(calc(-50% + var(--hand-y, 0px)));
                 z-index: 10;
-                filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.3));
+                filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
             }
             .spark {
                 position: absolute;
-                right: 25px;
+                right: 12px;
                 top: 50%;
                 transform: translateY(-50%);
                 width: var(--spark-size, 0px);
