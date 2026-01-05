@@ -48,7 +48,7 @@ async function generateGif(variant = 'green') {
                 font-family: Arial, sans-serif;
                 font-size: 14px;
                 font-weight: bold;
-                padding: 12px 34px 12px 24px;
+                padding: 12px 45px 12px 24px;
                 border-radius: 50px;
                 position: relative;
                 overflow: hidden;
