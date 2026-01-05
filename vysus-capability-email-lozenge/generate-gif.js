@@ -5,8 +5,8 @@ const path = require('path');
 const { PNG } = require('pngjs');
 
 async function generateGif(variant = 'green') {
-    const frames = 1;
-    const delay = 100;
+    const frames = 60;
+    const delay = 50;
 
     console.log(`\nGenerating ${variant} lozenge GIF...`);
 
@@ -68,6 +68,15 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 z-index: 1;
             }
+            .cursor {
+                position: absolute;
+                bottom: var(--cursor-y, -50px);
+                left: 50%;
+                transform: translateX(-50%) rotate(-15deg);
+                font-size: 28px;
+                opacity: var(--cursor-opacity, 0);
+                filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.25));
+            }
         </style>
     </head>
     <body>
@@ -79,6 +88,7 @@ async function generateGif(variant = 'green') {
                 </svg>
                 <span class="text">Vysus Capability</span>
             </div>
+            <span class="cursor" id="cursor">👆</span>
         </div>
     </body>
     </html>`;
@@ -101,6 +111,46 @@ async function generateGif(variant = 'green') {
     encoder.start();
 
     for (let i = 0; i < frames; i++) {
+        // Hand animation - rises from bottom, clicks, descends
+        let cursorY = -50;
+        let cursorOpacity = 0;
+        let scale = 1;
+
+        if (i >= 5 && i < 20) {
+            // Smooth rise with easing
+            const t = (i - 5) / 15;
+            const eased = 1 - Math.pow(1 - t, 3);
+            cursorY = -50 + (eased * 45);
+            cursorOpacity = Math.min(1, t * 2);
+        } else if (i >= 20 && i < 25) {
+            cursorY = -5;
+            cursorOpacity = 1;
+        } else if (i >= 25 && i < 30) {
+            cursorY = -5;
+            cursorOpacity = 1;
+            if (i === 26 || i === 27) {
+                cursorY = -2;
+                scale = 0.96;
+            } else if (i === 28 || i === 29) {
+                cursorY = -5;
+                scale = 1.02;
+            }
+        } else if (i >= 30 && i < 35) {
+            cursorY = -5;
+            cursorOpacity = 1;
+            scale = 1;
+        } else if (i >= 35 && i < 50) {
+            const t = (i - 35) / 15;
+            const eased = t * t;
+            cursorY = -5 - (eased * 45);
+            cursorOpacity = Math.max(0, 1 - t * 1.5);
+        }
+
+        await page.evaluate((cY, cO, s) => {
+            document.querySelector('.lozenge').style.setProperty('--scale', s);
+            document.querySelector('.cursor').style.setProperty('--cursor-y', cY + 'px');
+            document.querySelector('.cursor').style.setProperty('--cursor-opacity', cO);
+        }, cursorY, cursorOpacity, scale);
 
         const screenshot = await page.screenshot({
             type: 'png',
