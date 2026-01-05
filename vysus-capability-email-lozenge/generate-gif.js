@@ -75,11 +75,12 @@ async function generateGif(variant = 'green') {
                 z-index: 1;
             }
             .hand {
-                font-size: 24px;
+                font-size: 28px;
                 position: relative;
                 z-index: 2;
-                transform: translateX(var(--hand-x, 0px)) translateY(var(--hand-y, 0px));
-                filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
+                transform: translateY(var(--hand-y, 0px));
+                filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+                margin-left: 4px;
             }
         </style>
     </head>
@@ -118,22 +119,26 @@ async function generateGif(variant = 'green') {
         // Shimmer sweeps across the lozenge
         const shimmerProgress = (i / frames) * 200 - 100;
 
-        // Hand has a subtle bounce/click animation
-        let handX = 0;
+        // Hand taps twice during the animation
         let handY = 0;
 
-        // Click animation around frame 30
-        if (i >= 28 && i < 32) {
-            handY = 2; // hand presses down
-        } else if (i >= 32 && i < 36) {
-            handY = -1; // slight bounce back
+        // First tap at frame 15-22
+        if (i >= 15 && i < 18) {
+            handY = 3;
+        } else if (i >= 18 && i < 22) {
+            handY = -1;
+        }
+        // Second tap at frame 40-47
+        else if (i >= 40 && i < 43) {
+            handY = 3;
+        } else if (i >= 43 && i < 47) {
+            handY = -1;
         }
 
-        await page.evaluate((shimmerPos, hX, hY) => {
+        await page.evaluate((shimmerPos, hY) => {
             document.querySelector('.lozenge').style.setProperty('--shimmer-pos', shimmerPos + '%');
-            document.querySelector('.hand').style.setProperty('--hand-x', hX + 'px');
             document.querySelector('.hand').style.setProperty('--hand-y', hY + 'px');
-        }, shimmerProgress, handX, handY);
+        }, shimmerProgress, handY);
 
         const screenshot = await page.screenshot({
             type: 'png',
