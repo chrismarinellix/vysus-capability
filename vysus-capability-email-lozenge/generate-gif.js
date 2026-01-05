@@ -6,7 +6,7 @@ const { PNG } = require('pngjs');
 
 async function generateGif(variant = 'green') {
     const frames = 80;
-    const delay = 40; // Smoother animation
+    const delay = 40;
 
     console.log(`\nGenerating ${variant} lozenge GIF...`);
 
@@ -36,8 +36,9 @@ async function generateGif(variant = 'green') {
                 padding: 20px;
             }
             .container {
-                position: relative;
-                display: inline-block;
+                display: flex;
+                align-items: center;
+                gap: 6px;
             }
             .lozenge {
                 display: inline-flex;
@@ -48,7 +49,7 @@ async function generateGif(variant = 'green') {
                 font-family: Arial, sans-serif;
                 font-size: 14px;
                 font-weight: bold;
-                padding: 12px 45px 12px 24px;
+                padding: 12px 24px;
                 border-radius: 50px;
                 position: relative;
                 overflow: hidden;
@@ -83,57 +84,27 @@ async function generateGif(variant = 'green') {
                 z-index: 1;
             }
             .hand {
-                position: absolute;
-                font-size: 14px;
-                right: 6px;
-                top: 50%;
-                transform: translateY(calc(-50% + var(--hand-y, 0px)));
-                z-index: 10;
-                filter: drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+                font-size: 18px;
+                transform: translateY(var(--hand-y, 0px)) scaleX(-1);
+                filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.2));
             }
             .spark {
                 position: absolute;
-                right: 12px;
+                right: -8px;
                 top: 50%;
                 transform: translateY(-50%);
                 width: var(--spark-size, 0px);
                 height: var(--spark-size, 0px);
                 opacity: var(--spark-opacity, 0);
-                z-index: 5;
-            }
-            .spark::before, .spark::after {
-                content: '';
-                position: absolute;
-                background: #ffffff;
+                pointer-events: none;
             }
             .spark::before {
-                width: 100%;
-                height: 3px;
-                top: 50%;
-                left: 0;
-                transform: translateY(-50%);
-                border-radius: 2px;
-                box-shadow: 0 0 10px 3px rgba(0,227,169,0.8), 0 0 20px 5px rgba(0,227,169,0.4);
-            }
-            .spark::after {
-                width: 3px;
-                height: 100%;
-                left: 50%;
-                top: 0;
-                transform: translateX(-50%);
-                border-radius: 2px;
-                box-shadow: 0 0 10px 3px rgba(0,227,169,0.8), 0 0 20px 5px rgba(0,227,169,0.4);
-            }
-            .ring {
+                content: '';
                 position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%);
-                width: var(--ring-size, 0px);
-                height: var(--ring-size, 0px);
-                border: 2px solid rgba(0,227,169, var(--ring-opacity, 0));
+                width: 100%;
+                height: 100%;
+                background: radial-gradient(circle, rgba(0,227,169,0.8) 0%, rgba(0,227,169,0) 70%);
                 border-radius: 50%;
-                z-index: 4;
             }
         </style>
     </head>
@@ -145,16 +116,15 @@ async function generateGif(variant = 'green') {
                     <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
                 </svg>
                 <span class="text">Vysus Capability</span>
-                <span class="hand" id="hand">👆</span>
                 <div class="spark" id="spark"></div>
-                <div class="ring" id="ring"></div>
             </div>
+            <span class="hand" id="hand">👈</span>
         </div>
     </body>
     </html>`;
 
     await page.setContent(html);
-    await page.waitForSelector('.lozenge');
+    await page.waitForSelector('.container');
 
     const container = await page.$('.container');
     const box = await container.boundingBox();
@@ -170,58 +140,44 @@ async function generateGif(variant = 'green') {
     encoder.setRepeat(0);
     encoder.start();
 
-    const clickFrame = 40; // Click happens at frame 40
+    const clickFrame = 40;
 
     for (let i = 0; i < frames; i++) {
-        // Smooth shimmer - slower, more elegant sweep
-        const shimmerProgress = ((i / frames) * 300) - 150; // -150% to 150%
+        const shimmerProgress = ((i / frames) * 300) - 150;
 
         let handY = 0;
         let lozengeScale = 1;
         let sparkSize = 0;
         let sparkOpacity = 0;
-        let ringSize = 0;
-        let ringOpacity = 0;
 
-        // Smooth click animation
-        const clickWindow = 12;
-        if (i >= clickFrame - 4 && i <= clickFrame + clickWindow) {
+        // Click animation
+        const clickWindow = 10;
+        if (i >= clickFrame - 3 && i <= clickFrame + clickWindow) {
             const progress = i - clickFrame;
 
             if (progress < 0) {
-                // Ease down
-                handY = Math.sin((progress + 4) / 4 * Math.PI / 2) * 4;
+                handY = (progress + 3) * -1.5;
             } else if (progress === 0) {
-                // Click moment
-                handY = 4;
+                handY = -4;
                 lozengeScale = 0.97;
-                sparkSize = 20;
+                sparkSize = 25;
                 sparkOpacity = 1;
             } else if (progress <= clickWindow) {
-                // Smooth bounce back + spark expand
                 const t = progress / clickWindow;
-                handY = 4 * (1 - t) * (1 - t); // Ease out
+                handY = -4 * (1 - t);
                 lozengeScale = 0.97 + (0.03 * t);
-
-                // Spark expands and fades
-                sparkSize = 20 + (progress * 4);
-                sparkOpacity = Math.max(0, 1 - (progress / 6));
-
-                // Ring expands
-                ringSize = progress * 8;
-                ringOpacity = Math.max(0, 0.8 - (progress / 10));
+                sparkSize = 25 + (progress * 5);
+                sparkOpacity = Math.max(0, 1 - (progress / 5));
             }
         }
 
-        await page.evaluate((shimmerPos, hY, lS, sS, sO, rS, rO) => {
+        await page.evaluate((shimmerPos, hY, lS, sS, sO) => {
             document.querySelector('.lozenge').style.setProperty('--shimmer-pos', shimmerPos + '%');
             document.querySelector('.lozenge').style.setProperty('--lozenge-scale', lS);
             document.querySelector('.hand').style.setProperty('--hand-y', hY + 'px');
             document.querySelector('.spark').style.setProperty('--spark-size', sS + 'px');
             document.querySelector('.spark').style.setProperty('--spark-opacity', sO);
-            document.querySelector('.ring').style.setProperty('--ring-size', rS + 'px');
-            document.querySelector('.ring').style.setProperty('--ring-opacity', rO);
-        }, shimmerProgress, handY, lozengeScale, sparkSize, sparkOpacity, ringSize, ringOpacity);
+        }, shimmerProgress, handY, lozengeScale, sparkSize, sparkOpacity);
 
         const screenshot = await page.screenshot({
             type: 'png',
