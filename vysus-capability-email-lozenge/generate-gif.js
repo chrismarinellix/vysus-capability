@@ -95,7 +95,7 @@ async function generateGif(variant = 'green') {
                 </svg>
                 <span class="text">Vysus Capability</span>
             </div>
-            <span class="cursor" id="cursor">🖱️</span>
+            <span class="cursor" id="cursor">👆</span>
         </div>
     </body>
     </html>`;
