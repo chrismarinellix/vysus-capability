@@ -13,7 +13,7 @@ async function generateGif(variant = 'green') {
     const browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
 
-    await page.setViewport({ width: 400, height: 150, deviceScaleFactor: 2 });
+    await page.setViewport({ width: 450, height: 150, deviceScaleFactor: 2 });
 
     const isNeon = variant === 'neon';
     const bgColor = isNeon ? '#00E3A9' : '#005454';
@@ -35,6 +35,11 @@ async function generateGif(variant = 'green') {
                 height: 100vh;
                 padding: 20px;
             }
+            .container {
+                display: flex;
+                align-items: center;
+                position: relative;
+            }
             .lozenge {
                 display: inline-flex;
                 align-items: center;
@@ -49,6 +54,8 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 overflow: hidden;
                 box-shadow: 0 4px 15px rgba(0, 84, 84, 0.3);
+                transform: scale(var(--lozenge-scale, 1));
+                transition: transform 0.1s;
             }
             .lozenge::before {
                 content: '';
@@ -69,15 +76,36 @@ async function generateGif(variant = 'green') {
                 position: relative;
                 z-index: 1;
             }
+            .hand {
+                font-size: 28px;
+                margin-left: 8px;
+                transform: translateY(var(--hand-y, 0px)) rotate(var(--hand-rotate, 0deg));
+                filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.2));
+            }
+            .click-effect {
+                position: absolute;
+                right: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: var(--click-size, 0px);
+                height: var(--click-size, 0px);
+                background: radial-gradient(circle, rgba(0,227,169,0.6) 0%, transparent 70%);
+                border-radius: 50%;
+                opacity: var(--click-opacity, 0);
+            }
         </style>
     </head>
     <body>
-        <div class="lozenge" id="lozenge">
-            <svg class="icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="currentColor"/>
-                <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
-            </svg>
-            <span class="text">Vysus Capability</span>
+        <div class="container" id="container">
+            <div class="lozenge" id="lozenge">
+                <svg class="icon" viewBox="0 0 100 112" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0 L38.7 112.2 L85 112.2 L46.2 0 Z" fill="currentColor"/>
+                    <path d="M86.2 2.8 L74.8 10.9 L67.6 22.6 L65.7 36.1 L68.5 48.1 L76.9 59.8 L88.2 66.6 L100 68.6 L100 0 Z" fill="currentColor"/>
+                </svg>
+                <span class="text">Vysus Capability</span>
+                <div class="click-effect" id="click-effect"></div>
+            </div>
+            <span class="hand" id="hand">👆</span>
         </div>
     </body>
     </html>`;
@@ -85,9 +113,9 @@ async function generateGif(variant = 'green') {
     await page.setContent(html);
     await page.waitForSelector('.lozenge');
 
-    // Get lozenge bounding box
-    const lozenge = await page.$('.lozenge');
-    const box = await lozenge.boundingBox();
+    // Get container bounding box
+    const container = await page.$('.container');
+    const box = await container.boundingBox();
 
     // Add some padding
     const padding = 10;
@@ -105,9 +133,66 @@ async function generateGif(variant = 'green') {
         // Shimmer animation (full cycle)
         const shimmerProgress = (i / frames) * 200 - 100; // -100% to 100%
 
-        await page.evaluate((shimmerPos) => {
+        // Hand animation - bobs and clicks
+        const cycleProgress = (i % 30) / 30; // Two clicks per loop
+        let handY = 0;
+        let handRotate = 0;
+        let lozengeScale = 1;
+        let clickSize = 0;
+        let clickOpacity = 0;
+
+        // Click happens at frame 15 and 45 (twice per loop)
+        const clickFrame1 = 15;
+        const clickFrame2 = 45;
+
+        if (i >= clickFrame1 - 3 && i <= clickFrame1 + 5) {
+            // First click
+            const clickProgress = i - clickFrame1;
+            if (clickProgress < 0) {
+                // Moving down to click
+                handY = clickProgress * -2;
+            } else if (clickProgress === 0) {
+                // Click moment
+                handY = 6;
+                handRotate = -5;
+                lozengeScale = 0.98;
+                clickSize = 30;
+                clickOpacity = 0.8;
+            } else {
+                // Bounce back
+                handY = Math.max(0, 6 - clickProgress * 2);
+                clickSize = 30 + clickProgress * 10;
+                clickOpacity = Math.max(0, 0.8 - clickProgress * 0.2);
+            }
+        } else if (i >= clickFrame2 - 3 && i <= clickFrame2 + 5) {
+            // Second click
+            const clickProgress = i - clickFrame2;
+            if (clickProgress < 0) {
+                handY = clickProgress * -2;
+            } else if (clickProgress === 0) {
+                handY = 6;
+                handRotate = -5;
+                lozengeScale = 0.98;
+                clickSize = 30;
+                clickOpacity = 0.8;
+            } else {
+                handY = Math.max(0, 6 - clickProgress * 2);
+                clickSize = 30 + clickProgress * 10;
+                clickOpacity = Math.max(0, 0.8 - clickProgress * 0.2);
+            }
+        } else {
+            // Gentle bobbing
+            handY = Math.sin((i / frames) * Math.PI * 4) * 2;
+        }
+
+        await page.evaluate((shimmerPos, hY, hR, lS, cS, cO) => {
             document.querySelector('.lozenge').style.setProperty('--shimmer-pos', shimmerPos + '%');
-        }, shimmerProgress);
+            document.querySelector('.lozenge').style.setProperty('--lozenge-scale', lS);
+            document.querySelector('.hand').style.setProperty('--hand-y', hY + 'px');
+            document.querySelector('.hand').style.setProperty('--hand-rotate', hR + 'deg');
+            document.querySelector('.click-effect').style.setProperty('--click-size', cS + 'px');
+            document.querySelector('.click-effect').style.setProperty('--click-opacity', cO);
+        }, shimmerProgress, handY, handRotate, lozengeScale, clickSize, clickOpacity);
 
         const screenshot = await page.screenshot({
             type: 'png',
