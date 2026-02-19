@@ -569,6 +569,24 @@
         .heatmap-cell.low { background: #fee; color: #c44; }
         .heatmap-cell.med { background: #ffd; color: #a80; }
         .heatmap-cell.high { background: #dfd; color: #080; }
+
+        /* Bar Chart Visualisation Styles */
+        .viz-toggle { display: flex; gap: 10px; margin-bottom: 20px; }
+        .viz-btn { padding: 8px 16px; border: 2px solid var(--vysus-bergen-rain); background: var(--vysus-white); color: var(--vysus-scandinavia-rock); cursor: pointer; border-radius: 6px; font-size: 0.85rem; transition: all 0.2s; }
+        .viz-btn:hover { border-color: var(--vysus-stockholm-neon); }
+        .viz-btn.active { background: var(--vysus-stockholm-neon); border-color: var(--vysus-stockholm-neon); color: var(--vysus-malmo-green); font-weight: bold; }
+        .bar-chart-viz { display: flex; flex-direction: column; gap: 6px; max-height: 500px; overflow-y: auto; }
+        .bar-row-viz { display: grid; grid-template-columns: 200px 1fr 50px; align-items: center; gap: 12px; padding: 5px 0; }
+        .bar-row-viz:hover { background: var(--vysus-oslo-snow); }
+        .bar-label-viz { font-size: 10px; color: var(--vysus-trondheim-night); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .bar-container-viz { height: 18px; background: var(--vysus-stavanger-ice); border-radius: 3px; position: relative; overflow: visible; }
+        .bar-fill-viz { height: 100%; border-radius: 3px; transition: width 0.5s ease; }
+        .bar-fill-viz.l1 { background: var(--vysus-bergen-rain); }
+        .bar-fill-viz.l2 { background: var(--vysus-stockholm-neon); }
+        .bar-fill-viz.l3 { background: var(--vysus-malmo-green); }
+        .bar-previous-viz { position: absolute; top: 0; height: 100%; border-right: 3px solid var(--vysus-scandinavia-rock); opacity: 0.6; z-index: 1; }
+        .bar-goal-viz { position: absolute; top: -3px; height: calc(100% + 6px); border-right: 3px dashed #F39C12; z-index: 2; }
+        .bar-value-viz { font-size: 11px; font-weight: bold; color: var(--vysus-malmo-green); text-align: center; }
     </style>
 </head>
 <body>
@@ -820,7 +838,27 @@
             );
         };
 
+        const BarChartViz = ({ data, vizMode }) => (
+            <div className="bar-chart-viz">
+                {data.map((item, i) => (
+                    <div key={i} className="bar-row-viz">
+                        <div className="bar-label-viz" title={item.name}>{item.name}</div>
+                        <div className="bar-container-viz">
+                            {vizMode === 'movement' && item.old !== null && (
+                                <div className="bar-previous-viz" style={{ width: `${(item.old / 3) * 100}%` }} />
+                            )}
+                            <div className={`bar-fill-viz l${item.new}`} style={{ width: `${(item.new / 3) * 100}%` }} />
+                        </div>
+                        <div className="bar-value-viz">
+                            {vizMode === 'movement' && item.old !== null ? `${item.old}→${item.new}` : `L${item.new}`}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+
         const App = () => {
+            const [vizMode, setVizMode] = useState('current');
             const allData = [...technicalCodes, ...activityCodes];
             const upgradedCount = allData.filter(d => d.old !== null && d.new > d.old).length;
             const newSkillCount = allData.filter(d => d.old === null).length;
@@ -930,6 +968,31 @@
                                             </div>
                                         ))}
                                     </div>
+                                </div>
+                            </div>
+
+                            <div className="chart-card full-width">
+                                <h3 className="chart-title">Bar Chart View - Technical & Activity Codes</h3>
+                                <div className="viz-toggle">
+                                    <button className={`viz-btn ${vizMode === 'current' ? 'active' : ''}`} onClick={() => setVizMode('current')}>Current Levels</button>
+                                    <button className={`viz-btn ${vizMode === 'movement' ? 'active' : ''}`} onClick={() => setVizMode('movement')}>Movement</button>
+                                    <button className={`viz-btn ${vizMode === 'newskills' ? 'active' : ''}`} onClick={() => setVizMode('newskills')}>New Skills Only</button>
+                                </div>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
+                                    <div>
+                                        <h4 style={{ color: 'var(--vysus-malmo-green)', fontSize: '13px', marginBottom: '12px' }}>Technical Codes ({technicalCodes.length})</h4>
+                                        <BarChartViz data={vizMode === 'newskills' ? technicalCodes.filter(c => c.old === null) : technicalCodes} vizMode={vizMode} />
+                                    </div>
+                                    <div>
+                                        <h4 style={{ color: 'var(--vysus-malmo-green)', fontSize: '13px', marginBottom: '12px' }}>Activity Codes ({activityCodes.length})</h4>
+                                        <BarChartViz data={vizMode === 'newskills' ? activityCodes.filter(c => c.old === null) : activityCodes} vizMode={vizMode} />
+                                    </div>
+                                </div>
+                                <div className="legend" style={{ marginTop: '15px' }}>
+                                    <div className="legend-item"><div className="legend-dot" style={{ background: 'var(--vysus-bergen-rain)' }}></div><span>Level 1</span></div>
+                                    <div className="legend-item"><div className="legend-dot current"></div><span>Level 2</span></div>
+                                    <div className="legend-item"><div className="legend-dot" style={{ background: 'var(--vysus-malmo-green)' }}></div><span>Level 3</span></div>
+                                    {vizMode === 'movement' && <div className="legend-item"><div style={{ width: '20px', borderRight: '3px solid var(--vysus-scandinavia-rock)' }}></div><span>Previous Level</span></div>}
                                 </div>
                             </div>
 
